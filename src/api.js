@@ -1,4 +1,4 @@
-const BASE='http://127.0.0.1:8000';
+const BASE = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
 export function getSavedUser(){try{return JSON.parse(localStorage.getItem('pethome_user')||'null')}catch{return null}}
 export function clearAuth(){localStorage.removeItem('pethome_token');localStorage.removeItem('pethome_user')}
 export async function api(path,options={}){
