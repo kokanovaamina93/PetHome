@@ -1,11 +1,27 @@
+
 import os
+import secrets
 from datetime import datetime, timedelta, timezone
+from io import BytesIO
 from pathlib import Path
 from typing import Optional
+from uuid import uuid4
+
 import jwt
-from fastapi import FastAPI, Depends, HTTPException, Header, UploadFile, File
+from fastapi import (
+    FastAPI,
+    Depends,
+    HTTPException,
+    Header,
+    UploadFile,
+    File,
+    Request,
+)
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel, EmailStr, Field, HttpUrl
+from fastapi.staticfiles import StaticFiles
+from PIL import Image, ImageOps
+from pydantic import BaseModel, EmailStr, Field
+from pwdlib import PasswordHash
 from sqlalchemy import (
     create_engine,
     ForeignKey,
@@ -15,6 +31,7 @@ from sqlalchemy import (
     DateTime,
     select,
     text,
+    inspect,
 )
 from sqlalchemy.orm import (
     DeclarativeBase,
@@ -24,31 +41,89 @@ from sqlalchemy.orm import (
     sessionmaker,
     Session,
 )
-from pwdlib import PasswordHash
-from fastapi.staticfiles import StaticFiles
-from PIL import Image, ImageOps
-from io import BytesIO
-from uuid import uuid4
-import secrets
+
+
+# ============================================================
+# 1. CONFIGURATION
+# ============================================================
 
 BASE = Path(__file__).resolve().parent
-engine = create_engine(
-    f"sqlite:///{BASE / 'pethome.db'}", connect_args={"check_same_thread": False}
+
+DATABASE_URL = os.environ.get(
+    "DATABASE_URL",
+    f"sqlite:///{BASE / 'pethome.db'}",
 )
-SessionLocal = sessionmaker(engine)
+
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace(
+        "postgres://",
+        "postgresql://",
+        1,
+    )
+
+connect_args = {}
+
+if DATABASE_URL.startswith("sqlite"):
+    connect_args["check_same_thread"] = False
+
+engine = create_engine(
+    DATABASE_URL,
+    connect_args=connect_args,
+    pool_pre_ping=True,
+)
+
+SessionLocal = sessionmaker(bind=engine)
+
 SECRET = os.environ.get("PETHOME_SECRET_KEY", "")
+
 if not SECRET:
-    raise RuntimeError("Set PETHOME_SECRET_KEY before starting the server.")
+    raise RuntimeError(
+        "Set PETHOME_SECRET_KEY before starting the server."
+    )
+
 hasher = PasswordHash.recommended()
-app = FastAPI(title="PetHome API", version="1.0")
+
+
+# ============================================================
+# 2. FASTAPI AND CORS
+# ============================================================
+
+app = FastAPI(
+    title="PetHome API",
+    version="1.0",
+)
+
+DEFAULT_ORIGINS = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "https://pet-home-psbiha709-fariza-amina.vercel.app",
+]
+
+EXTRA_ORIGINS = [
+    origin.strip().rstrip("/")
+    for origin in os.environ.get(
+        "FRONTEND_ORIGINS", ""
+    ).split(",")
+    if origin.strip()
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
-    allow_credentials=False,
+    allow_origins=DEFAULT_ORIGINS + EXTRA_ORIGINS,
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+
+@app.get("/health")
+def health():
+    return {"status": "ok", "service": "PetHome API"}
+
+
+# ============================================================
+# 3. DATABASE MODELS
+# ============================================================
 
 class Base(DeclarativeBase):
     pass
@@ -56,15 +131,23 @@ class Base(DeclarativeBase):
 
 class User(Base):
     __tablename__ = "users"
+
     id: Mapped[int] = mapped_column(primary_key=True)
-    email: Mapped[str] = mapped_column(String(255), unique=True, index=True)
+    email: Mapped[str] = mapped_column(
+        String(255), unique=True, index=True
+    )
     password_hash: Mapped[str] = mapped_column(String(255))
-    role: Mapped[str] = mapped_column(String(20), default="user")
-    is_active: Mapped[int] = mapped_column(Integer, default=1)
+    role: Mapped[str] = mapped_column(
+        String(20), default="user"
+    )
+    is_active: Mapped[int] = mapped_column(
+        Integer, default=1
+    )
 
 
 class Animal(Base):
     __tablename__ = "animals"
+
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(100))
     type: Mapped[str] = mapped_column(String(30))
@@ -72,79 +155,172 @@ class Animal(Base):
     city: Mapped[str] = mapped_column(String(100))
     description: Mapped[str] = mapped_column(Text)
     image_url: Mapped[str] = mapped_column(Text)
-    status: Mapped[str] = mapped_column(String(30), default="available")
-    breed: Mapped[str] = mapped_column(String(100), default="")
-    sex: Mapped[str] = mapped_column(String(20), default="")
-    size: Mapped[str] = mapped_column(String(20), default="")
-    temperament: Mapped[str] = mapped_column(String(100), default="")
-    activity_level: Mapped[str] = mapped_column(String(30), default="")
-    good_with_kids: Mapped[str] = mapped_column(String(20), default="unknown")
-    good_with_pets: Mapped[str] = mapped_column(String(20), default="unknown")
-    vaccinated: Mapped[str] = mapped_column(String(20), default="unknown")
-    sterilized: Mapped[str] = mapped_column(String(20), default="unknown")
-    special_needs: Mapped[str] = mapped_column(Text, default="")
-    age_group: Mapped[str] = mapped_column(String(20), default="")
+    status: Mapped[str] = mapped_column(
+        String(30), default="available"
+    )
+    breed: Mapped[str] = mapped_column(
+        String(100), default=""
+    )
+    sex: Mapped[str] = mapped_column(
+        String(20), default=""
+    )
+    size: Mapped[str] = mapped_column(
+        String(20), default=""
+    )
+    temperament: Mapped[str] = mapped_column(
+        String(100), default=""
+    )
+    activity_level: Mapped[str] = mapped_column(
+        String(30), default=""
+    )
+    good_with_kids: Mapped[str] = mapped_column(
+        String(20), default="unknown"
+    )
+    good_with_pets: Mapped[str] = mapped_column(
+        String(20), default="unknown"
+    )
+    vaccinated: Mapped[str] = mapped_column(
+        String(20), default="unknown"
+    )
+    sterilized: Mapped[str] = mapped_column(
+        String(20), default="unknown"
+    )
+    special_needs: Mapped[str] = mapped_column(
+        Text, default=""
+    )
+    age_group: Mapped[str] = mapped_column(
+        String(20), default=""
+    )
 
 
 class Application(Base):
     __tablename__ = "applications"
+
     id: Mapped[int] = mapped_column(primary_key=True)
-    animal_id: Mapped[int] = mapped_column(ForeignKey("animals.id"))
-    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    animal_id: Mapped[int] = mapped_column(
+        ForeignKey("animals.id")
+    )
+    user_id: Mapped[int] = mapped_column(
+        ForeignKey("users.id")
+    )
     full_name: Mapped[str] = mapped_column(String(120))
     phone: Mapped[str] = mapped_column(String(40))
-    comment: Mapped[str] = mapped_column(Text, default="")
-    status: Mapped[str] = mapped_column(String(30), default="new")
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    comment: Mapped[str] = mapped_column(
+        Text, default=""
+    )
+    status: Mapped[str] = mapped_column(
+        String(30), default="new"
+    )
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime, default=datetime.utcnow
+    )
+
     animal: Mapped[Animal] = relationship()
 
 
 class ApplicationHistory(Base):
     __tablename__ = "application_history"
+
     id: Mapped[int] = mapped_column(primary_key=True)
-    application_id: Mapped[int] = mapped_column(ForeignKey("applications.id"))
-    changed_by: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    application_id: Mapped[int] = mapped_column(
+        ForeignKey("applications.id")
+    )
+    changed_by: Mapped[int] = mapped_column(
+        ForeignKey("users.id")
+    )
     old_status: Mapped[str] = mapped_column(String(30))
     new_status: Mapped[str] = mapped_column(String(30))
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime, default=datetime.utcnow
+    )
 
 
 class AuditLog(Base):
     __tablename__ = "audit_log"
+
     id: Mapped[int] = mapped_column(primary_key=True)
-    actor_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    actor_id: Mapped[int] = mapped_column(
+        ForeignKey("users.id")
+    )
     action: Mapped[str] = mapped_column(String(100))
-    detail: Mapped[str] = mapped_column(Text, default="")
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    detail: Mapped[str] = mapped_column(
+        Text, default=""
+    )
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime, default=datetime.utcnow
+    )
 
 
-# Non-destructive migration: preserve existing pethome.db and all applications.
+# ============================================================
+# 4. DATABASE INITIALIZATION
+# ============================================================
+
 Base.metadata.create_all(engine)
-with engine.begin() as conn:
-    for table, columns in {
-        "users": {"is_active": "INTEGER NOT NULL DEFAULT 1"},
-        "animals": {
-            "breed": "VARCHAR(100) NOT NULL DEFAULT ''",
-            "sex": "VARCHAR(20) NOT NULL DEFAULT ''",
-            "size": "VARCHAR(20) NOT NULL DEFAULT ''",
-            "temperament": "VARCHAR(100) NOT NULL DEFAULT ''",
-            "activity_level": "VARCHAR(30) NOT NULL DEFAULT ''",
-            "good_with_kids": "VARCHAR(20) NOT NULL DEFAULT 'unknown'",
-            "good_with_pets": "VARCHAR(20) NOT NULL DEFAULT 'unknown'",
-            "vaccinated": "VARCHAR(20) NOT NULL DEFAULT 'unknown'",
-            "sterilized": "VARCHAR(20) NOT NULL DEFAULT 'unknown'",
-            "special_needs": "TEXT NOT NULL DEFAULT ''",
-            "age_group": "VARCHAR(20) NOT NULL DEFAULT ''",
-        },
-    }.items():
-        existing = {row[1] for row in conn.execute(text(f"PRAGMA table_info({table})"))}
-        for col, sql_type in columns.items():
-            if col not in existing:
-                conn.execute(text(f"ALTER TABLE {table} ADD COLUMN {col} {sql_type}"))
-UPLOADS = BASE / "uploads"
-UPLOADS.mkdir(exist_ok=True)
-app.mount("/uploads", StaticFiles(directory=str(UPLOADS)), name="uploads")
 
+# Compatibility migration for existing SQLite databases
+# and PostgreSQL databases created from older schemas.
+
+MISSING_COLUMNS = {
+    "users": {
+        "is_active": "INTEGER NOT NULL DEFAULT 1",
+    },
+    "animals": {
+        "breed": "VARCHAR(100) NOT NULL DEFAULT ''",
+        "sex": "VARCHAR(20) NOT NULL DEFAULT ''",
+        "size": "VARCHAR(20) NOT NULL DEFAULT ''",
+        "temperament": "VARCHAR(100) NOT NULL DEFAULT ''",
+        "activity_level": "VARCHAR(30) NOT NULL DEFAULT ''",
+        "good_with_kids": "VARCHAR(20) NOT NULL DEFAULT 'unknown'",
+        "good_with_pets": "VARCHAR(20) NOT NULL DEFAULT 'unknown'",
+        "vaccinated": "VARCHAR(20) NOT NULL DEFAULT 'unknown'",
+        "sterilized": "VARCHAR(20) NOT NULL DEFAULT 'unknown'",
+        "special_needs": "TEXT NOT NULL DEFAULT ''",
+        "age_group": "VARCHAR(20) NOT NULL DEFAULT ''",
+    },
+}
+
+with engine.begin() as conn:
+    inspector = inspect(conn)
+
+    for table_name, columns in MISSING_COLUMNS.items():
+        existing = {
+            column["name"]
+            for column in inspector.get_columns(table_name)
+        }
+
+        for column_name, column_type in columns.items():
+            if column_name not in existing:
+                conn.execute(
+                    text(
+                        f"ALTER TABLE {table_name} "
+                        f"ADD COLUMN {column_name} {column_type}"
+                    )
+                )
+
+
+# ============================================================
+# 5. FILE UPLOADS
+# ============================================================
+
+UPLOADS = Path(
+    os.environ.get(
+        "UPLOAD_DIR",
+        str(BASE / "uploads"),
+    )
+)
+
+UPLOADS.mkdir(parents=True, exist_ok=True)
+
+app.mount(
+    "/uploads",
+    StaticFiles(directory=str(UPLOADS)),
+    name="uploads",
+)
+
+
+# ============================================================
+# 6. DATABASE DEPENDENCY AND AUTHORIZATION
+# ============================================================
 
 def db():
     with SessionLocal() as session:
@@ -152,18 +328,28 @@ def db():
 
 
 def user_from_token(
-    authorization: Optional[str] = Header(default=None), session: Session = Depends(db)
+    authorization: Optional[str] = Header(default=None),
+    session: Session = Depends(db),
 ):
     if not authorization or not authorization.startswith("Bearer "):
         raise HTTPException(401, "Необходимо войти")
+
     try:
-        payload = jwt.decode(authorization[7:], SECRET, algorithms=["HS256"])
+        payload = jwt.decode(
+            authorization[7:],
+            SECRET,
+            algorithms=["HS256"],
+        )
         uid = int(payload["sub"])
+
     except (jwt.InvalidTokenError, ValueError, KeyError):
         raise HTTPException(401, "Недействительный токен")
+
     user = session.get(User, uid)
+
     if not user or not user.is_active:
         raise HTTPException(401, "Аккаунт недоступен")
+
     return user
 
 
@@ -175,13 +361,26 @@ def admin(user: User = Depends(user_from_token)):
 
 def owner(user: User = Depends(user_from_token)):
     if user.role != "owner":
-        raise HTTPException(403, "Только владелец управляет командой")
+        raise HTTPException(
+            403,
+            "Только владелец управляет командой",
+        )
     return user
 
 
 def audit(session, actor, action, detail=""):
-    session.add(AuditLog(actor_id=actor.id, action=action, detail=detail))
+    session.add(
+        AuditLog(
+            actor_id=actor.id,
+            action=action,
+            detail=detail,
+        )
+    )
 
+
+# ============================================================
+# 7. JSON HELPERS
+# ============================================================
 
 def animal_json(a):
     return {
@@ -224,16 +423,32 @@ def app_json(a):
     }
 
 
+# ============================================================
+# 8. PYDANTIC SCHEMAS
+# ============================================================
+
 class Credentials(BaseModel):
     email: EmailStr
-    password: str = Field(min_length=8, max_length=128)
+    password: str = Field(
+        min_length=8,
+        max_length=128,
+    )
 
 
 class ApplicationIn(BaseModel):
     animal_id: int
-    full_name: str = Field(min_length=2, max_length=120)
-    phone: str = Field(min_length=6, max_length=40)
-    comment: str = Field(default="", max_length=2000)
+    full_name: str = Field(
+        min_length=2,
+        max_length=120,
+    )
+    phone: str = Field(
+        min_length=6,
+        max_length=40,
+    )
+    comment: str = Field(
+        default="",
+        max_length=2000,
+    )
 
 
 class AnimalIn(BaseModel):
@@ -261,38 +476,96 @@ class StatusIn(BaseModel):
     status: str
 
 
+# ============================================================
+# 9. AUTHENTICATION
+# ============================================================
+
 @app.post("/auth/register", status_code=201)
-def register(data: Credentials, session: Session = Depends(db)):
+def register(
+    data: Credentials,
+    session: Session = Depends(db),
+):
     email = str(data.email).lower()
-    if session.scalar(select(User).where(User.email == email)):
-        raise HTTPException(409, "Email уже зарегистрирован")
-    u = User(email=email, password_hash=hasher.hash(data.password), role="user")
+
+    if session.scalar(
+        select(User).where(User.email == email)
+    ):
+        raise HTTPException(
+            409,
+            "Email уже зарегистрирован",
+        )
+
+    u = User(
+        email=email,
+        password_hash=hasher.hash(data.password),
+        role="user",
+    )
+
     session.add(u)
     session.commit()
+
     return {"message": "Аккаунт создан"}
 
 
 @app.post("/auth/login")
-def login(data: Credentials, session: Session = Depends(db)):
-    u = session.scalar(select(User).where(User.email == str(data.email).lower()))
-    if not u or not u.is_active or not hasher.verify(data.password, u.password_hash):
-        raise HTTPException(401, "Неверный email или пароль")
+def login(
+    data: Credentials,
+    session: Session = Depends(db),
+):
+    u = session.scalar(
+        select(User).where(
+            User.email == str(data.email).lower()
+        )
+    )
+
+    if (
+        not u
+        or not u.is_active
+        or not hasher.verify(
+            data.password,
+            u.password_hash,
+        )
+    ):
+        raise HTTPException(
+            401,
+            "Неверный email или пароль",
+        )
+
     token = jwt.encode(
-        {"sub": str(u.id), "exp": datetime.now(timezone.utc) + timedelta(hours=8)},
+        {
+            "sub": str(u.id),
+            "exp": (
+                datetime.now(timezone.utc)
+                + timedelta(hours=8)
+            ),
+        },
         SECRET,
         algorithm="HS256",
     )
+
     return {
         "access_token": token,
         "token_type": "bearer",
-        "user": {"id": u.id, "email": u.email, "role": u.role},
+        "user": {
+            "id": u.id,
+            "email": u.email,
+            "role": u.role,
+        },
     }
 
 
 @app.get("/auth/me")
 def me(u: User = Depends(user_from_token)):
-    return {"id": u.id, "email": u.email, "role": u.role}
+    return {
+        "id": u.id,
+        "email": u.email,
+        "role": u.role,
+    }
 
+
+# ============================================================
+# 10. ANIMALS AND APPLICATIONS
+# ============================================================
 
 @app.get("/animals")
 def animals(session: Session = Depends(db)):
@@ -313,25 +586,46 @@ def apply(
     session: Session = Depends(db),
 ):
     a = session.get(Animal, data.animal_id)
+
     if not a or a.status != "available":
-        raise HTTPException(404, "Животное недоступно")
-    if session.scalar(
+        raise HTTPException(
+            404,
+            "Животное недоступно",
+        )
+
+    existing = session.scalar(
         select(Application).where(
             Application.user_id == u.id,
             Application.animal_id == a.id,
-            Application.status.in_(["new", "reviewing", "approved"]),
+            Application.status.in_(
+                ["new", "reviewing", "approved"]
+            ),
         )
-    ):
-        raise HTTPException(409, "У вас уже есть активная заявка")
-    application = Application(**data.model_dump(), user_id=u.id)
+    )
+
+    if existing:
+        raise HTTPException(
+            409,
+            "У вас уже есть активная заявка",
+        )
+
+    application = Application(
+        **data.model_dump(),
+        user_id=u.id,
+    )
+
     session.add(application)
     session.commit()
     session.refresh(application)
+
     return app_json(application)
 
 
 @app.get("/applications/me")
-def my_applications(u: User = Depends(user_from_token), session: Session = Depends(db)):
+def my_applications(
+    u: User = Depends(user_from_token),
+    session: Session = Depends(db),
+):
     return [
         app_json(a)
         for a in session.scalars(
@@ -342,12 +636,21 @@ def my_applications(u: User = Depends(user_from_token), session: Session = Depen
     ]
 
 
+# ============================================================
+# 11. ADMIN APPLICATIONS
+# ============================================================
+
 @app.get("/admin/applications")
-def all_applications(_=Depends(admin), session: Session = Depends(db)):
+def all_applications(
+    _=Depends(admin),
+    session: Session = Depends(db),
+):
     return [
         app_json(a)
         for a in session.scalars(
-            select(Application).order_by(Application.id.desc())
+            select(Application).order_by(
+                Application.id.desc()
+            )
         ).all()
     ]
 
@@ -359,14 +662,30 @@ def change_status(
     u: User = Depends(admin),
     session: Session = Depends(db),
 ):
-    if data.status not in ("new", "reviewing", "approved", "rejected"):
-        raise HTTPException(422, "Неизвестный статус")
+    if data.status not in (
+        "new",
+        "reviewing",
+        "approved",
+        "rejected",
+    ):
+        raise HTTPException(
+            422,
+            "Неизвестный статус",
+        )
+
     a = session.get(Application, application_id)
+
     if not a:
-        raise HTTPException(404, "Заявка не найдена")
+        raise HTTPException(
+            404,
+            "Заявка не найдена",
+        )
+
     old = a.status
+
     if old != data.status:
         a.status = data.status
+
         session.add(
             ApplicationHistory(
                 application_id=a.id,
@@ -375,25 +694,55 @@ def change_status(
                 new_status=data.status,
             )
         )
+
         audit(
-            session, u, "application.status", f"Заявка #{a.id}: {old} → {data.status}"
+            session,
+            u,
+            "application.status",
+            f"Заявка #{a.id}: {old} → {data.status}",
         )
+
         session.commit()
+
     return app_json(a)
 
 
+# ============================================================
+# 12. ADMIN ANIMALS
+# ============================================================
+
 @app.post("/admin/animals", status_code=201)
 def add_animal(
-    data: AnimalIn, u: User = Depends(admin), session: Session = Depends(db)
+    data: AnimalIn,
+    u: User = Depends(admin),
+    session: Session = Depends(db),
 ):
-    if data.status not in ("available", "reserved", "adopted", "archived"):
-        raise HTTPException(422, "Неизвестный статус животного")
+    if data.status not in (
+        "available",
+        "reserved",
+        "adopted",
+        "archived",
+    ):
+        raise HTTPException(
+            422,
+            "Неизвестный статус животного",
+        )
+
     a = Animal(**data.model_dump())
+
     session.add(a)
     session.flush()
-    audit(session, u, "animal.create", f"Животное #{a.id}: {a.name}")
+
+    audit(
+        session,
+        u,
+        "animal.create",
+        f"Животное #{a.id}: {a.name}",
+    )
+
     session.commit()
     session.refresh(a)
+
     return animal_json(a)
 
 
@@ -405,38 +754,83 @@ def edit_animal(
     session: Session = Depends(db),
 ):
     a = session.get(Animal, animal_id)
+
     if not a:
-        raise HTTPException(404, "Животное не найдено")
-    if data.status not in ("available", "reserved", "adopted", "archived"):
-        raise HTTPException(422, "Неизвестный статус животного")
+        raise HTTPException(
+            404,
+            "Животное не найдено",
+        )
+
+    if data.status not in (
+        "available",
+        "reserved",
+        "adopted",
+        "archived",
+    ):
+        raise HTTPException(
+            422,
+            "Неизвестный статус животного",
+        )
+
     for k, v in data.model_dump().items():
         setattr(a, k, v)
-    audit(session, u, "animal.update", f"Животное #{a.id}: {a.name}, статус {a.status}")
+
+    audit(
+        session,
+        u,
+        "animal.update",
+        f"Животное #{a.id}: {a.name}, статус {a.status}",
+    )
+
     session.commit()
+
     return animal_json(a)
 
 
 @app.get("/admin/animals")
-def admin_animals(_=Depends(admin), session: Session = Depends(db)):
+def admin_animals(
+    _=Depends(admin),
+    session: Session = Depends(db),
+):
     return [
         animal_json(a)
-        for a in session.scalars(select(Animal).order_by(Animal.id.desc())).all()
+        for a in session.scalars(
+            select(Animal).order_by(
+                Animal.id.desc()
+            )
+        ).all()
     ]
 
 
 @app.get("/admin/users")
-def admin_users(_=Depends(admin), session: Session = Depends(db)):
+def admin_users(
+    _=Depends(admin),
+    session: Session = Depends(db),
+):
     return [
-        {"id": u.id, "email": u.email, "role": u.role, "is_active": bool(u.is_active)}
-        for u in session.scalars(select(User).order_by(User.id.desc())).all()
+        {
+            "id": u.id,
+            "email": u.email,
+            "role": u.role,
+            "is_active": bool(u.is_active),
+        }
+        for u in session.scalars(
+            select(User).order_by(User.id.desc())
+        ).all()
     ]
 
 
 @app.get("/admin/history")
-def admin_history(_=Depends(admin), session: Session = Depends(db)):
+def admin_history(
+    _=Depends(admin),
+    session: Session = Depends(db),
+):
     entries = session.scalars(
-        select(ApplicationHistory).order_by(ApplicationHistory.id.desc())
+        select(ApplicationHistory).order_by(
+            ApplicationHistory.id.desc()
+        )
     ).all()
+
     return [
         {
             "id": h.id,
@@ -451,66 +845,160 @@ def admin_history(_=Depends(admin), session: Session = Depends(db)):
 
 
 @app.get("/admin/stats")
-def admin_stats(_=Depends(admin), session: Session = Depends(db)):
-    animals = session.scalars(select(Animal)).all()
-    apps = session.scalars(select(Application)).all()
+def admin_stats(
+    _=Depends(admin),
+    session: Session = Depends(db),
+):
+    all_animals = session.scalars(
+        select(Animal)
+    ).all()
+
+    apps = session.scalars(
+        select(Application)
+    ).all()
+
     return {
-        "animals": len(animals),
-        "available": sum(a.status == "available" for a in animals),
-        "adopted": sum(a.status == "adopted" for a in animals),
+        "animals": len(all_animals),
+        "available": sum(
+            a.status == "available"
+            for a in all_animals
+        ),
+        "adopted": sum(
+            a.status == "adopted"
+            for a in all_animals
+        ),
         "applications": len(apps),
-        "new": sum(a.status == "new" for a in apps),
-        "reviewing": sum(a.status == "reviewing" for a in apps),
-        "approved": sum(a.status == "approved" for a in apps),
+        "new": sum(
+            a.status == "new"
+            for a in apps
+        ),
+        "reviewing": sum(
+            a.status == "reviewing"
+            for a in apps
+        ),
+        "approved": sum(
+            a.status == "approved"
+            for a in apps
+        ),
     }
 
 
+# ============================================================
+# 13. IMAGE UPLOAD
+# ============================================================
+
 @app.post("/admin/upload")
 async def upload_photo(
+    request: Request,
     file: UploadFile = File(...),
     u: User = Depends(admin),
     session: Session = Depends(db),
 ):
-    # Read only up to limit + 1; reject oversized and deceptive files.
-    raw = await file.read(5 * 1024 * 1024 + 1)
+    raw = await file.read(
+        5 * 1024 * 1024 + 1
+    )
+
     if len(raw) > 5 * 1024 * 1024:
-        raise HTTPException(413, "Максимальный размер файла — 5 МБ")
+        raise HTTPException(
+            413,
+            "Максимальный размер файла — 5 МБ",
+        )
+
     try:
         if raw[:5] == b"%PDF-":
             try:
                 import fitz
 
-                doc = fitz.open(stream=raw, filetype="pdf")
-                if doc.page_count < 1:
-                    raise ValueError("PDF пуст")
-                page = doc.load_page(0)
-                pix = page.get_pixmap(matrix=fitz.Matrix(1.5, 1.5), alpha=False)
-                img = Image.open(BytesIO(pix.tobytes("png")))
-                doc.close()
+                doc = fitz.open(
+                    stream=raw,
+                    filetype="pdf",
+                )
+
+                try:
+                    if doc.page_count < 1:
+                        raise ValueError("PDF пуст")
+
+                    page = doc.load_page(0)
+
+                    pix = page.get_pixmap(
+                        matrix=fitz.Matrix(1.5, 1.5),
+                        alpha=False,
+                    )
+
+                    img = Image.open(
+                        BytesIO(
+                            pix.tobytes("png")
+                        )
+                    )
+                finally:
+                    doc.close()
+
             except ImportError:
                 raise HTTPException(
-                    422, "Для PDF установите PyMuPDF из requirements.txt"
+                    422,
+                    "Для PDF установите PyMuPDF из requirements.txt",
                 )
         else:
             img = Image.open(BytesIO(raw))
-            if img.format not in ("JPEG", "PNG", "WEBP"):
-                raise ValueError("Неподдерживаемый формат")
+
+            if img.format not in (
+                "JPEG",
+                "PNG",
+                "WEBP",
+            ):
+                raise ValueError(
+                    "Неподдерживаемый формат"
+                )
+
         img = ImageOps.exif_transpose(img)
+
         if img.width * img.height > 25_000_000:
-            raise ValueError("Слишком большое разрешение")
+            raise ValueError(
+                "Слишком большое разрешение"
+            )
+
         img.thumbnail((1600, 1600))
+
         if img.mode not in ("RGB", "L"):
             img = img.convert("RGB")
+
         name = secrets.token_hex(16) + ".webp"
-        img.save(UPLOADS / name, "WEBP", quality=84)
+
+        img.save(
+            UPLOADS / name,
+            "WEBP",
+            quality=84,
+        )
+
     except HTTPException:
         raise
-    except Exception:
-        raise HTTPException(422, "Нужен корректный JPG, PNG, WEBP или PDF")
-    audit(session, u, "photo.upload", name)
-    session.commit()
-    return {"image_url": f"http://127.0.0.1:8000/uploads/{name}"}
 
+    except Exception:
+        raise HTTPException(
+            422,
+            "Нужен корректный JPG, PNG, WEBP или PDF",
+        )
+
+    audit(
+        session,
+        u,
+        "photo.upload",
+        name,
+    )
+
+    session.commit()
+
+    # Use the actual API URL rather than localhost.
+    image_url = str(
+        request.url_for("uploads", path=name)
+    )
+
+    return {"image_url": image_url}
+
+
+# ============================================================
+# 14. TEAM MANAGEMENT SCHEMAS
+# ============================================================
 
 class TeamRoleIn(BaseModel):
     role: str
@@ -522,31 +1010,73 @@ class TeamActiveIn(BaseModel):
 
 class TeamInviteIn(BaseModel):
     email: EmailStr
-    password: str = Field(min_length=12, max_length=128)
+    password: str = Field(
+        min_length=12,
+        max_length=128,
+    )
 
+
+# ============================================================
+# 15. OWNER TEAM MANAGEMENT
+# ============================================================
 
 @app.get("/owner/team")
-def owner_team(_=Depends(owner), session: Session = Depends(db)):
+def owner_team(
+    _=Depends(owner),
+    session: Session = Depends(db),
+):
     return [
-        {"id": u.id, "email": u.email, "role": u.role, "is_active": bool(u.is_active)}
-        for u in session.scalars(select(User).order_by(User.id)).all()
+        {
+            "id": u.id,
+            "email": u.email,
+            "role": u.role,
+            "is_active": bool(u.is_active),
+        }
+        for u in session.scalars(
+            select(User).order_by(User.id)
+        ).all()
     ]
 
 
 @app.post("/owner/team", status_code=201)
 def owner_create_admin(
-    data: TeamInviteIn, actor: User = Depends(owner), session: Session = Depends(db)
+    data: TeamInviteIn,
+    actor: User = Depends(owner),
+    session: Session = Depends(db),
 ):
-    # Owner-created account with a temporary password; share it privately and change it after login.
     email = str(data.email).lower()
-    if session.scalar(select(User).where(User.email == email)):
-        raise HTTPException(409, "Email уже используется")
-    u = User(email=email, password_hash=hasher.hash(data.password), role="admin")
+
+    if session.scalar(
+        select(User).where(User.email == email)
+    ):
+        raise HTTPException(
+            409,
+            "Email уже используется",
+        )
+
+    u = User(
+        email=email,
+        password_hash=hasher.hash(data.password),
+        role="admin",
+    )
+
     session.add(u)
     session.flush()
-    audit(session, actor, "team.create", f"Сотрудник #{u.id}: {email}")
+
+    audit(
+        session,
+        actor,
+        "team.create",
+        f"Сотрудник #{u.id}: {email}",
+    )
+
     session.commit()
-    return {"id": u.id, "email": u.email, "role": u.role}
+
+    return {
+        "id": u.id,
+        "email": u.email,
+        "role": u.role,
+    }
 
 
 @app.patch("/owner/team/{user_id}/role")
@@ -557,17 +1087,41 @@ def owner_change_role(
     session: Session = Depends(db),
 ):
     if data.role not in ("admin", "user"):
-        raise HTTPException(422, "Можно назначить admin или user")
+        raise HTTPException(
+            422,
+            "Можно назначить admin или user",
+        )
+
     target = session.get(User, user_id)
+
     if not target:
-        raise HTTPException(404, "Пользователь не найден")
+        raise HTTPException(
+            404,
+            "Пользователь не найден",
+        )
+
     if target.role == "owner" or target.id == actor.id:
-        raise HTTPException(403, "Нельзя изменять владельца")
+        raise HTTPException(
+            403,
+            "Нельзя изменять владельца",
+        )
+
     previous = target.role
     target.role = data.role
-    audit(session, actor, "team.role", f"#{target.id}: {previous} → {data.role}")
+
+    audit(
+        session,
+        actor,
+        "team.role",
+        f"#{target.id}: {previous} → {data.role}",
+    )
+
     session.commit()
-    return {"id": target.id, "role": target.role}
+
+    return {
+        "id": target.id,
+        "role": target.role,
+    }
 
 
 @app.patch("/owner/team/{user_id}/active")
@@ -578,39 +1132,79 @@ def owner_change_active(
     session: Session = Depends(db),
 ):
     target = session.get(User, user_id)
+
     if not target:
-        raise HTTPException(404, "Пользователь не найден")
+        raise HTTPException(
+            404,
+            "Пользователь не найден",
+        )
+
     if target.role == "owner" or target.id == actor.id:
-        raise HTTPException(403, "Нельзя блокировать владельца")
+        raise HTTPException(
+            403,
+            "Нельзя блокировать владельца",
+        )
+
     target.is_active = int(data.is_active)
+
     audit(
         session,
         actor,
         "team.active",
-        f"#{target.id}: {'active' if data.is_active else 'blocked'}",
+        (
+            f"#{target.id}: "
+            f"{'active' if data.is_active else 'blocked'}"
+        ),
     )
-    session.commit()
-    return {"id": target.id, "is_active": bool(target.is_active)}
 
+    session.commit()
+
+    return {
+        "id": target.id,
+        "is_active": bool(target.is_active),
+    }
+
+
+# ============================================================
+# 16. ADMIN ACTIVITY
+# ============================================================
 
 @app.get("/admin/activity")
-def activity(_=Depends(admin), session: Session = Depends(db)):
+def activity(
+    _=Depends(admin),
+    session: Session = Depends(db),
+):
     entries = session.scalars(
-        select(AuditLog).order_by(AuditLog.id.desc()).limit(60)
+        select(AuditLog)
+        .order_by(AuditLog.id.desc())
+        .limit(60)
     ).all()
-    ids = {a.actor_id for a in entries}
+
+    ids = {
+        a.actor_id
+        for a in entries
+    }
+
     names = (
         {
             u.id: u.email
-            for u in session.scalars(select(User).where(User.id.in_(ids))).all()
+            for u in session.scalars(
+                select(User).where(
+                    User.id.in_(ids)
+                )
+            ).all()
         }
         if ids
         else {}
     )
+
     return [
         {
             "id": a.id,
-            "actor": names.get(a.actor_id, "#" + str(a.actor_id)),
+            "actor": names.get(
+                a.actor_id,
+                "#" + str(a.actor_id),
+            ),
             "action": a.action,
             "detail": a.detail,
             "created_at": a.created_at.isoformat(),
@@ -619,45 +1213,101 @@ def activity(_=Depends(admin), session: Session = Depends(db)):
     ]
 
 
+# ============================================================
+# 17. ADMIN ANALYTICS
+# ============================================================
+
 @app.get("/admin/analytics")
-def analytics(days: int = 30, _=Depends(admin), session: Session = Depends(db)):
+def analytics(
+    days: int = 30,
+    _=Depends(admin),
+    session: Session = Depends(db),
+):
     if days not in (7, 30, 90):
-        raise HTTPException(422, "Период: 7, 30 или 90 дней")
-    cutoff = datetime.utcnow() - timedelta(days=days)
+        raise HTTPException(
+            422,
+            "Период: 7, 30 или 90 дней",
+        )
+
+    cutoff = datetime.utcnow() - timedelta(
+        days=days
+    )
+
     apps = session.scalars(
-        select(Application).where(Application.created_at >= cutoff)
+        select(Application).where(
+            Application.created_at >= cutoff
+        )
     ).all()
+
     by_day = {}
+
     for a in apps:
         k = a.created_at.date().isoformat()
         by_day[k] = by_day.get(k, 0) + 1
-    animals = session.scalars(select(Animal)).all()
+
+    all_animals = session.scalars(
+        select(Animal)
+    ).all()
+
     return {
         "period_days": days,
         "applications_by_day": [
             {
-                "date": (datetime.utcnow().date() - timedelta(days=i)).isoformat(),
+                "date": (
+                    datetime.utcnow().date()
+                    - timedelta(days=i)
+                ).isoformat(),
                 "count": by_day.get(
-                    (datetime.utcnow().date() - timedelta(days=i)).isoformat(), 0
+                    (
+                        datetime.utcnow().date()
+                        - timedelta(days=i)
+                    ).isoformat(),
+                    0,
                 ),
             }
             for i in reversed(range(days))
         ],
         "application_statuses": {
-            k: sum(a.status == k for a in apps)
-            for k in ("new", "reviewing", "approved", "rejected")
+            k: sum(
+                a.status == k
+                for a in apps
+            )
+            for k in (
+                "new",
+                "reviewing",
+                "approved",
+                "rejected",
+            )
         },
         "animal_statuses": {
-            k: sum(a.status == k for a in animals)
-            for k in ("available", "reserved", "adopted", "archived")
+            k: sum(
+                a.status == k
+                for a in all_animals
+            )
+            for k in (
+                "available",
+                "reserved",
+                "adopted",
+                "archived",
+            )
         },
-        "adopted": sum(a.status == "adopted" for a in animals),
+        "adopted": sum(
+            a.status == "adopted"
+            for a in all_animals
+        ),
     }
 
 
+# ============================================================
+# 18. PASSWORD CHANGE
+# ============================================================
+
 class PasswordChangeIn(BaseModel):
     current_password: str
-    new_password: str = Field(min_length=12, max_length=128)
+    new_password: str = Field(
+        min_length=12,
+        max_length=128,
+    )
 
 
 @app.post("/auth/change-password")
@@ -666,8 +1316,21 @@ def change_password(
     u: User = Depends(user_from_token),
     session: Session = Depends(db),
 ):
-    if not hasher.verify(data.current_password, u.password_hash):
-        raise HTTPException(403, "Неверный текущий пароль")
-    u.password_hash = hasher.hash(data.new_password)
+    if not hasher.verify(
+        data.current_password,
+        u.password_hash,
+    ):
+        raise HTTPException(
+            403,
+            "Неверный текущий пароль",
+        )
+
+    u.password_hash = hasher.hash(
+        data.new_password
+    )
+
     session.commit()
-    return {"message": "Пароль изменён"}
+
+    return {
+        "message": "Пароль изменён"
+    }
