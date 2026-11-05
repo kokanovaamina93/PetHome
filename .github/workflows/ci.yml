@@ -1,13 +1,15 @@
 
-name: CI
+name: PetHome CI
 
 on:
   push:
     branches: [main]
   pull_request:
+  workflow_dispatch:
 
 jobs:
   check:
+    name: Check PetHome
     runs-on: ubuntu-latest
 
     steps:
@@ -23,4 +25,21 @@ jobs:
         run: python --version
 
       - name: Check repository structure
-        run: ls -la
+        run: |
+          echo "PetHome repository files:"
+          ls -la
+          echo "Backend files:"
+          ls -la backend
+          echo "Frontend files:"
+          ls -la src
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r backend/requirements.txt
+
+      - name: Check backend imports
+        run: |
+          python -c "import fastapi; print('FastAPI OK')"
+          python -c "import sqlalchemy; print('SQLAlchemy OK')"
+          python -c "import uvicorn; print('Uvicorn OK')"
