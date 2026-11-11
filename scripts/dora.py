@@ -158,10 +158,15 @@ def main():
     commit_cache = {}
 
     for dep in preview:
-        sha = (
-            dep.get("meta", {}).get("githubCommitSha")
-            or dep.get("gitSource", {}).get("sha")
-        )
+        meta = dep.get("meta") or {}
+git_source = dep.get("gitSource") or {}
+
+sha = (
+    meta.get("githubCommitSha")
+    or meta.get("githubCommitRef")
+    or git_source.get("sha")
+)
+        
 
         deployed = deployment_time(dep)
 
