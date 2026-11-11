@@ -1,3 +1,4 @@
+
 import csv
 import json
 import os
@@ -81,7 +82,6 @@ def deployment_time(dep):
     )
 
 
-# ИСПРАВЛЕНО: ошибка 404 больше не останавливает расчёт
 def get_commit_date(sha):
     if not sha:
         return None
@@ -158,15 +158,10 @@ def main():
     commit_cache = {}
 
     for dep in preview:
-        meta = dep.get("meta") or {}
-git_source = dep.get("gitSource") or {}
-
-sha = (
-    meta.get("githubCommitSha")
-    or meta.get("githubCommitRef")
-    or git_source.get("sha")
-)
-        
+        sha = (
+            dep.get("meta", {}).get("githubCommitSha")
+            or dep.get("gitSource", {}).get("sha")
+        )
 
         deployed = deployment_time(dep)
 
