@@ -55,7 +55,7 @@ jobs:
       # 4. Автоматические тесты и покрытие
       - name: Run automated tests with coverage
         run: |
-          python -m pytest tests/ -v --cov=backend --cov-report=term-missing
+          python -m pytest tests/ -v --cov=backend --cov-report=term-missing --cov-fail-under=50
 
       - name: Check Python syntax
         run: |
