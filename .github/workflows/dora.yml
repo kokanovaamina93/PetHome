@@ -34,3 +34,4 @@ jobs:
         with:
           name: pethome-dora-results
           path: dora_metrics.json
+          if-no-files-found: error
