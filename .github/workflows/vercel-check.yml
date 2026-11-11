@@ -1,0 +1,54 @@
+
+name: PetHome Vercel Check
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check Vercel deployments
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          python - <<'PY'
+          import os
+          import json
+          import urllib.request
+          import urllib.parse
+
+          token = os.environ["VERCEL_TOKEN"]
+          params = urllib.parse.urlencode({
+              "projectId": "prj_hwuS0OhqJA8vmOygxcOsxyq1EiWB",
+              "slug": "fariza-amina",
+              "limit": 100
+          })
+          url = "https://api.vercel.com/v6/deployments?" + params
+          req = urllib.request.Request(
+              url,
+              headers={"Authorization": f"Bearer {token}"}
+          )
+
+          with urllib.request.urlopen(req) as response:
+              data = json.load(response)
+
+          deployments = data.get("deployments", [])
+          ready = [
+              d for d in deployments
+              if d.get("readyState", d.get("state")) == "READY"
+          ]
+          preview = [
+              d for d in ready
+              if d.get("target") != "production"
+          ]
+
+          print("Проект: PetHome")
+          print("Всего получено:", len(deployments))
+          print("Успешных развёртываний:", len(ready))
+          print("Успешных Preview:", len(preview))
+          print("Успешных Production:", len(ready) - len(preview))
+          PY
