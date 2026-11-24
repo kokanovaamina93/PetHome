@@ -74,7 +74,7 @@ if prev:
 (out / "prompts/system.txt").write_text(R.SYSTEM, encoding="utf-8")
 (out / "prompts/few_shot.json").write_text(json.dumps(R.FEW_SHOT, ensure_ascii=False, indent=1), encoding="utf-8")
 
-files = {v: open(out / f"{v}.jsonl", "a" if RESUME else "w", encoding="utf-8") for v in "ABCD"}
+files = {v: open(out / f"{v}.jsonl", "a" if RESUME else "w", encoding="utf-8", buffering=1) for v in "ABCD"}
 errors = prev.get("api_errors", [])
 TPM = float(os.environ.get("EVAL_TPM", "7000"))  # лимит бесплатного тарифа Groq — 8000 токенов/мин, держим запас
 stopped = False
