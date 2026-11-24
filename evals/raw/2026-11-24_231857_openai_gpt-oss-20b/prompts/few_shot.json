@@ -1,0 +1,231 @@
+[
+ [
+  {
+   "profile": {
+    "preferred_type": "dog",
+    "housing": "apartment",
+    "kids": "over6",
+    "other_pets": "none",
+    "time_per_day": "medium",
+    "experience": "none",
+    "activity": "low",
+    "walks_ready": "yes"
+   },
+   "text": "Хотим спокойную собаку в квартиру, ребёнку 9 лет",
+   "candidates": [
+    {
+     "id": 9001,
+     "type": "dog",
+     "breed": "Лабрадор",
+     "size": "large",
+     "activity": "high",
+     "good_with_kids": "yes",
+     "good_with_pets": "yes",
+     "apartment_ok": "unknown",
+     "beginner_ok": "yes",
+     "care_level": "medium",
+     "age_group": "adult"
+    },
+    {
+     "id": 9002,
+     "type": "dog",
+     "breed": "Мопс",
+     "size": "small",
+     "activity": "low",
+     "good_with_kids": "yes",
+     "good_with_pets": "unknown",
+     "apartment_ok": "yes",
+     "beginner_ok": "yes",
+     "care_level": "low",
+     "age_group": "adult"
+    },
+    {
+     "id": 9003,
+     "type": "cat",
+     "breed": "Метис",
+     "size": "small",
+     "activity": "medium",
+     "good_with_kids": "no",
+     "good_with_pets": "yes",
+     "apartment_ok": "yes",
+     "beginner_ok": "yes",
+     "care_level": "low",
+     "age_group": "young"
+    }
+   ]
+  },
+  {
+   "action": "recommend",
+   "question": null,
+   "top": [
+    9002
+   ],
+   "pairs": [
+    {
+     "animal_id": 9001,
+     "label": "unsuitable",
+     "reason": "крупная и очень активная, нет подтверждения, что подходит для квартиры"
+    },
+    {
+     "animal_id": 9002,
+     "label": "suitable",
+     "reason": "маленькая спокойная собака, ладит с детьми, подходит для квартиры"
+    },
+    {
+     "animal_id": 9003,
+     "label": "unsuitable",
+     "reason": "человек ищет собаку, а это кошка"
+    }
+   ]
+  }
+ ],
+ [
+  {
+   "profile": {
+    "preferred_type": "any",
+    "kids": "under6",
+    "other_pets": "cat"
+   },
+   "text": "хочу питомца",
+   "candidates": [
+    {
+     "id": 9001,
+     "type": "dog",
+     "breed": "Лабрадор",
+     "size": "large",
+     "activity": "high",
+     "good_with_kids": "yes",
+     "good_with_pets": "yes",
+     "apartment_ok": "unknown",
+     "beginner_ok": "yes",
+     "care_level": "medium",
+     "age_group": "adult"
+    },
+    {
+     "id": 9002,
+     "type": "dog",
+     "breed": "Мопс",
+     "size": "small",
+     "activity": "low",
+     "good_with_kids": "yes",
+     "good_with_pets": "unknown",
+     "apartment_ok": "yes",
+     "beginner_ok": "yes",
+     "care_level": "low",
+     "age_group": "adult"
+    },
+    {
+     "id": 9003,
+     "type": "cat",
+     "breed": "Метис",
+     "size": "small",
+     "activity": "medium",
+     "good_with_kids": "no",
+     "good_with_pets": "yes",
+     "apartment_ok": "yes",
+     "beginner_ok": "yes",
+     "care_level": "low",
+     "age_group": "young"
+    }
+   ]
+  },
+  {
+   "action": "clarify",
+   "question": "Вы живёте в квартире или в доме и сколько времени в день готовы уделять питомцу?",
+   "top": [],
+   "pairs": [
+    {
+     "animal_id": 9001,
+     "label": "insufficient",
+     "reason": "неизвестно жильё и время человека"
+    },
+    {
+     "animal_id": 9002,
+     "label": "insufficient",
+     "reason": "нет данных, ладит ли с кошками"
+    },
+    {
+     "animal_id": 9003,
+     "label": "unsuitable",
+     "reason": "не ладит с детьми, а в семье ребёнок до 6 лет"
+    }
+   ]
+  }
+ ],
+ [
+  {
+   "profile": {
+    "preferred_type": "cat",
+    "housing": "apartment",
+    "kids": "under6",
+    "other_pets": "none",
+    "time_per_day": "low",
+    "experience": "none"
+   },
+   "text": "Мысық керек, үйде кішкентай бала бар",
+   "candidates": [
+    {
+     "id": 9001,
+     "type": "dog",
+     "breed": "Лабрадор",
+     "size": "large",
+     "activity": "high",
+     "good_with_kids": "yes",
+     "good_with_pets": "yes",
+     "apartment_ok": "unknown",
+     "beginner_ok": "yes",
+     "care_level": "medium",
+     "age_group": "adult"
+    },
+    {
+     "id": 9002,
+     "type": "dog",
+     "breed": "Мопс",
+     "size": "small",
+     "activity": "low",
+     "good_with_kids": "yes",
+     "good_with_pets": "unknown",
+     "apartment_ok": "yes",
+     "beginner_ok": "yes",
+     "care_level": "low",
+     "age_group": "adult"
+    },
+    {
+     "id": 9003,
+     "type": "cat",
+     "breed": "Метис",
+     "size": "small",
+     "activity": "medium",
+     "good_with_kids": "no",
+     "good_with_pets": "yes",
+     "apartment_ok": "yes",
+     "beginner_ok": "yes",
+     "care_level": "low",
+     "age_group": "young"
+    }
+   ]
+  },
+  {
+   "action": "no_safe_match",
+   "question": null,
+   "top": [],
+   "pairs": [
+    {
+     "animal_id": 9001,
+     "label": "unsuitable",
+     "reason": "нужна кошка, а это собака"
+    },
+    {
+     "animal_id": 9002,
+     "label": "unsuitable",
+     "reason": "нужна кошка, а это собака"
+    },
+    {
+     "animal_id": 9003,
+     "label": "unsuitable",
+     "reason": "кошка не ладит с детьми, а в семье маленький ребёнок"
+    }
+   ]
+  }
+ ]
+]

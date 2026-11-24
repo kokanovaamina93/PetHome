@@ -27,8 +27,30 @@ LABELS = ("suitable", "unsuitable", "insufficient")
 LABELS_RU = {"suitable": "Подходит", "unsuitable": "Не подходит", "insufficient": "Недостаточно данных"}
 TOP_K = 5
 
+
+
+def _load_env_file() -> str:
+    """Читает backend/.env или файл из PETHOME_ENV_FILE (KEY=VALUE). Уже заданные переменные не перезаписывает.
+    Возвращает путь к прочитанному файлу (без значений) — для диагностики."""
+    from pathlib import Path
+
+    path = Path(os.environ.get("PETHOME_ENV_FILE") or Path(__file__).resolve().parent / ".env").expanduser()
+    try:
+        lines = path.read_text(encoding="utf-8").splitlines()
+    except OSError:
+        return ""
+    for line in lines:
+        line = line.strip()
+        if line and not line.startswith("#") and "=" in line:
+            k, v = line.split("=", 1)
+            os.environ.setdefault(k.strip().removeprefix("export ").strip(), v.strip().strip("'\""))
+    return str(path)
+
+
+ENV_FILE_LOADED = _load_env_file()
 AI_BASE_URL = os.environ.get("AI_BASE_URL", "https://api.groq.com/openai/v1").rstrip("/")
-AI_API_KEY = os.environ.get("AI_API_KEY", "")
+# AI_API_KEY — основное имя; GROQ_API_KEY принимаем как синоним (так его часто называют на Render)
+AI_API_KEY = os.environ.get("AI_API_KEY") or os.environ.get("GROQ_API_KEY", "")
 AI_MODEL = os.environ.get("AI_MODEL", "openai/gpt-oss-20b")
 AI_TIMEOUT = float(os.environ.get("AI_TIMEOUT", "25"))
 
@@ -471,7 +493,21 @@ def _parse(raw: str, ids: list[int]) -> dict:
 
 
 class AIUnavailable(Exception):
-    pass
+    """kind: not_configured | rate_limit | auth | model | network | timeout | bad_response"""
+
+    def __init__(self, message: str, kind: str = "network"):
+        super().__init__(message)
+        self.kind = kind
+
+
+def _retry_after(e: urllib.error.HTTPError, body: str) -> float:
+    m = re.search(r"try again in (?:(\d+)m)?([\d.]+)s", body)
+    if m:
+        return int(m.group(1) or 0) * 60 + float(m.group(2))
+    try:
+        return float(e.headers.get("retry-after", "0"))
+    except ValueError:
+        return 0.0
 
 
 def llm_recommend(
@@ -505,21 +541,45 @@ def llm_recommend(
             **({"Authorization": "Bearer " + api_key} if api_key else {}),
         },
     )
+    if not api_key and "localhost" not in base_url:
+        raise AIUnavailable("не задан AI_API_KEY", "not_configured")
     t0 = time.perf_counter()
-    try:
-        with urllib.request.urlopen(req, timeout=AI_TIMEOUT) as r:
-            data = json.loads(r.read())
-    except urllib.error.HTTPError as e:
-        raise AIUnavailable(f"HTTP {e.code}: {e.read()[:300].decode(errors='replace')}") from e
-    except (urllib.error.URLError, TimeoutError, OSError) as e:
-        raise AIUnavailable(str(e)) from e
-    raw = (data.get("choices") or [{}])[0].get("message", {}).get("content") or ""
+    for attempt in (1, 2):
+        try:
+            with urllib.request.urlopen(req, timeout=AI_TIMEOUT) as r:
+                data = json.loads(r.read())
+            break
+        except urllib.error.HTTPError as e:
+            try:
+                body = e.read()[:600].decode(errors="replace")
+            except OSError:
+                body = ""
+            body = re.sub(r"org_\w+", "org_***", body)  # в журнал не пишем идентификатор организации
+            if e.code == 429:
+                wait = _retry_after(e, body)
+                # минутный лимит токенов: Groq просит подождать несколько секунд — ждём один раз и повторяем
+                if attempt == 1 and 0 < wait <= float(os.environ.get("AI_MAX_RETRY_WAIT", "8")):
+                    time.sleep(wait + 0.3)
+                    continue
+                raise AIUnavailable(f"HTTP 429: {body[:300]}", "rate_limit") from e
+            kind = "auth" if e.code in (401, 403) else "model" if e.code in (400, 404) else "network"
+            raise AIUnavailable(f"HTTP {e.code}: {body[:300]}", kind) from e
+        except TimeoutError as e:
+            raise AIUnavailable(f"таймаут {AI_TIMEOUT} с", "timeout") from e
+        except (urllib.error.URLError, OSError) as e:
+            raise AIUnavailable(str(e), "network") from e
+    choice = (data.get("choices") or [{}])[0]
+    raw = choice.get("message", {}).get("content") or ""
+    if not raw.strip():
+        # у gpt-oss рассуждения идут в отдельном поле reasoning; пустой content — это сбой, а не «нет вариантов»
+        raise AIUnavailable(f"пустой ответ модели, finish_reason={choice.get('finish_reason')}", "bad_response")
     out = _parse(raw, [a["id"] for a in animals])
     out.update(
         variant="B" if mode == "zero" else "C",
         raw=raw,
         model=data.get("model", model),
         system_fingerprint=data.get("system_fingerprint"),
+        finish_reason=choice.get("finish_reason"),
         usage=data.get("usage", {}),
         latency_s=round(time.perf_counter() - t0, 3),
         source="ai",
@@ -646,8 +706,10 @@ def recommend_for_site(profile: dict, text: str, animals: list[dict], ai_enabled
             return r
         except AIUnavailable as e:
             r = baseline_recommend(profile, pool, text)
-            r.update(mode="fallback", error=str(e)[:200])
+            r.update(mode="fallback", error=str(e)[:200], error_kind=e.kind)
             return r
     r = baseline_recommend(profile, pool, text)
     r["mode"] = "disabled" if not ai_enabled else "fallback"
+    if ai_enabled:
+        r.update(error="не задан AI_API_KEY", error_kind="not_configured")
     return r

@@ -1419,6 +1419,24 @@ FALLBACK_NOTICE = (
     "Облачная модель сейчас недоступна — показан подбор по правилам без ИИ. "
     "Совместимость необходимо подтвердить с сотрудником приюта."
 )
+# точная причина резервного режима (показывается вместе с основным предупреждением)
+FALLBACK_REASON = {
+    "rate_limit": "Причина: превышен лимит запросов к облачной модели. Повторите через минуту.",
+    "not_configured": "Причина: на сервере не настроен ключ облачной модели.",
+    "auth": "Причина: облачная модель отклонила ключ доступа.",
+    "model": "Причина: облачная модель отклонила запрос.",
+    "timeout": "Причина: облачная модель не ответила вовремя.",
+    "network": "Причина: нет соединения с облачной моделью.",
+    "bad_response": "Причина: облачная модель вернула пустой ответ.",
+}
+print(
+    "PetHome AI:",
+    "ключ задан" if recommender.AI_API_KEY else "КЛЮЧ НЕ ЗАДАН",
+    "| модель", recommender.AI_MODEL,
+    "| endpoint", recommender.AI_BASE_URL,
+    "| env-файл", recommender.ENV_FILE_LOADED or "не найден",
+    flush=True,
+)
 DISABLED_NOTICE = (
     "ИИ-подбор временно отключён — показан подбор по правилам. "
     "Совместимость необходимо подтвердить с сотрудником приюта."
@@ -1493,7 +1511,7 @@ def ai_recommend(
         latency_ms=int(float(result.get("latency_s", 0)) * 1000),
         prompt_tokens=int(usage.get("prompt_tokens", 0) or 0),
         completion_tokens=int(usage.get("completion_tokens", 0) or 0),
-        error=result.get("error", ""),
+        error=(result.get("error_kind", "") + ": " + result.get("error", "")) if result.get("error") else "",
     )
     session.add(log)
     session.commit()
@@ -1501,7 +1519,10 @@ def ai_recommend(
     return {
         "recommendation_id": log.id,
         "mode": mode,
-        "notice": AI_NOTICE if mode == "ai" else DISABLED_NOTICE if mode == "disabled" else FALLBACK_NOTICE,
+        "notice": AI_NOTICE if mode == "ai" else DISABLED_NOTICE if mode == "disabled"
+        else FALLBACK_NOTICE + " " + FALLBACK_REASON.get(result.get("error_kind", ""), ""),
+        "fallback_reason": result.get("error_kind") if mode == "fallback" else None,
+        "model": result.get("model") if mode == "ai" else None,
         "action": result.get("action"),
         "question": result.get("question"),
         "handoff": result.get("action") != "recommend",
