@@ -210,9 +210,24 @@ def _score(p: dict, a: dict, text: str) -> float:
     return s
 
 
+_CAT_RX = re.compile(r"\bкош\w*|\bкот(?:ик\w*|ёнк\w*|енк\w*|ят\w*|ы|а|у|е|ом)?\b|\bкотёнок\b|\bкотенок\b|мысық|\bcats?\b|"
+                     r"мейн-кун|сфинкс|британ|шотланд|персидск")
+_DOG_RX = re.compile(r"\bсобак\w*|\bсобачк\w*|\bп[её]с\b|\bпсин\w*|\bщен\w*|\bит\b|\bитті\w*|\bdogs?\b|хаски|овчарк|"
+                     r"лабрадор|ретривер|корги|шпиц|терьер|бигл|пудел|такс[аеуы]\b|доберман|ротвейлер|самоед")
+
+
+_OWNED_RX = re.compile(r"(?:уже\s+)?есть\s+(?:\w+\s+){0,2}?(?:кош\w*|кот\w*|собак\w*|п[её]с\w*)|"
+                       r"(?:мысық|ит)\s+(?:та|те)\s+бар|(?:кошк\w*|кот\w*|собак\w*)\s+уже\s+есть")
+
+
 def _type_from_text(text: str) -> str | None:
     t = (text or "").lower()
-    cat, dog = bool(re.search(r"кош|кот|мысық|cat", t)), bool(re.search(r"собак|пёс|пес|щен|ит\b|dog", t))
+    if RULES_VERSION == "rules-v1":  # как в замере 24.11 (с найденным дефектом: «кот» в «который», «ит» в глаголах)
+        cat, dog = bool(re.search(r"кош|кот|мысық|cat", t)), bool(re.search(r"собак|пёс|пес|щен|ит\b|dog", t))
+    else:
+        # животные, которые у человека уже есть, — не то, что он хочет взять
+        t = _OWNED_RX.sub(" ", t)
+        cat, dog = bool(_CAT_RX.search(t)), bool(_DOG_RX.search(t))
     return "cat" if cat and not dog else "dog" if dog and not cat else None
 
 
