@@ -1,0 +1,9 @@
+{
+ "pairs": 360,
+ "pairs_agreement": 0.928,
+ "pairs_kappa": 0.883,
+ "clarify_agreement": 0.778,
+ "clarify_kappa": 0.546,
+ "allowed_agreement": 0.889,
+ "allowed_kappa": 0.778
+}

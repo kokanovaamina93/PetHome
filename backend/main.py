@@ -6,6 +6,9 @@ from io import BytesIO
 from pathlib import Path
 from typing import Optional
 from uuid import uuid4
+import json as jsonlib
+
+import recommender
 
 import jwt
 from fastapi import (
@@ -188,6 +191,9 @@ class Animal(Base):
     special_needs: Mapped[str] = mapped_column(
         Text, default=""
     )
+    apartment_ok: Mapped[str] = mapped_column(String(20), default="unknown")
+    beginner_ok: Mapped[str] = mapped_column(String(20), default="unknown")
+    care_level: Mapped[str] = mapped_column(String(20), default="unknown")
     age_group: Mapped[str] = mapped_column(
         String(20), default=""
     )
@@ -214,8 +220,36 @@ class Application(Base):
     created_at: Mapped[datetime] = mapped_column(
         DateTime, default=datetime.utcnow
     )
+    # заявка подана из блока ИИ-рекомендаций (для бизнес-метрики конверсии)
+    recommendation_id: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
 
     animal: Mapped[Animal] = relationship()
+
+
+class AppSetting(Base):
+    """Настройки, меняемые без перезапуска (переключатель ИИ)."""
+    __tablename__ = "app_settings"
+    key: Mapped[str] = mapped_column(String(50), primary_key=True)
+    value: Mapped[str] = mapped_column(String(200), default="")
+
+
+class RecommendationLog(Base):
+    """Журнал ИИ-подбора: без свободного текста пользователя (только длина и анкета)."""
+    __tablename__ = "recommendation_log"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    user_id: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
+    mode: Mapped[str] = mapped_column(String(20))          # ai | fallback | disabled
+    model: Mapped[str] = mapped_column(String(80), default="")
+    prompt_version: Mapped[str] = mapped_column(String(20), default="")
+    action: Mapped[str] = mapped_column(String(20), default="")
+    recommended_ids: Mapped[str] = mapped_column(Text, default="[]")
+    profile_json: Mapped[str] = mapped_column(Text, default="{}")
+    text_length: Mapped[int] = mapped_column(Integer, default=0)
+    latency_ms: Mapped[int] = mapped_column(Integer, default=0)
+    prompt_tokens: Mapped[int] = mapped_column(Integer, default=0)
+    completion_tokens: Mapped[int] = mapped_column(Integer, default=0)
+    error: Mapped[str] = mapped_column(Text, default="")
 
 
 class ApplicationHistory(Base):
@@ -276,6 +310,12 @@ MISSING_COLUMNS = {
         "sterilized": "VARCHAR(20) NOT NULL DEFAULT 'unknown'",
         "special_needs": "TEXT NOT NULL DEFAULT ''",
         "age_group": "VARCHAR(20) NOT NULL DEFAULT ''",
+        "apartment_ok": "VARCHAR(20) NOT NULL DEFAULT 'unknown'",
+        "beginner_ok": "VARCHAR(20) NOT NULL DEFAULT 'unknown'",
+        "care_level": "VARCHAR(20) NOT NULL DEFAULT 'unknown'",
+    },
+    "applications": {
+        "recommendation_id": "INTEGER",
     },
 }
 
@@ -296,6 +336,14 @@ with engine.begin() as conn:
                         f"ADD COLUMN {column_name} {column_type}"
                     )
                 )
+
+
+# Новая пустая база (например, PostgreSQL на Render) заполняется каталогом из data/animals.json
+if os.environ.get("SEED_IF_EMPTY", "1") == "1":
+    import seed_animals
+
+    with SessionLocal() as _s:
+        seed_animals.seed_if_empty(_s, Animal)
 
 
 # ============================================================
@@ -382,8 +430,22 @@ def audit(session, actor, action, detail=""):
 # 7. JSON HELPERS
 # ============================================================
 
+PUBLIC_URL = (
+    os.environ.get("PUBLIC_URL")
+    or os.environ.get("RENDER_EXTERNAL_URL")
+    or "http://127.0.0.1:8000"
+).rstrip("/")
+
+
+def public_image(url):
+    # старые карточки хранят http://127.0.0.1:8000/uploads/... — на Render такой адрес не открывается
+    if url and "/uploads/" in url and url.startswith(("http://127.0.0.1", "http://localhost", "/uploads/")):
+        return PUBLIC_URL + url[url.index("/uploads/"):]
+    return url
+
+
 def animal_json(a):
-    return {
+    d = {
         k: getattr(a, k)
         for k in (
             "id",
@@ -405,8 +467,13 @@ def animal_json(a):
             "sterilized",
             "special_needs",
             "age_group",
+            "apartment_ok",
+            "beginner_ok",
+            "care_level",
         )
     }
+    d["image_url"] = public_image(d["image_url"])
+    return d
 
 
 def app_json(a):
@@ -449,6 +516,7 @@ class ApplicationIn(BaseModel):
         default="",
         max_length=2000,
     )
+    recommendation_id: Optional[int] = None
 
 
 class AnimalIn(BaseModel):
@@ -470,6 +538,9 @@ class AnimalIn(BaseModel):
     sterilized: str = "unknown"
     special_needs: str = Field(default="", max_length=2000)
     age_group: str = ""
+    apartment_ok: str = "unknown"
+    beginner_ok: str = "unknown"
+    care_level: str = "unknown"
 
 
 class StatusIn(BaseModel):
@@ -1333,4 +1404,201 @@ def change_password(
 
     return {
         "message": "Пароль изменён"
+    }
+
+
+# ============================================================
+# ИИ-ПОДБОР ПИТОМЦА (ЛЗ 12)
+# ============================================================
+
+AI_NOTICE = (
+    "Рекомендации сформированы с помощью искусственного интеллекта. "
+    "Совместимость и условия содержания необходимо подтвердить с сотрудником приюта."
+)
+FALLBACK_NOTICE = (
+    "Облачная модель сейчас недоступна — показан подбор по правилам без ИИ. "
+    "Совместимость необходимо подтвердить с сотрудником приюта."
+)
+# точная причина резервного режима (показывается вместе с основным предупреждением)
+FALLBACK_REASON = {
+    "rate_limit": "Причина: превышен лимит запросов к облачной модели. Повторите через минуту.",
+    "not_configured": "Причина: на сервере не настроен ключ облачной модели.",
+    "auth": "Причина: облачная модель отклонила ключ доступа.",
+    "model": "Причина: облачная модель отклонила запрос.",
+    "timeout": "Причина: облачная модель не ответила вовремя.",
+    "network": "Причина: нет соединения с облачной моделью.",
+    "bad_response": "Причина: облачная модель вернула пустой ответ.",
+}
+print(
+    "PetHome AI:",
+    "ключ задан" if recommender.AI_API_KEY else "КЛЮЧ НЕ ЗАДАН",
+    "| модель", recommender.AI_MODEL,
+    "| endpoint", recommender.AI_BASE_URL,
+    "| env-файл", recommender.ENV_FILE_LOADED or "не найден",
+    flush=True,
+)
+DISABLED_NOTICE = (
+    "ИИ-подбор временно отключён — показан подбор по правилам. "
+    "Совместимость необходимо подтвердить с сотрудником приюта."
+)
+
+
+def ai_enabled(session: Session) -> bool:
+    row = session.get(AppSetting, "ai_enabled")
+    if row is not None:
+        return row.value == "1"
+    return os.environ.get("AI_ENABLED", "1") != "0"
+
+
+def optional_user(
+    authorization: Optional[str] = Header(default=None),
+    session: Session = Depends(db),
+):
+    if not authorization or not authorization.startswith("Bearer "):
+        return None
+    try:
+        payload = jwt.decode(authorization[7:], SECRET, algorithms=["HS256"])
+        return session.get(User, int(payload["sub"]))
+    except (jwt.InvalidTokenError, ValueError, KeyError):
+        return None
+
+
+class RecommendIn(BaseModel):
+    profile: dict = Field(default_factory=dict)
+    message: str = Field(default="", max_length=1000)
+
+
+class AiToggleIn(BaseModel):
+    enabled: bool
+
+
+@app.get("/ai/status")
+def ai_status(session: Session = Depends(db)):
+    return {
+        "enabled": ai_enabled(session),
+        "provider_configured": bool(recommender.AI_API_KEY) or "localhost" in recommender.AI_BASE_URL,
+        "model": recommender.AI_MODEL,
+        "prompt_version": recommender.PROMPT_VERSION,
+        "notice": AI_NOTICE,
+    }
+
+
+@app.post("/ai/recommend")
+def ai_recommend(
+    data: RecommendIn,
+    u: Optional[User] = Depends(optional_user),
+    session: Session = Depends(db),
+):
+    animals = [
+        animal_json(a)
+        for a in session.scalars(select(Animal).where(Animal.status == "available")).all()
+    ]
+    result = recommender.recommend_for_site(
+        data.profile, data.message, animals, ai_enabled(session)
+    )
+    by_id = {a["id"]: a for a in animals}
+    reasons = {p["animal_id"]: p.get("reason", "") for p in result.get("pairs", [])}
+    usage = result.get("usage") or {}
+    log = RecommendationLog(
+        user_id=u.id if u else None,
+        mode=result.get("mode", ""),
+        model=result.get("model", "keyword-rules") or "",
+        prompt_version=recommender.PROMPT_VERSION if result.get("mode") == "ai" else "rules-v1",
+        action=result.get("action", ""),
+        recommended_ids=jsonlib.dumps(result.get("top", [])),
+        profile_json=jsonlib.dumps(recommender.clean_profile(data.profile), ensure_ascii=False),
+        text_length=len(data.message or ""),
+        latency_ms=int(float(result.get("latency_s", 0)) * 1000),
+        prompt_tokens=int(usage.get("prompt_tokens", 0) or 0),
+        completion_tokens=int(usage.get("completion_tokens", 0) or 0),
+        error=(result.get("error_kind", "") + ": " + result.get("error", "")) if result.get("error") else "",
+    )
+    session.add(log)
+    session.commit()
+    mode = result.get("mode")
+    return {
+        "recommendation_id": log.id,
+        "mode": mode,
+        "notice": AI_NOTICE if mode == "ai" else DISABLED_NOTICE if mode == "disabled"
+        else FALLBACK_NOTICE + " " + FALLBACK_REASON.get(result.get("error_kind", ""), ""),
+        "fallback_reason": result.get("error_kind") if mode == "fallback" else None,
+        "model": result.get("model") if mode == "ai" else None,
+        "action": result.get("action"),
+        "question": result.get("question"),
+        "handoff": result.get("action") != "recommend",
+        "items": [
+            {**by_id[i], "reason": reasons.get(i, "")} for i in result.get("top", []) if i in by_id
+        ],
+        "alternatives": [
+            {**by_id[i], "reason": reasons.get(i, "")}
+            for i in result.get("alternatives", []) if i in by_id
+        ],
+    }
+
+
+class HandoffRequest(Base):
+    """Вопрос, переданный сотруднику, когда ИИ не смог безопасно подобрать животное."""
+    __tablename__ = "ai_handoff"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    recommendation_id: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
+    message: Mapped[str] = mapped_column(Text, default="")
+    status: Mapped[str] = mapped_column(String(20), default="new")
+
+
+Base.metadata.create_all(engine, tables=[HandoffRequest.__table__])
+
+
+class HandoffIn(BaseModel):
+    recommendation_id: Optional[int] = None
+    message: str = Field(default="", max_length=1000)
+
+
+@app.post("/ai/handoff", status_code=201)
+def ai_handoff(data: HandoffIn, u: User = Depends(user_from_token), session: Session = Depends(db)):
+    h = HandoffRequest(user_id=u.id, recommendation_id=data.recommendation_id,
+                       message=recommender.scrub_pii(data.message))
+    session.add(h)
+    session.commit()
+    return {"id": h.id, "message": "Вопрос передан сотруднику приюта"}
+
+
+@app.get("/admin/ai/handoffs")
+def admin_handoffs(_=Depends(admin), session: Session = Depends(db)):
+    rows = session.scalars(select(HandoffRequest).order_by(HandoffRequest.id.desc()).limit(100)).all()
+    emails = {u.id: u.email for u in session.scalars(select(User)).all()}
+    return [{"id": h.id, "created_at": h.created_at.isoformat(), "email": emails.get(h.user_id, ""),
+             "message": h.message, "recommendation_id": h.recommendation_id, "status": h.status} for h in rows]
+
+
+@app.patch("/admin/ai")
+def admin_ai_toggle(data: AiToggleIn, u: User = Depends(admin), session: Session = Depends(db)):
+    row = session.get(AppSetting, "ai_enabled") or AppSetting(key="ai_enabled")
+    row.value = "1" if data.enabled else "0"
+    session.add(row)
+    audit(session, u, "ai.toggle", "включён" if data.enabled else "отключён")
+    session.commit()
+    return {"enabled": data.enabled}
+
+
+@app.get("/admin/ai/stats")
+def admin_ai_stats(_=Depends(admin), session: Session = Depends(db)):
+    logs = session.scalars(select(RecommendationLog)).all()
+    with_recs = [x for x in logs if x.recommended_ids not in ("[]", "")]
+    apps_from_reco = session.scalars(
+        select(Application).where(Application.recommendation_id.is_not(None))
+    ).all()
+    n = len(logs) or 1
+    return {
+        "enabled": ai_enabled(session),
+        "requests": len(logs),
+        "ai_share": round(sum(x.mode == "ai" for x in logs) / n, 3),
+        "fallback_share": round(sum(x.mode == "fallback" for x in logs) / n, 3),
+        "refusal_share": round(sum(x.action in ("clarify", "no_safe_match") for x in logs) / n, 3),
+        "avg_latency_ms": round(sum(x.latency_ms for x in logs) / n),
+        "avg_prompt_tokens": round(sum(x.prompt_tokens for x in logs) / n),
+        "avg_completion_tokens": round(sum(x.completion_tokens for x in logs) / n),
+        "applications_from_recommendations": len(apps_from_reco),
+        "conversion": round(len(apps_from_reco) / len(with_recs), 3) if with_recs else None,
     }

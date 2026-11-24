@@ -1,0 +1,2770 @@
+{
+ "run_id": "2026-11-24_231857_openai_gpt-oss-20b",
+ "meta": {
+  "run_id": "2026-11-24_231857_openai_gpt-oss-20b",
+  "started_utc": "2026-11-24T18:18:57+00:00",
+  "provider_base_url": "https://api.groq.com/openai/v1",
+  "model": "openai/gpt-oss-20b",
+  "prompt_version": "reco-v1",
+  "params": {
+   "temperature": 0,
+   "seed": 42,
+   "max_tokens": 2500,
+   "response_format": "json_object",
+   "reasoning_effort": "low"
+  },
+  "determinism_note": "seed поддерживается провайдером в режиме best effort; детерминированность не гарантируется",
+  "catalog_version": "f45debb02649",
+  "n_scenarios": 36,
+  "python": "3.11.4",
+  "git_commit": "f1d5191",
+  "finished_utc": "2026-11-24T20:23:00+00:00",
+  "complete": false,
+  "api_errors": [
+   {
+    "id": "sc-07",
+    "variant": "C",
+    "attempt": 1,
+    "error": "HTTP 429: {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-20b` in organization `org_01m86z9gnhektt1sseew0wyrn2` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 5262, Requested 3698. Please try again in 7.199999999s. Need more tokens? Upgrade to Dev Tier today at https:/",
+    "utc": "2026-11-24T18:24:15+00:00"
+   },
+   {
+    "id": "sc-32",
+    "variant": "C",
+    "attempt": 1,
+    "error": "HTTP 429: {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-20b` in organization `org_01m86z9gnhektt1sseew0wyrn2` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 196935, Requested 3552. Please try again in 3m30.384s. Need more tokens? Upgrade to Dev Tier today at https://c",
+    "utc": "2026-11-24T18:45:20+00:00"
+   }
+  ],
+  "completed_scenarios": 31,
+  "not_completed": [
+   "sc-32",
+   "sc-33",
+   "sc-34",
+   "sc-35",
+   "sc-36"
+  ],
+  "not_completed_reason": "не выполнено: исчерпан суточный лимит бесплатного тарифа Groq (200 000 токенов), прогон закрыт 25.11.2026"
+ },
+ "results": {
+  "A": {
+   "accuracy": 0.5944444444444444,
+   "macro_precision": 0.7377132671250318,
+   "macro_recall": 0.5716637039963132,
+   "macro_f1": 0.5042854875864726,
+   "per_class": {
+    "suitable": {
+     "precision": 0.3949579831932773,
+     "recall": 1.0,
+     "f1": 0.5662650602409639,
+     "support": 94
+    },
+    "unsuitable": {
+     "precision": 1.0,
+     "recall": 0.6065573770491803,
+     "f1": 0.7551020408163265,
+     "support": 183
+    },
+    "insufficient": {
+     "precision": 0.8181818181818182,
+     "recall": 0.10843373493975904,
+     "f1": 0.19148936170212766,
+     "support": 83
+    }
+   },
+   "precision_at_5": 0.799074074074074,
+   "recall_at_5": 0.9666666666666667,
+   "ndcg_at_5": 0.8531871114897767,
+   "violation_rate": 0.2565789473684211,
+   "violations": 39,
+   "recommended_items": 152,
+   "explanation_error_rate": 0.0,
+   "correct_refusal": "2/18",
+   "clarify_accuracy": 0.5277777777777778,
+   "latency_mean_s": 0.0012738888888888889,
+   "latency_p95_s": 0.00259,
+   "api_errors": 0,
+   "parse_errors": 0,
+   "confusion": {
+    "suitable": {
+     "suitable": 94,
+     "unsuitable": 0,
+     "insufficient": 0,
+     "missing": 0
+    },
+    "unsuitable": {
+     "suitable": 70,
+     "unsuitable": 111,
+     "insufficient": 2,
+     "missing": 0
+    },
+    "insufficient": {
+     "suitable": 74,
+     "unsuitable": 0,
+     "insufficient": 9,
+     "missing": 0
+    }
+   },
+   "per_category": {
+    "apartment": {
+     "p5": 0.7125,
+     "ndcg5": 0.7998037049627125,
+     "violations": 5,
+     "n": 4
+    },
+    "house": {
+     "p5": 0.95,
+     "ndcg5": 0.8810706688919452,
+     "violations": 1,
+     "n": 4
+    },
+    "family_kids": {
+     "p5": 1.0,
+     "ndcg5": 0.971736649560532,
+     "violations": 0,
+     "n": 3
+    },
+    "no_experience": {
+     "p5": 0.65,
+     "ndcg5": 0.679665140678938,
+     "violations": 4,
+     "n": 4
+    },
+    "active": {
+     "p5": 0.5666666666666667,
+     "ndcg5": 1.0,
+     "violations": 3,
+     "n": 2
+    },
+    "limited_time": {
+     "p5": 1.0,
+     "ndcg5": 1.0,
+     "violations": 0,
+     "n": 1
+    }
+   }
+  },
+  "B": {
+   "accuracy": 0.5138888888888888,
+   "macro_precision": 0.6112544362544363,
+   "macro_recall": 0.48653864382071943,
+   "macro_f1": 0.5305412880686733,
+   "per_class": {
+    "suitable": {
+     "precision": 0.6060606060606061,
+     "recall": 0.6382978723404256,
+     "f1": 0.6217616580310881,
+     "support": 94
+    },
+    "unsuitable": {
+     "precision": 0.7027027027027027,
+     "recall": 0.5683060109289617,
+     "f1": 0.6283987915407855,
+     "support": 183
+    },
+    "insufficient": {
+     "precision": 0.525,
+     "recall": 0.25301204819277107,
+     "f1": 0.34146341463414637,
+     "support": 83
+    }
+   },
+   "precision_at_5": 0.7833333333333333,
+   "recall_at_5": 0.637962962962963,
+   "ndcg_at_5": 0.6400093541876887,
+   "violation_rate": 0.125,
+   "violations": 10,
+   "recommended_items": 80,
+   "explanation_error_rate": 0.0,
+   "correct_refusal": "9/18",
+   "clarify_accuracy": 0.6111111111111112,
+   "latency_mean_s": 1.0584516129032258,
+   "latency_p95_s": 1.318,
+   "api_errors": 5,
+   "parse_errors": 0,
+   "confusion": {
+    "suitable": {
+     "suitable": 60,
+     "unsuitable": 24,
+     "insufficient": 4,
+     "missing": 6
+    },
+    "unsuitable": {
+     "suitable": 10,
+     "unsuitable": 104,
+     "insufficient": 15,
+     "missing": 54
+    },
+    "insufficient": {
+     "suitable": 29,
+     "unsuitable": 20,
+     "insufficient": 21,
+     "missing": 13
+    }
+   },
+   "per_category": {
+    "apartment": {
+     "p5": 0.75,
+     "ndcg5": 0.5343090822438928,
+     "violations": 1,
+     "n": 4
+    },
+    "house": {
+     "p5": 1.0,
+     "ndcg5": 0.6731338894250956,
+     "violations": 0,
+     "n": 4
+    },
+    "family_kids": {
+     "p5": 0.9333333333333333,
+     "ndcg5": 0.8832307992411995,
+     "violations": 1,
+     "n": 3
+    },
+    "no_experience": {
+     "p5": 0.575,
+     "ndcg5": 0.5101760227447111,
+     "violations": 2,
+     "n": 4
+    },
+    "active": {
+     "p5": 1.0,
+     "ndcg5": 1.0,
+     "violations": 0,
+     "n": 2
+    },
+    "limited_time": {
+     "p5": 0.0,
+     "ndcg5": 0.0,
+     "violations": 0,
+     "n": 1
+    }
+   }
+  },
+  "C": {
+   "accuracy": 0.46944444444444444,
+   "macro_precision": 0.559452693861296,
+   "macro_recall": 0.40143109351719164,
+   "macro_f1": 0.4028846338144252,
+   "per_class": {
+    "suitable": {
+     "precision": 0.5698924731182796,
+     "recall": 0.5638297872340425,
+     "f1": 0.5668449197860964,
+     "support": 94
+    },
+    "unsuitable": {
+     "precision": 0.6084656084656085,
+     "recall": 0.6284153005464481,
+     "f1": 0.6182795698924732,
+     "support": 183
+    },
+    "insufficient": {
+     "precision": 0.5,
+     "recall": 0.012048192771084338,
+     "f1": 0.023529411764705882,
+     "support": 83
+    }
+   },
+   "precision_at_5": 0.8037037037037037,
+   "recall_at_5": 0.5861111111111111,
+   "ndcg_at_5": 0.611265621091113,
+   "violation_rate": 0.14814814814814814,
+   "violations": 12,
+   "recommended_items": 81,
+   "explanation_error_rate": 0.0,
+   "correct_refusal": "7/18",
+   "clarify_accuracy": 0.5277777777777778,
+   "latency_mean_s": 0.9831290322580645,
+   "latency_p95_s": 1.227,
+   "api_errors": 5,
+   "parse_errors": 0,
+   "confusion": {
+    "suitable": {
+     "suitable": 53,
+     "unsuitable": 39,
+     "insufficient": 1,
+     "missing": 1
+    },
+    "unsuitable": {
+     "suitable": 12,
+     "unsuitable": 115,
+     "insufficient": 0,
+     "missing": 56
+    },
+    "insufficient": {
+     "suitable": 28,
+     "unsuitable": 35,
+     "insufficient": 1,
+     "missing": 19
+    }
+   },
+   "per_category": {
+    "apartment": {
+     "p5": 1.0,
+     "ndcg5": 0.7765732350040718,
+     "violations": 0,
+     "n": 4
+    },
+    "house": {
+     "p5": 1.0,
+     "ndcg5": 0.6698317787344101,
+     "violations": 0,
+     "n": 4
+    },
+    "family_kids": {
+     "p5": 0.9333333333333333,
+     "ndcg5": 0.5947423287170982,
+     "violations": 1,
+     "n": 3
+    },
+    "no_experience": {
+     "p5": 0.6666666666666666,
+     "ndcg5": 0.6502654187014827,
+     "violations": 1,
+     "n": 4
+    },
+    "active": {
+     "p5": 0.5,
+     "ndcg5": 0.4159362318644413,
+     "violations": 0,
+     "n": 2
+    },
+    "limited_time": {
+     "p5": 0.0,
+     "ndcg5": 0.0,
+     "violations": 0,
+     "n": 1
+    }
+   }
+  },
+  "D": {
+   "accuracy": 0.5194444444444445,
+   "macro_precision": 0.534382422442124,
+   "macro_recall": 0.44738540255662806,
+   "macro_f1": 0.4576817225641483,
+   "per_class": {
+    "suitable": {
+     "precision": 0.5824175824175825,
+     "recall": 0.5638297872340425,
+     "f1": 0.572972972972973,
+     "support": 94
+    },
+    "unsuitable": {
+     "precision": 0.6318407960199005,
+     "recall": 0.6939890710382514,
+     "f1": 0.6614583333333334,
+     "support": 183
+    },
+    "insufficient": {
+     "precision": 0.3888888888888889,
+     "recall": 0.08433734939759036,
+     "f1": 0.1386138613861386,
+     "support": 83
+    }
+   },
+   "precision_at_5": 0.8148148148148148,
+   "recall_at_5": 0.575,
+   "ndcg_at_5": 0.6035635814423618,
+   "violation_rate": 0.14285714285714285,
+   "violations": 9,
+   "recommended_items": 63,
+   "explanation_error_rate": 0.0,
+   "correct_refusal": "11/18",
+   "clarify_accuracy": 0.6388888888888888,
+   "latency_mean_s": 0.9831290322580645,
+   "latency_p95_s": 1.227,
+   "api_errors": 5,
+   "parse_errors": 0,
+   "confusion": {
+    "suitable": {
+     "suitable": 53,
+     "unsuitable": 39,
+     "insufficient": 1,
+     "missing": 1
+    },
+    "unsuitable": {
+     "suitable": 10,
+     "unsuitable": 127,
+     "insufficient": 10,
+     "missing": 36
+    },
+    "insufficient": {
+     "suitable": 28,
+     "unsuitable": 35,
+     "insufficient": 7,
+     "missing": 13
+    }
+   },
+   "per_category": {
+    "apartment": {
+     "p5": 1.0,
+     "ndcg5": 0.7765732350040718,
+     "violations": 0,
+     "n": 4
+    },
+    "house": {
+     "p5": 1.0,
+     "ndcg5": 0.6698317787344101,
+     "violations": 0,
+     "n": 4
+    },
+    "family_kids": {
+     "p5": 1.0,
+     "ndcg5": 0.5947423287170982,
+     "violations": 0,
+     "n": 3
+    },
+    "no_experience": {
+     "p5": 0.6666666666666666,
+     "ndcg5": 0.6156062402821016,
+     "violations": 1,
+     "n": 4
+    },
+    "active": {
+     "p5": 0.5,
+     "ndcg5": 0.4159362318644413,
+     "violations": 0,
+     "n": 2
+    },
+    "limited_time": {
+     "p5": 0.0,
+     "ndcg5": 0.0,
+     "violations": 0,
+     "n": 1
+    }
+   }
+  },
+  "D2": {
+   "accuracy": 0.6138888888888889,
+   "macro_precision": 0.735789449499127,
+   "macro_recall": 0.5839315872955839,
+   "macro_f1": 0.6447695025812373,
+   "per_class": {
+    "suitable": {
+     "precision": 0.7361111111111112,
+     "recall": 0.5638297872340425,
+     "f1": 0.6385542168674699,
+     "support": 94
+    },
+    "unsuitable": {
+     "precision": 0.6827956989247311,
+     "recall": 0.6939890710382514,
+     "f1": 0.6883468834688347,
+     "support": 183
+    },
+    "insufficient": {
+     "precision": 0.7884615384615384,
+     "recall": 0.4939759036144578,
+     "f1": 0.6074074074074073,
+     "support": 83
+    }
+   },
+   "precision_at_5": 0.8148148148148148,
+   "recall_at_5": 0.575,
+   "ndcg_at_5": 0.6035635814423618,
+   "violation_rate": 0.14285714285714285,
+   "violations": 9,
+   "recommended_items": 63,
+   "explanation_error_rate": 0.0,
+   "correct_refusal": "11/18",
+   "clarify_accuracy": 0.6388888888888888,
+   "latency_mean_s": 0.9831290322580645,
+   "latency_p95_s": 1.227,
+   "api_errors": 5,
+   "parse_errors": 0,
+   "confusion": {
+    "suitable": {
+     "suitable": 53,
+     "unsuitable": 39,
+     "insufficient": 1,
+     "missing": 1
+    },
+    "unsuitable": {
+     "suitable": 10,
+     "unsuitable": 127,
+     "insufficient": 10,
+     "missing": 36
+    },
+    "insufficient": {
+     "suitable": 9,
+     "unsuitable": 20,
+     "insufficient": 41,
+     "missing": 13
+    }
+   },
+   "per_category": {
+    "apartment": {
+     "p5": 1.0,
+     "ndcg5": 0.7765732350040718,
+     "violations": 0,
+     "n": 4
+    },
+    "house": {
+     "p5": 1.0,
+     "ndcg5": 0.6698317787344101,
+     "violations": 0,
+     "n": 4
+    },
+    "family_kids": {
+     "p5": 1.0,
+     "ndcg5": 0.5947423287170982,
+     "violations": 0,
+     "n": 3
+    },
+    "no_experience": {
+     "p5": 0.6666666666666666,
+     "ndcg5": 0.6156062402821016,
+     "violations": 1,
+     "n": 4
+    },
+    "active": {
+     "p5": 0.5,
+     "ndcg5": 0.4159362318644413,
+     "violations": 0,
+     "n": 2
+    },
+    "limited_time": {
+     "p5": 0.0,
+     "ndcg5": 0.0,
+     "violations": 0,
+     "n": 1
+    }
+   }
+  }
+ },
+ "agreement": {
+  "pairs": 360,
+  "pairs_agreement": 0.928,
+  "pairs_kappa": 0.883,
+  "clarify_agreement": 0.778,
+  "clarify_kappa": 0.546,
+  "allowed_agreement": 0.889,
+  "allowed_kappa": 0.778
+ },
+ "gold_counts": {
+  "unsuitable": 183,
+  "suitable": 94,
+  "insufficient": 83
+ },
+ "gold_clarify": {
+  "no": 19,
+  "yes": 17
+ },
+ "gold_allowed": {
+  "yes": 18,
+  "no": 18
+ },
+ "categories": {
+  "apartment": 6,
+  "house": 6,
+  "family_kids": 6,
+  "no_experience": 6,
+  "active": 6,
+  "limited_time": 6
+ },
+ "hard": {
+  "contradictory": 4,
+  "no_safe": 1,
+  "insufficient": 2,
+  "mixed_kz": 2,
+  "short": 2,
+  "ambiguous": 1
+ },
+ "per_category": [
+  {
+   "category": "active",
+   "A_P@5": "0.567",
+   "A_NDCG@5": "1.0",
+   "A_violations": "3",
+   "B_P@5": "1.0",
+   "B_NDCG@5": "1.0",
+   "B_violations": "0",
+   "C_P@5": "0.5",
+   "C_NDCG@5": "0.416",
+   "C_violations": "0",
+   "D_P@5": "0.5",
+   "D_NDCG@5": "0.416",
+   "D_violations": "0",
+   "D2_P@5": "0.5",
+   "D2_NDCG@5": "0.416",
+   "D2_violations": "0"
+  },
+  {
+   "category": "apartment",
+   "A_P@5": "0.713",
+   "A_NDCG@5": "0.8",
+   "A_violations": "5",
+   "B_P@5": "0.75",
+   "B_NDCG@5": "0.534",
+   "B_violations": "1",
+   "C_P@5": "1.0",
+   "C_NDCG@5": "0.777",
+   "C_violations": "0",
+   "D_P@5": "1.0",
+   "D_NDCG@5": "0.777",
+   "D_violations": "0",
+   "D2_P@5": "1.0",
+   "D2_NDCG@5": "0.777",
+   "D2_violations": "0"
+  },
+  {
+   "category": "family_kids",
+   "A_P@5": "1.0",
+   "A_NDCG@5": "0.972",
+   "A_violations": "0",
+   "B_P@5": "0.933",
+   "B_NDCG@5": "0.883",
+   "B_violations": "1",
+   "C_P@5": "0.933",
+   "C_NDCG@5": "0.595",
+   "C_violations": "1",
+   "D_P@5": "1.0",
+   "D_NDCG@5": "0.595",
+   "D_violations": "0",
+   "D2_P@5": "1.0",
+   "D2_NDCG@5": "0.595",
+   "D2_violations": "0"
+  },
+  {
+   "category": "house",
+   "A_P@5": "0.95",
+   "A_NDCG@5": "0.881",
+   "A_violations": "1",
+   "B_P@5": "1.0",
+   "B_NDCG@5": "0.673",
+   "B_violations": "0",
+   "C_P@5": "1.0",
+   "C_NDCG@5": "0.67",
+   "C_violations": "0",
+   "D_P@5": "1.0",
+   "D_NDCG@5": "0.67",
+   "D_violations": "0",
+   "D2_P@5": "1.0",
+   "D2_NDCG@5": "0.67",
+   "D2_violations": "0"
+  },
+  {
+   "category": "limited_time",
+   "A_P@5": "1.0",
+   "A_NDCG@5": "1.0",
+   "A_violations": "0",
+   "B_P@5": "0.0",
+   "B_NDCG@5": "0.0",
+   "B_violations": "0",
+   "C_P@5": "0.0",
+   "C_NDCG@5": "0.0",
+   "C_violations": "0",
+   "D_P@5": "0.0",
+   "D_NDCG@5": "0.0",
+   "D_violations": "0",
+   "D2_P@5": "0.0",
+   "D2_NDCG@5": "0.0",
+   "D2_violations": "0"
+  },
+  {
+   "category": "no_experience",
+   "A_P@5": "0.65",
+   "A_NDCG@5": "0.68",
+   "A_violations": "4",
+   "B_P@5": "0.575",
+   "B_NDCG@5": "0.51",
+   "B_violations": "2",
+   "C_P@5": "0.667",
+   "C_NDCG@5": "0.65",
+   "C_violations": "1",
+   "D_P@5": "0.667",
+   "D_NDCG@5": "0.616",
+   "D_violations": "1",
+   "D2_P@5": "0.667",
+   "D2_NDCG@5": "0.616",
+   "D2_violations": "1"
+  }
+ ],
+ "errors": [
+  {
+   "variant": "A",
+   "id": "sc-01",
+   "category": "apartment",
+   "hard": "",
+   "request": "Ищу спокойную кошку в однокомнатную квартиру, работаю в офисе",
+   "gold": "подходят [45, 39, 35, 47, 41, 36]; уточнить=no; можно=yes",
+   "answer": "action=recommend; top=[35, 39, 45, 47, 36]; неверных пар=4/10",
+   "error_type": "ошибки классификации пар",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "A",
+   "id": "sc-02",
+   "category": "apartment",
+   "hard": "",
+   "request": "Небольшая собака для квартиры, гуляю утром и вечером",
+   "gold": "подходят [19, 32, 28, 14, 16]; уточнить=no; можно=yes",
+   "answer": "action=recommend; top=[14, 32, 10, 16, 17]; неверных пар=3/10",
+   "error_type": "нарушение ограничения",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "A",
+   "id": "sc-03",
+   "category": "apartment",
+   "hard": "contradictory",
+   "request": "Хочу крупную активную собаку, но живу в квартире 40 м²",
+   "gold": "подходят [23]; уточнить=no; можно=yes",
+   "answer": "action=recommend; top=[10, 19, 23, 26]; неверных пар=3/10",
+   "error_type": "нарушение ограничения",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "A",
+   "id": "sc-05",
+   "category": "apartment",
+   "hard": "",
+   "request": "У мужа лёгкая аллергия, но очень хотим питомца",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=no_safe_match; top=[]; неверных пар=0/10",
+   "error_type": "не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "A",
+   "id": "sc-06",
+   "category": "apartment",
+   "hard": "no_safe",
+   "request": "Хочу собаку, но гулять с ней не смогу — работаю допоздна",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=no_safe_match; top=[]; неверных пар=0/10",
+   "error_type": "не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "A",
+   "id": "sc-07",
+   "category": "house",
+   "hard": "",
+   "request": "Частный дом с большим двором, есть опыт с крупными собаками",
+   "gold": "подходят [25, 11, 18, 12]; уточнить=no; можно=yes",
+   "answer": "action=recommend; top=[11, 12, 25, 9, 18]; неверных пар=6/10",
+   "error_type": "нарушение ограничения",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "A",
+   "id": "sc-09",
+   "category": "house",
+   "hard": "",
+   "request": "Дом за городом, кошка сможет гулять по участку",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=recommend; top=[37, 43, 52, 57, 38]; неверных пар=10/10",
+   "error_type": "рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "A",
+   "id": "sc-11",
+   "category": "house",
+   "hard": "insufficient",
+   "request": "собака во двор",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=recommend; top=[13, 14, 22, 23, 24]; неверных пар=10/10",
+   "error_type": "рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "A",
+   "id": "sc-14",
+   "category": "family_kids",
+   "hard": "",
+   "request": "Дочке 10 лет, мечтает о котёнке, будем ухаживать вместе",
+   "gold": "подходят []; уточнить=no; можно=no",
+   "answer": "action=recommend; top=[41, 49, 53, 55, 35]; неверных пар=6/10",
+   "error_type": "нарушение ограничения; рекомендация при отсутствии безопасных",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "A",
+   "id": "sc-16",
+   "category": "family_kids",
+   "hard": "",
+   "request": "Малышу год, хотим питомца, но времени мало",
+   "gold": "подходят [44]; уточнить=yes; можно=no",
+   "answer": "action=recommend; top=[44, 48]; неверных пар=1/10",
+   "error_type": "нарушение ограничения; рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "A",
+   "id": "sc-18",
+   "category": "family_kids",
+   "hard": "short",
+   "request": "для ребёнка",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=recommend; top=[11, 13, 14, 18, 22]; неверных пар=9/10",
+   "error_type": "рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "A",
+   "id": "sc-19",
+   "category": "no_experience",
+   "hard": "",
+   "request": "Первый питомец в жизни, хочу неприхотливую кошку",
+   "gold": "подходят [49, 44, 54, 45, 39, 34, 55, 53]; уточнить=no; можно=yes",
+   "answer": "action=recommend; top=[36, 39, 45, 34, 44]; неверных пар=1/10",
+   "error_type": "нарушение ограничения",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "A",
+   "id": "sc-20",
+   "category": "no_experience",
+   "hard": "",
+   "request": "Никогда не было собак, нужна послушная и несложная",
+   "gold": "подходят [13, 11, 16]; уточнить=no; можно=yes",
+   "answer": "action=recommend; top=[18, 11, 13, 16, 28]; неверных пар=2/10",
+   "error_type": "нарушение ограничения",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "A",
+   "id": "sc-21",
+   "category": "no_experience",
+   "hard": "contradictory",
+   "request": "Опыта нет, но хочу хаски или овчарку",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=recommend; top=[13, 14, 17, 30, 32]; неверных пар=6/10",
+   "error_type": "нарушение ограничения; рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "A",
+   "id": "sc-23",
+   "category": "no_experience",
+   "hard": "ambiguous",
+   "request": "хочу кого-нибудь милого",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=recommend; top=[17, 20, 33, 35, 51]; неверных пар=6/10",
+   "error_type": "рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "A",
+   "id": "sc-24",
+   "category": "no_experience",
+   "hard": "",
+   "request": "Хочу взрослую спокойную собаку, не щенка — боюсь не справиться",
+   "gold": "подходят [28]; уточнить=no; можно=yes",
+   "answer": "action=recommend; top=[14, 20, 28, 30, 10]; неверных пар=4/10",
+   "error_type": "нарушение ограничения",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "A",
+   "id": "sc-25",
+   "category": "active",
+   "hard": "",
+   "request": "Бегаю 10 км каждое утро, ищу напарника",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=recommend; top=[23, 14, 17, 26, 28]; неверных пар=7/10",
+   "error_type": "нарушение ограничения; рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "A",
+   "id": "sc-26",
+   "category": "active",
+   "hard": "",
+   "request": "Часто ходим в горы, нужна выносливая собака",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=recommend; top=[9, 12, 23, 25, 29]; неверных пар=10/10",
+   "error_type": "рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "A",
+   "id": "sc-27",
+   "category": "active",
+   "hard": "",
+   "request": "Хочу игривую кошку, которая не будет спать весь день",
+   "gold": "подходят [43, 48, 42, 51]; уточнить=no; можно=yes",
+   "answer": "action=recommend; top=[42, 43, 48, 51, 41]; неверных пар=6/10",
+   "error_type": "нарушение ограничения",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "A",
+   "id": "sc-28",
+   "category": "active",
+   "hard": "contradictory",
+   "request": "Люблю активный отдых по выходным, в будни работаю по 12 часов",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=recommend; top=[11, 13]; неверных пар=2/10",
+   "error_type": "нарушение ограничения; рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "A",
+   "id": "sc-29",
+   "category": "active",
+   "hard": "",
+   "request": "Велосипед, бег, есть ещё одна собака",
+   "gold": "подходят [19]; уточнить=no; можно=yes",
+   "answer": "action=recommend; top=[19, 17, 10]; неверных пар=2/10",
+   "error_type": "нарушение ограничения",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "A",
+   "id": "sc-30",
+   "category": "active",
+   "hard": "short",
+   "request": "спорт",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=recommend; top=[8, 9, 14, 16, 17]; неверных пар=10/10",
+   "error_type": "рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "A",
+   "id": "sc-31",
+   "category": "limited_time",
+   "hard": "",
+   "request": "Работаю по 10 часов, хочу самостоятельную кошку",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=recommend; top=[33, 45, 34, 40, 53]; неверных пар=9/10",
+   "error_type": "рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "A",
+   "id": "sc-33",
+   "category": "limited_time",
+   "hard": "",
+   "request": "Часто в командировках, кого посоветуете?",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=recommend; top=[40, 41, 53, 51]; неверных пар=4/10",
+   "error_type": "нарушение ограничения; рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "A",
+   "id": "sc-34",
+   "category": "limited_time",
+   "hard": "contradictory",
+   "request": "Хочу персидскую кошку, но на уход времени почти нет",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=recommend; top=[33, 35, 40, 44, 45]; неверных пар=9/10",
+   "error_type": "нарушение ограничения; рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "A",
+   "id": "sc-35",
+   "category": "limited_time",
+   "hard": "",
+   "request": "Есть кошка, днём никого нет дома, нужна вторая для компании",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=recommend; top=[42, 43, 57]; неверных пар=4/10",
+   "error_type": "нарушение ограничения; рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "A",
+   "id": "sc-36",
+   "category": "limited_time",
+   "hard": "insufficient",
+   "request": "мне бы просто кого-то, не знаю",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=recommend; top=[8, 13, 15, 24, 28]; неверных пар=10/10",
+   "error_type": "рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "B",
+   "id": "sc-01",
+   "category": "apartment",
+   "hard": "",
+   "request": "Ищу спокойную кошку в однокомнатную квартиру, работаю в офисе",
+   "gold": "подходят [45, 39, 35, 47, 41, 36]; уточнить=no; можно=yes",
+   "answer": "action=recommend; top=[35, 39, 45]; неверных пар=7/10",
+   "error_type": "ошибки классификации пар",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "B",
+   "id": "sc-02",
+   "category": "apartment",
+   "hard": "",
+   "request": "Небольшая собака для квартиры, гуляю утром и вечером",
+   "gold": "подходят [19, 32, 28, 14, 16]; уточнить=no; можно=yes",
+   "answer": "action=recommend; top=[14, 32]; неверных пар=3/10",
+   "error_type": "ошибки классификации пар",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "B",
+   "id": "sc-03",
+   "category": "apartment",
+   "hard": "contradictory",
+   "request": "Хочу крупную активную собаку, но живу в квартире 40 м²",
+   "gold": "подходят [23]; уточнить=no; можно=yes",
+   "answer": "action=recommend; top=[19]; неверных пар=2/10",
+   "error_type": "нарушение ограничения",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "B",
+   "id": "sc-05",
+   "category": "apartment",
+   "hard": "",
+   "request": "У мужа лёгкая аллергия, но очень хотим питомца",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=clarify; top=[]; неверных пар=4/10",
+   "error_type": "ошибки классификации пар",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "B",
+   "id": "sc-06",
+   "category": "apartment",
+   "hard": "no_safe",
+   "request": "Хочу собаку, но гулять с ней не смогу — работаю допоздна",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=recommend; top=[16]; неверных пар=1/10",
+   "error_type": "нарушение ограничения; рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "B",
+   "id": "sc-08",
+   "category": "house",
+   "hard": "",
+   "request": "Живём в доме, есть взрослая собака, дети школьники",
+   "gold": "подходят [28, 9, 12, 29, 32, 19, 10]; уточнить=no; можно=yes",
+   "answer": "action=recommend; top=[10, 32]; неверных пар=5/10",
+   "error_type": "ошибки классификации пар",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "B",
+   "id": "sc-09",
+   "category": "house",
+   "hard": "",
+   "request": "Дом за городом, кошка сможет гулять по участку",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=recommend; top=[43, 52, 57]; неверных пар=9/10",
+   "error_type": "рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "B",
+   "id": "sc-10",
+   "category": "house",
+   "hard": "",
+   "request": "Пенсионеры, свой дом, много свободного времени",
+   "gold": "подходят [22, 14, 28, 51, 34, 48, 16, 23, 46, 33]; уточнить=no; можно=yes",
+   "answer": "action=recommend; top=[23, 34, 46, 48, 51]; неверных пар=5/10",
+   "error_type": "ошибки классификации пар",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "B",
+   "id": "sc-11",
+   "category": "house",
+   "hard": "insufficient",
+   "request": "собака во двор",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=recommend; top=[13, 14, 22, 23, 24]; неверных пар=10/10",
+   "error_type": "рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "B",
+   "id": "sc-12",
+   "category": "house",
+   "hard": "mixed_kz",
+   "request": "Үйіміз бар, ит керек, күніне екі рет серуендеймін",
+   "gold": "подходят [12, 20, 23, 24, 16, 29, 32, 19, 8, 28]; уточнить=no; можно=yes",
+   "answer": "action=recommend; top=[16, 28, 32]; неверных пар=7/10",
+   "error_type": "ошибки классификации пар",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "B",
+   "id": "sc-14",
+   "category": "family_kids",
+   "hard": "",
+   "request": "Дочке 10 лет, мечтает о котёнке, будем ухаживать вместе",
+   "gold": "подходят []; уточнить=no; можно=no",
+   "answer": "action=recommend; top=[35]; неверных пар=2/10",
+   "error_type": "нарушение ограничения; рекомендация при отсутствии безопасных",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "B",
+   "id": "sc-15",
+   "category": "family_kids",
+   "hard": "",
+   "request": "Большая семья, есть кошка, хотим активную собаку для походов",
+   "gold": "подходят [12, 13, 19, 8, 9, 29]; уточнить=no; можно=yes",
+   "answer": "action=recommend; top=[12, 13, 19, 24, 29]; неверных пар=2/10",
+   "error_type": "нарушение ограничения",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "B",
+   "id": "sc-16",
+   "category": "family_kids",
+   "hard": "",
+   "request": "Малышу год, хотим питомца, но времени мало",
+   "gold": "подходят [44]; уточнить=yes; можно=no",
+   "answer": "action=recommend; top=[40, 44, 48]; неверных пар=2/10",
+   "error_type": "нарушение ограничения; рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "B",
+   "id": "sc-18",
+   "category": "family_kids",
+   "hard": "short",
+   "request": "для ребёнка",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=recommend; top=[13, 14, 22, 23, 25]; неверных пар=8/10",
+   "error_type": "рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "B",
+   "id": "sc-19",
+   "category": "no_experience",
+   "hard": "",
+   "request": "Первый питомец в жизни, хочу неприхотливую кошку",
+   "gold": "подходят [49, 44, 54, 45, 39, 34, 55, 53]; уточнить=no; можно=yes",
+   "answer": "action=recommend; top=[36, 39, 45, 53, 55]; неверных пар=1/10",
+   "error_type": "нарушение ограничения",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "B",
+   "id": "sc-20",
+   "category": "no_experience",
+   "hard": "",
+   "request": "Никогда не было собак, нужна послушная и несложная",
+   "gold": "подходят [13, 11, 16]; уточнить=no; можно=yes",
+   "answer": "action=recommend; top=[16, 28]; неверных пар=9/10",
+   "error_type": "нарушение ограничения",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "B",
+   "id": "sc-21",
+   "category": "no_experience",
+   "hard": "contradictory",
+   "request": "Опыта нет, но хочу хаски или овчарку",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=no_safe_match; top=[]; неверных пар=0/10",
+   "error_type": "не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "B",
+   "id": "sc-22",
+   "category": "no_experience",
+   "hard": "",
+   "request": "Студентка, учусь онлайн, впервые беру кошку",
+   "gold": "подходят [38, 40, 56, 33, 35, 47, 52, 36, 44]; уточнить=no; можно=yes",
+   "answer": "action=recommend; top=[40, 44, 33, 35, 47]; неверных пар=3/10",
+   "error_type": "ошибки классификации пар",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "B",
+   "id": "sc-23",
+   "category": "no_experience",
+   "hard": "ambiguous",
+   "request": "хочу кого-нибудь милого",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=recommend; top=[17, 20, 33, 35, 51]; неверных пар=6/10",
+   "error_type": "рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "B",
+   "id": "sc-24",
+   "category": "no_experience",
+   "hard": "",
+   "request": "Хочу взрослую спокойную собаку, не щенка — боюсь не справиться",
+   "gold": "подходят [28]; уточнить=no; можно=yes",
+   "answer": "action=no_safe_match; top=[]; неверных пар=4/10",
+   "error_type": "лишний отказ",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "B",
+   "id": "sc-25",
+   "category": "active",
+   "hard": "",
+   "request": "Бегаю 10 км каждое утро, ищу напарника",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=no_safe_match; top=[]; неверных пар=7/10",
+   "error_type": "не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "B",
+   "id": "sc-26",
+   "category": "active",
+   "hard": "",
+   "request": "Часто ходим в горы, нужна выносливая собака",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=clarify; top=[]; неверных пар=3/10",
+   "error_type": "ошибки классификации пар",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "B",
+   "id": "sc-28",
+   "category": "active",
+   "hard": "contradictory",
+   "request": "Люблю активный отдых по выходным, в будни работаю по 12 часов",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=recommend; top=[11, 13]; неверных пар=10/10",
+   "error_type": "нарушение ограничения; рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "B",
+   "id": "sc-30",
+   "category": "active",
+   "hard": "short",
+   "request": "спорт",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=clarify; top=[]; неверных пар=4/10",
+   "error_type": "ошибки классификации пар",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "B",
+   "id": "sc-31",
+   "category": "limited_time",
+   "hard": "",
+   "request": "Работаю по 10 часов, хочу самостоятельную кошку",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=recommend; top=[33, 45]; неверных пар=7/10",
+   "error_type": "рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "B",
+   "id": "sc-32",
+   "category": "limited_time",
+   "hard": "",
+   "request": "Мало времени, но могу гулять 30 минут два раза в день",
+   "gold": "подходят [10]; уточнить=no; можно=yes",
+   "answer": "action=error; top=[]; неверных пар=10/10",
+   "error_type": "ошибка API",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "B",
+   "id": "sc-33",
+   "category": "limited_time",
+   "hard": "",
+   "request": "Часто в командировках, кого посоветуете?",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=error; top=[]; неверных пар=10/10",
+   "error_type": "не задан уточняющий вопрос; ошибка API",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "B",
+   "id": "sc-34",
+   "category": "limited_time",
+   "hard": "contradictory",
+   "request": "Хочу персидскую кошку, но на уход времени почти нет",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=error; top=[]; неверных пар=10/10",
+   "error_type": "не задан уточняющий вопрос; ошибка API",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "B",
+   "id": "sc-35",
+   "category": "limited_time",
+   "hard": "",
+   "request": "Есть кошка, днём никого нет дома, нужна вторая для компании",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=error; top=[]; неверных пар=10/10",
+   "error_type": "не задан уточняющий вопрос; ошибка API",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "B",
+   "id": "sc-36",
+   "category": "limited_time",
+   "hard": "insufficient",
+   "request": "мне бы просто кого-то, не знаю",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=error; top=[]; неверных пар=10/10",
+   "error_type": "не задан уточняющий вопрос; ошибка API",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "C",
+   "id": "sc-02",
+   "category": "apartment",
+   "hard": "",
+   "request": "Небольшая собака для квартиры, гуляю утром и вечером",
+   "gold": "подходят [19, 32, 28, 14, 16]; уточнить=no; можно=yes",
+   "answer": "action=recommend; top=[16, 32]; неверных пар=3/10",
+   "error_type": "ошибки классификации пар",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "C",
+   "id": "sc-04",
+   "category": "apartment",
+   "hard": "",
+   "request": "Дома уже есть кот, ищем ему компанию",
+   "gold": "подходят [51, 35, 42, 54, 33, 40, 45, 48]; уточнить=no; можно=yes",
+   "answer": "action=recommend; top=[40, 54]; неверных пар=7/10",
+   "error_type": "ошибки классификации пар",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "C",
+   "id": "sc-05",
+   "category": "apartment",
+   "hard": "",
+   "request": "У мужа лёгкая аллергия, но очень хотим питомца",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=no_safe_match; top=[]; неверных пар=6/10",
+   "error_type": "не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "C",
+   "id": "sc-06",
+   "category": "apartment",
+   "hard": "no_safe",
+   "request": "Хочу собаку, но гулять с ней не смогу — работаю допоздна",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=recommend; top=[16]; неверных пар=1/10",
+   "error_type": "нарушение ограничения; рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "C",
+   "id": "sc-08",
+   "category": "house",
+   "hard": "",
+   "request": "Живём в доме, есть взрослая собака, дети школьники",
+   "gold": "подходят [28, 9, 12, 29, 32, 19, 10]; уточнить=no; можно=yes",
+   "answer": "action=recommend; top=[10, 32]; неверных пар=6/10",
+   "error_type": "ошибки классификации пар",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "C",
+   "id": "sc-09",
+   "category": "house",
+   "hard": "",
+   "request": "Дом за городом, кошка сможет гулять по участку",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=recommend; top=[52, 57, 43]; неверных пар=10/10",
+   "error_type": "рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "C",
+   "id": "sc-11",
+   "category": "house",
+   "hard": "insufficient",
+   "request": "собака во двор",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=recommend; top=[13, 32, 25, 30, 28]; неверных пар=10/10",
+   "error_type": "рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "C",
+   "id": "sc-12",
+   "category": "house",
+   "hard": "mixed_kz",
+   "request": "Үйіміз бар, ит керек, күніне екі рет серуендеймін",
+   "gold": "подходят [12, 20, 23, 24, 16, 29, 32, 19, 8, 28]; уточнить=no; можно=yes",
+   "answer": "action=recommend; top=[16, 32]; неверных пар=8/10",
+   "error_type": "ошибки классификации пар",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "C",
+   "id": "sc-13",
+   "category": "family_kids",
+   "hard": "",
+   "request": "Двое детей 3 и 5 лет, нужна добрая собака",
+   "gold": "подходят [26, 13, 28, 30, 16, 17]; уточнить=no; можно=yes",
+   "answer": "action=recommend; top=[13, 16]; неверных пар=4/10",
+   "error_type": "ошибки классификации пар",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "C",
+   "id": "sc-14",
+   "category": "family_kids",
+   "hard": "",
+   "request": "Дочке 10 лет, мечтает о котёнке, будем ухаживать вместе",
+   "gold": "подходят []; уточнить=no; можно=no",
+   "answer": "action=recommend; top=[35, 41, 49, 53, 55]; неверных пар=5/10",
+   "error_type": "нарушение ограничения; рекомендация при отсутствии безопасных",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "C",
+   "id": "sc-15",
+   "category": "family_kids",
+   "hard": "",
+   "request": "Большая семья, есть кошка, хотим активную собаку для походов",
+   "gold": "подходят [12, 13, 19, 8, 9, 29]; уточнить=no; можно=yes",
+   "answer": "action=recommend; top=[8, 9, 12, 13, 14]; неверных пар=2/10",
+   "error_type": "нарушение ограничения",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "C",
+   "id": "sc-16",
+   "category": "family_kids",
+   "hard": "",
+   "request": "Малышу год, хотим питомца, но времени мало",
+   "gold": "подходят [44]; уточнить=yes; можно=no",
+   "answer": "action=recommend; top=[44, 48]; неверных пар=1/10",
+   "error_type": "нарушение ограничения; рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "C",
+   "id": "sc-17",
+   "category": "family_kids",
+   "hard": "mixed_kz",
+   "request": "Балам кішкентай, мысық керек, үйде ит те бар",
+   "gold": "подходят [33, 44, 38]; уточнить=no; можно=yes",
+   "answer": "action=recommend; top=[33]; неверных пар=8/10",
+   "error_type": "ошибки классификации пар",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "C",
+   "id": "sc-18",
+   "category": "family_kids",
+   "hard": "short",
+   "request": "для ребёнка",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=recommend; top=[13, 32, 14, 11]; неверных пар=9/10",
+   "error_type": "рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "C",
+   "id": "sc-20",
+   "category": "no_experience",
+   "hard": "",
+   "request": "Никогда не было собак, нужна послушная и несложная",
+   "gold": "подходят [13, 11, 16]; уточнить=no; можно=yes",
+   "answer": "action=recommend; top=[13, 16, 28]; неверных пар=2/10",
+   "error_type": "нарушение ограничения",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "C",
+   "id": "sc-21",
+   "category": "no_experience",
+   "hard": "contradictory",
+   "request": "Опыта нет, но хочу хаски или овчарку",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=recommend; top=[13]; неверных пар=10/10",
+   "error_type": "нарушение ограничения; рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "C",
+   "id": "sc-22",
+   "category": "no_experience",
+   "hard": "",
+   "request": "Студентка, учусь онлайн, впервые беру кошку",
+   "gold": "подходят [38, 40, 56, 33, 35, 47, 52, 36, 44]; уточнить=no; можно=yes",
+   "answer": "action=recommend; top=[33, 35, 40, 44, 52]; неверных пар=5/10",
+   "error_type": "ошибки классификации пар",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "C",
+   "id": "sc-23",
+   "category": "no_experience",
+   "hard": "ambiguous",
+   "request": "хочу кого-нибудь милого",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=recommend; top=[33, 35, 57, 20, 17]; неверных пар=6/10",
+   "error_type": "рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "C",
+   "id": "sc-24",
+   "category": "no_experience",
+   "hard": "",
+   "request": "Хочу взрослую спокойную собаку, не щенка — боюсь не справиться",
+   "gold": "подходят [28]; уточнить=no; можно=yes",
+   "answer": "action=no_safe_match; top=[]; неверных пар=4/10",
+   "error_type": "лишний отказ",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "C",
+   "id": "sc-25",
+   "category": "active",
+   "hard": "",
+   "request": "Бегаю 10 км каждое утро, ищу напарника",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=no_safe_match; top=[]; неверных пар=1/10",
+   "error_type": "не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "C",
+   "id": "sc-26",
+   "category": "active",
+   "hard": "",
+   "request": "Часто ходим в горы, нужна выносливая собака",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=recommend; top=[9, 12, 23, 25, 29]; неверных пар=6/10",
+   "error_type": "рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "C",
+   "id": "sc-28",
+   "category": "active",
+   "hard": "contradictory",
+   "request": "Люблю активный отдых по выходным, в будни работаю по 12 часов",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=recommend; top=[11, 13]; неверных пар=2/10",
+   "error_type": "нарушение ограничения; рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "C",
+   "id": "sc-29",
+   "category": "active",
+   "hard": "",
+   "request": "Велосипед, бег, есть ещё одна собака",
+   "gold": "подходят [19]; уточнить=no; можно=yes",
+   "answer": "action=no_safe_match; top=[]; неверных пар=1/10",
+   "error_type": "лишний отказ",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "C",
+   "id": "sc-30",
+   "category": "active",
+   "hard": "short",
+   "request": "спорт",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=no_safe_match; top=[]; неверных пар=10/10",
+   "error_type": "не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "C",
+   "id": "sc-31",
+   "category": "limited_time",
+   "hard": "",
+   "request": "Работаю по 10 часов, хочу самостоятельную кошку",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=recommend; top=[33]; неверных пар=10/10",
+   "error_type": "рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "C",
+   "id": "sc-32",
+   "category": "limited_time",
+   "hard": "",
+   "request": "Мало времени, но могу гулять 30 минут два раза в день",
+   "gold": "подходят [10]; уточнить=no; можно=yes",
+   "answer": "action=error; top=[]; неверных пар=10/10",
+   "error_type": "ошибка API",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "C",
+   "id": "sc-33",
+   "category": "limited_time",
+   "hard": "",
+   "request": "Часто в командировках, кого посоветуете?",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=error; top=[]; неверных пар=10/10",
+   "error_type": "не задан уточняющий вопрос; ошибка API",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "C",
+   "id": "sc-34",
+   "category": "limited_time",
+   "hard": "contradictory",
+   "request": "Хочу персидскую кошку, но на уход времени почти нет",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=error; top=[]; неверных пар=10/10",
+   "error_type": "не задан уточняющий вопрос; ошибка API",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "C",
+   "id": "sc-35",
+   "category": "limited_time",
+   "hard": "",
+   "request": "Есть кошка, днём никого нет дома, нужна вторая для компании",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=error; top=[]; неверных пар=10/10",
+   "error_type": "не задан уточняющий вопрос; ошибка API",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "C",
+   "id": "sc-36",
+   "category": "limited_time",
+   "hard": "insufficient",
+   "request": "мне бы просто кого-то, не знаю",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=error; top=[]; неверных пар=10/10",
+   "error_type": "не задан уточняющий вопрос; ошибка API",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D",
+   "id": "sc-02",
+   "category": "apartment",
+   "hard": "",
+   "request": "Небольшая собака для квартиры, гуляю утром и вечером",
+   "gold": "подходят [19, 32, 28, 14, 16]; уточнить=no; можно=yes",
+   "answer": "action=recommend; top=[16, 32]; неверных пар=3/10",
+   "error_type": "ошибки классификации пар",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D",
+   "id": "sc-04",
+   "category": "apartment",
+   "hard": "",
+   "request": "Дома уже есть кот, ищем ему компанию",
+   "gold": "подходят [51, 35, 42, 54, 33, 40, 45, 48]; уточнить=no; можно=yes",
+   "answer": "action=recommend; top=[40, 54]; неверных пар=7/10",
+   "error_type": "ошибки классификации пар",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D",
+   "id": "sc-05",
+   "category": "apartment",
+   "hard": "",
+   "request": "У мужа лёгкая аллергия, но очень хотим питомца",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=no_safe_match; top=[]; неверных пар=6/10",
+   "error_type": "не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D",
+   "id": "sc-06",
+   "category": "apartment",
+   "hard": "no_safe",
+   "request": "Хочу собаку, но гулять с ней не смогу — работаю допоздна",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=no_safe_match; top=[]; неверных пар=0/10",
+   "error_type": "не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D",
+   "id": "sc-08",
+   "category": "house",
+   "hard": "",
+   "request": "Живём в доме, есть взрослая собака, дети школьники",
+   "gold": "подходят [28, 9, 12, 29, 32, 19, 10]; уточнить=no; можно=yes",
+   "answer": "action=recommend; top=[10, 32]; неверных пар=5/10",
+   "error_type": "ошибки классификации пар",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D",
+   "id": "sc-09",
+   "category": "house",
+   "hard": "",
+   "request": "Дом за городом, кошка сможет гулять по участку",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=recommend; top=[52, 57, 43]; неверных пар=10/10",
+   "error_type": "рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D",
+   "id": "sc-11",
+   "category": "house",
+   "hard": "insufficient",
+   "request": "собака во двор",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=clarify; top=[]; неверных пар=9/10",
+   "error_type": "ошибки классификации пар",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D",
+   "id": "sc-12",
+   "category": "house",
+   "hard": "mixed_kz",
+   "request": "Үйіміз бар, ит керек, күніне екі рет серуендеймін",
+   "gold": "подходят [12, 20, 23, 24, 16, 29, 32, 19, 8, 28]; уточнить=no; можно=yes",
+   "answer": "action=recommend; top=[16, 32]; неверных пар=8/10",
+   "error_type": "ошибки классификации пар",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D",
+   "id": "sc-13",
+   "category": "family_kids",
+   "hard": "",
+   "request": "Двое детей 3 и 5 лет, нужна добрая собака",
+   "gold": "подходят [26, 13, 28, 30, 16, 17]; уточнить=no; можно=yes",
+   "answer": "action=recommend; top=[13, 16]; неверных пар=4/10",
+   "error_type": "ошибки классификации пар",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D",
+   "id": "sc-14",
+   "category": "family_kids",
+   "hard": "",
+   "request": "Дочке 10 лет, мечтает о котёнке, будем ухаживать вместе",
+   "gold": "подходят []; уточнить=no; можно=no",
+   "answer": "action=recommend; top=[35, 49, 53, 55]; неверных пар=5/10",
+   "error_type": "нарушение ограничения; рекомендация при отсутствии безопасных",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D",
+   "id": "sc-16",
+   "category": "family_kids",
+   "hard": "",
+   "request": "Малышу год, хотим питомца, но времени мало",
+   "gold": "подходят [44]; уточнить=yes; можно=no",
+   "answer": "action=recommend; top=[44, 48]; неверных пар=1/10",
+   "error_type": "нарушение ограничения; рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D",
+   "id": "sc-17",
+   "category": "family_kids",
+   "hard": "mixed_kz",
+   "request": "Балам кішкентай, мысық керек, үйде ит те бар",
+   "gold": "подходят [33, 44, 38]; уточнить=no; можно=yes",
+   "answer": "action=recommend; top=[33]; неверных пар=3/10",
+   "error_type": "ошибки классификации пар",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D",
+   "id": "sc-18",
+   "category": "family_kids",
+   "hard": "short",
+   "request": "для ребёнка",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=clarify; top=[]; неверных пар=9/10",
+   "error_type": "ошибки классификации пар",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D",
+   "id": "sc-20",
+   "category": "no_experience",
+   "hard": "",
+   "request": "Никогда не было собак, нужна послушная и несложная",
+   "gold": "подходят [13, 11, 16]; уточнить=no; можно=yes",
+   "answer": "action=recommend; top=[13, 16, 28]; неверных пар=2/10",
+   "error_type": "нарушение ограничения",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D",
+   "id": "sc-21",
+   "category": "no_experience",
+   "hard": "contradictory",
+   "request": "Опыта нет, но хочу хаски или овчарку",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=recommend; top=[13]; неверных пар=6/10",
+   "error_type": "нарушение ограничения; рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D",
+   "id": "sc-22",
+   "category": "no_experience",
+   "hard": "",
+   "request": "Студентка, учусь онлайн, впервые беру кошку",
+   "gold": "подходят [38, 40, 56, 33, 35, 47, 52, 36, 44]; уточнить=no; можно=yes",
+   "answer": "action=recommend; top=[33, 35, 40, 52]; неверных пар=5/10",
+   "error_type": "ошибки классификации пар",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D",
+   "id": "sc-23",
+   "category": "no_experience",
+   "hard": "ambiguous",
+   "request": "хочу кого-нибудь милого",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=clarify; top=[]; неверных пар=6/10",
+   "error_type": "ошибки классификации пар",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D",
+   "id": "sc-24",
+   "category": "no_experience",
+   "hard": "",
+   "request": "Хочу взрослую спокойную собаку, не щенка — боюсь не справиться",
+   "gold": "подходят [28]; уточнить=no; можно=yes",
+   "answer": "action=no_safe_match; top=[]; неверных пар=4/10",
+   "error_type": "лишний отказ",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D",
+   "id": "sc-25",
+   "category": "active",
+   "hard": "",
+   "request": "Бегаю 10 км каждое утро, ищу напарника",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=no_safe_match; top=[]; неверных пар=1/10",
+   "error_type": "не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D",
+   "id": "sc-26",
+   "category": "active",
+   "hard": "",
+   "request": "Часто ходим в горы, нужна выносливая собака",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=recommend; top=[9, 12, 23, 25, 29]; неверных пар=6/10",
+   "error_type": "рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D",
+   "id": "sc-28",
+   "category": "active",
+   "hard": "contradictory",
+   "request": "Люблю активный отдых по выходным, в будни работаю по 12 часов",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=recommend; top=[11, 13]; неверных пар=2/10",
+   "error_type": "нарушение ограничения; рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D",
+   "id": "sc-29",
+   "category": "active",
+   "hard": "",
+   "request": "Велосипед, бег, есть ещё одна собака",
+   "gold": "подходят [19]; уточнить=no; можно=yes",
+   "answer": "action=no_safe_match; top=[]; неверных пар=1/10",
+   "error_type": "лишний отказ",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D",
+   "id": "sc-30",
+   "category": "active",
+   "hard": "short",
+   "request": "спорт",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=clarify; top=[]; неверных пар=10/10",
+   "error_type": "ошибки классификации пар",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D",
+   "id": "sc-31",
+   "category": "limited_time",
+   "hard": "",
+   "request": "Работаю по 10 часов, хочу самостоятельную кошку",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=recommend; top=[33]; неверных пар=4/10",
+   "error_type": "рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D",
+   "id": "sc-32",
+   "category": "limited_time",
+   "hard": "",
+   "request": "Мало времени, но могу гулять 30 минут два раза в день",
+   "gold": "подходят [10]; уточнить=no; можно=yes",
+   "answer": "action=error; top=[]; неверных пар=10/10",
+   "error_type": "ошибка API",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D",
+   "id": "sc-33",
+   "category": "limited_time",
+   "hard": "",
+   "request": "Часто в командировках, кого посоветуете?",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=error; top=[]; неверных пар=10/10",
+   "error_type": "не задан уточняющий вопрос; ошибка API",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D",
+   "id": "sc-34",
+   "category": "limited_time",
+   "hard": "contradictory",
+   "request": "Хочу персидскую кошку, но на уход времени почти нет",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=error; top=[]; неверных пар=10/10",
+   "error_type": "не задан уточняющий вопрос; ошибка API",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D",
+   "id": "sc-35",
+   "category": "limited_time",
+   "hard": "",
+   "request": "Есть кошка, днём никого нет дома, нужна вторая для компании",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=error; top=[]; неверных пар=10/10",
+   "error_type": "не задан уточняющий вопрос; ошибка API",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D",
+   "id": "sc-36",
+   "category": "limited_time",
+   "hard": "insufficient",
+   "request": "мне бы просто кого-то, не знаю",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=error; top=[]; неверных пар=10/10",
+   "error_type": "не задан уточняющий вопрос; ошибка API",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D2",
+   "id": "sc-02",
+   "category": "apartment",
+   "hard": "",
+   "request": "Небольшая собака для квартиры, гуляю утром и вечером",
+   "gold": "подходят [19, 32, 28, 14, 16]; уточнить=no; можно=yes",
+   "answer": "action=recommend; top=[16, 32]; неверных пар=3/10",
+   "error_type": "ошибки классификации пар",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D2",
+   "id": "sc-04",
+   "category": "apartment",
+   "hard": "",
+   "request": "Дома уже есть кот, ищем ему компанию",
+   "gold": "подходят [51, 35, 42, 54, 33, 40, 45, 48]; уточнить=no; можно=yes",
+   "answer": "action=recommend; top=[40, 54]; неверных пар=7/10",
+   "error_type": "ошибки классификации пар",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D2",
+   "id": "sc-05",
+   "category": "apartment",
+   "hard": "",
+   "request": "У мужа лёгкая аллергия, но очень хотим питомца",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=no_safe_match; top=[]; неверных пар=6/10",
+   "error_type": "не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D2",
+   "id": "sc-06",
+   "category": "apartment",
+   "hard": "no_safe",
+   "request": "Хочу собаку, но гулять с ней не смогу — работаю допоздна",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=no_safe_match; top=[]; неверных пар=0/10",
+   "error_type": "не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D2",
+   "id": "sc-08",
+   "category": "house",
+   "hard": "",
+   "request": "Живём в доме, есть взрослая собака, дети школьники",
+   "gold": "подходят [28, 9, 12, 29, 32, 19, 10]; уточнить=no; можно=yes",
+   "answer": "action=recommend; top=[10, 32]; неверных пар=5/10",
+   "error_type": "ошибки классификации пар",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D2",
+   "id": "sc-09",
+   "category": "house",
+   "hard": "",
+   "request": "Дом за городом, кошка сможет гулять по участку",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=recommend; top=[52, 57, 43]; неверных пар=10/10",
+   "error_type": "рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D2",
+   "id": "sc-12",
+   "category": "house",
+   "hard": "mixed_kz",
+   "request": "Үйіміз бар, ит керек, күніне екі рет серуендеймін",
+   "gold": "подходят [12, 20, 23, 24, 16, 29, 32, 19, 8, 28]; уточнить=no; можно=yes",
+   "answer": "action=recommend; top=[16, 32]; неверных пар=8/10",
+   "error_type": "ошибки классификации пар",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D2",
+   "id": "sc-13",
+   "category": "family_kids",
+   "hard": "",
+   "request": "Двое детей 3 и 5 лет, нужна добрая собака",
+   "gold": "подходят [26, 13, 28, 30, 16, 17]; уточнить=no; можно=yes",
+   "answer": "action=recommend; top=[13, 16]; неверных пар=4/10",
+   "error_type": "ошибки классификации пар",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D2",
+   "id": "sc-14",
+   "category": "family_kids",
+   "hard": "",
+   "request": "Дочке 10 лет, мечтает о котёнке, будем ухаживать вместе",
+   "gold": "подходят []; уточнить=no; можно=no",
+   "answer": "action=recommend; top=[35, 49, 53, 55]; неверных пар=5/10",
+   "error_type": "нарушение ограничения; рекомендация при отсутствии безопасных",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D2",
+   "id": "sc-16",
+   "category": "family_kids",
+   "hard": "",
+   "request": "Малышу год, хотим питомца, но времени мало",
+   "gold": "подходят [44]; уточнить=yes; можно=no",
+   "answer": "action=recommend; top=[44, 48]; неверных пар=1/10",
+   "error_type": "нарушение ограничения; рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D2",
+   "id": "sc-17",
+   "category": "family_kids",
+   "hard": "mixed_kz",
+   "request": "Балам кішкентай, мысық керек, үйде ит те бар",
+   "gold": "подходят [33, 44, 38]; уточнить=no; можно=yes",
+   "answer": "action=recommend; top=[33]; неверных пар=3/10",
+   "error_type": "ошибки классификации пар",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D2",
+   "id": "sc-20",
+   "category": "no_experience",
+   "hard": "",
+   "request": "Никогда не было собак, нужна послушная и несложная",
+   "gold": "подходят [13, 11, 16]; уточнить=no; можно=yes",
+   "answer": "action=recommend; top=[13, 16, 28]; неверных пар=2/10",
+   "error_type": "нарушение ограничения",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D2",
+   "id": "sc-21",
+   "category": "no_experience",
+   "hard": "contradictory",
+   "request": "Опыта нет, но хочу хаски или овчарку",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=recommend; top=[13]; неверных пар=6/10",
+   "error_type": "нарушение ограничения; рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D2",
+   "id": "sc-22",
+   "category": "no_experience",
+   "hard": "",
+   "request": "Студентка, учусь онлайн, впервые беру кошку",
+   "gold": "подходят [38, 40, 56, 33, 35, 47, 52, 36, 44]; уточнить=no; можно=yes",
+   "answer": "action=recommend; top=[33, 35, 40, 52]; неверных пар=5/10",
+   "error_type": "ошибки классификации пар",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D2",
+   "id": "sc-24",
+   "category": "no_experience",
+   "hard": "",
+   "request": "Хочу взрослую спокойную собаку, не щенка — боюсь не справиться",
+   "gold": "подходят [28]; уточнить=no; можно=yes",
+   "answer": "action=no_safe_match; top=[]; неверных пар=4/10",
+   "error_type": "лишний отказ",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D2",
+   "id": "sc-25",
+   "category": "active",
+   "hard": "",
+   "request": "Бегаю 10 км каждое утро, ищу напарника",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=no_safe_match; top=[]; неверных пар=1/10",
+   "error_type": "не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D2",
+   "id": "sc-26",
+   "category": "active",
+   "hard": "",
+   "request": "Часто ходим в горы, нужна выносливая собака",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=recommend; top=[9, 12, 23, 25, 29]; неверных пар=6/10",
+   "error_type": "рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D2",
+   "id": "sc-28",
+   "category": "active",
+   "hard": "contradictory",
+   "request": "Люблю активный отдых по выходным, в будни работаю по 12 часов",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=recommend; top=[11, 13]; неверных пар=2/10",
+   "error_type": "нарушение ограничения; рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D2",
+   "id": "sc-29",
+   "category": "active",
+   "hard": "",
+   "request": "Велосипед, бег, есть ещё одна собака",
+   "gold": "подходят [19]; уточнить=no; можно=yes",
+   "answer": "action=no_safe_match; top=[]; неверных пар=1/10",
+   "error_type": "лишний отказ",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D2",
+   "id": "sc-31",
+   "category": "limited_time",
+   "hard": "",
+   "request": "Работаю по 10 часов, хочу самостоятельную кошку",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=recommend; top=[33]; неверных пар=4/10",
+   "error_type": "рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D2",
+   "id": "sc-32",
+   "category": "limited_time",
+   "hard": "",
+   "request": "Мало времени, но могу гулять 30 минут два раза в день",
+   "gold": "подходят [10]; уточнить=no; можно=yes",
+   "answer": "action=error; top=[]; неверных пар=10/10",
+   "error_type": "ошибка API",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D2",
+   "id": "sc-33",
+   "category": "limited_time",
+   "hard": "",
+   "request": "Часто в командировках, кого посоветуете?",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=error; top=[]; неверных пар=10/10",
+   "error_type": "не задан уточняющий вопрос; ошибка API",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D2",
+   "id": "sc-34",
+   "category": "limited_time",
+   "hard": "contradictory",
+   "request": "Хочу персидскую кошку, но на уход времени почти нет",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=error; top=[]; неверных пар=10/10",
+   "error_type": "не задан уточняющий вопрос; ошибка API",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D2",
+   "id": "sc-35",
+   "category": "limited_time",
+   "hard": "",
+   "request": "Есть кошка, днём никого нет дома, нужна вторая для компании",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=error; top=[]; неверных пар=10/10",
+   "error_type": "не задан уточняющий вопрос; ошибка API",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D2",
+   "id": "sc-36",
+   "category": "limited_time",
+   "hard": "insufficient",
+   "request": "мне бы просто кого-то, не знаю",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=error; top=[]; неверных пар=10/10",
+   "error_type": "не задан уточняющий вопрос; ошибка API",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  }
+ ],
+ "analysis": {
+  "intro": "Разобраны все сценарии, где итоговый вариант (D2) ошибся хотя бы в одной паре или выдал запрещённую рекомендацию (23 из 31 выполненного), плюс 5 невыполненных из-за лимита API. «Верных пар» — из 10 кандидатов сценария, порядок A / C / D / D2. Повторная проверка выполнена на том же наборе (без новых запросов к модели), поэтому это проверка на наборе разработки, а не независимая оценка.",
+  "cases": [
+   {
+    "id": "sc-11",
+    "request": "собака во двор",
+    "gold": "все 10 — Недостаточно данных; нужен вопрос",
+    "answer": "C: метки по карточкам, 0/10 верных",
+    "type": "Постановка / разметка",
+    "cause": "Эталон ставит «нет данных» при неполной анкете человека, промпт v1 — только при unknown в карточке животного",
+    "fix": "Правило отказа v2: при ≥ 2 пустых обязательных полях все пары, не исключённые правилами, — «Недостаточно данных»",
+    "retest": "D2: 10/10 (было 1/10)"
+   },
+   {
+    "id": "sc-18, sc-23, sc-30",
+    "request": "«для ребёнка», «хочу кого-нибудь милого», «спорт»",
+    "gold": "все пары — Недостаточно данных",
+    "answer": "C/D: 0–4 верных из 10",
+    "type": "Постановка / разметка",
+    "cause": "Та же причина: очень короткий или неоднозначный запрос без анкеты",
+    "fix": "Правило отказа v2",
+    "retest": "D2: 10/10 в каждом (было 1, 4 и 0)"
+   },
+   {
+    "id": "sc-04",
+    "request": "Дома уже есть кот, ищем ему компанию",
+    "gold": "7 — Подходит",
+    "answer": "C/D2: 5 подходящих кошек названы «Не подходит»: «низкая/высокая активность не соответствует средней»",
+    "type": "Ошибка модели",
+    "cause": "Модель считает отличие активности на один уровень жёстким ограничением",
+    "fix": "Промпт v3: несовпадение активности на один уровень — повод для ранжирования, а не для «Не подходит»",
+    "retest": "Не проводилась: суточный лимит Groq исчерпан"
+   },
+   {
+    "id": "sc-08, sc-12, sc-01, sc-17",
+    "request": "дом + взрослая собака; запрос на казахском; спокойная кошка",
+    "gold": "большинство — Подходит",
+    "answer": "D2: 2–5 верных из 10, причины «активность слишком высокая», «не подходит для дома»",
+    "type": "Ошибка модели",
+    "cause": "Та же строгость по активности + неверное чтение поля apartment_ok=no как «не подходит для дома»",
+    "fix": "Промпт v3: пояснить, что apartment_ok относится только к квартире",
+    "retest": "Не проводилась: лимит API"
+   },
+   {
+    "id": "sc-22",
+    "request": "Студентка, учусь онлайн, впервые беру кошку",
+    "gold": "Подходит",
+    "answer": "D2: «не ладит с другими питомцами» при отсутствии других питомцев",
+    "type": "Ошибка модели",
+    "cause": "Применяет ограничение, не относящееся к человеку",
+    "fix": "Промпт v3 + проверка: причина «Не подходит» должна ссылаться на поле анкеты",
+    "retest": "Не проводилась: лимит API"
+   },
+   {
+    "id": "sc-31",
+    "request": "Работаю по 10 часов, хочу самостоятельную кошку",
+    "gold": "смешанные метки, рекомендации нельзя",
+    "answer": "C: метки только для 1 из 10 кандидатов",
+    "type": "Ошибка модели (неполный ответ)",
+    "cause": "Режим json_object не гарантирует, что модель перечислит всех кандидатов",
+    "fix": "response_format json_schema (Structured Outputs) с обязательным списком всех id",
+    "retest": "D (v1): пропуски стали «нет данных» — 6/10 (было 0/10)"
+   },
+   {
+    "id": "sc-28",
+    "request": "Активный отдых по выходным, в будни работаю по 12 часов",
+    "gold": "все — Не подходит, рекомендации нельзя",
+    "answer": "A и D2 порекомендовали золотистого ретривера и бигля",
+    "type": "Пробел в правилах (данные)",
+    "cause": "Нет правила «собака + меньше часа в день»: R9 срабатывает только при сложном уходе",
+    "fix": "Новое жёсткое правило: собака при time_per_day = low → «Не подходит» (до следующего замера)",
+    "retest": "Не проводилась: правило добавляется в следующей версии"
+   },
+   {
+    "id": "sc-21",
+    "request": "Опыта нет, но хочу хаски или овчарку",
+    "gold": "все — Не подходит, рекомендации нельзя",
+    "answer": "D2: предложил бигля как безопасную альтернативу",
+    "type": "Дефект бизнес-процесса",
+    "cause": "Не определено, можно ли предлагать другую породу вместо запрошенной. Функция по заданию должна предлагать безопасные альтернативы, эталон это запрещает",
+    "fix": "Решение команды: альтернативы показывать отдельным блоком «можно обсудить с сотрудником», а не в рекомендациях",
+    "retest": "Требует решения команды"
+   },
+   {
+    "id": "sc-14",
+    "request": "Дочке 10 лет, мечтает о котёнке",
+    "gold": "все 10 — Не подходит, рекомендации нельзя",
+    "answer": "D2: 4 спокойные кошки, которые ладят с детьми",
+    "type": "Спорная разметка",
+    "cause": "По карточкам кошки ладят с детьми и подходят новичку, но эталон запрещает все варианты. Причина в разметке не указана",
+    "fix": "Вынести на повторное согласование; до решения не считать ошибкой модели",
+    "retest": "Требует согласования"
+   },
+   {
+    "id": "sc-16",
+    "request": "Малышу год, хотим питомца, но времени мало",
+    "gold": "рекомендации нельзя, но 1 пара «Подходит»",
+    "answer": "A и D2: турецкая ангора",
+    "type": "Противоречие в разметке",
+    "cause": "Эталон одновременно разрешает пару и запрещает рекомендации",
+    "fix": "Исправить эталон при следующей разметке",
+    "retest": "Требует согласования"
+   },
+   {
+    "id": "sc-05, sc-09",
+    "request": "аллергия у мужа; кошка будет гулять по участку",
+    "gold": "Недостаточно данных",
+    "answer": "D2: «Не подходит — не указан гипоаллергенный тип»",
+    "type": "Недостаток данных",
+    "cause": "В карточке нет полей «гипоаллергенность» и «безопасный выгул»",
+    "fix": "Добавить поля в карточку животного; до этого — уточняющий вопрос",
+    "retest": "Не проводилась: нужны новые данные"
+   },
+   {
+    "id": "sc-25, sc-26",
+    "request": "бегаю 10 км; ходим в горы",
+    "gold": "Недостаточно данных: выносливость не подтверждена",
+    "answer": "D2: активных собак называет «Подходит»",
+    "type": "Недостаток данных",
+    "cause": "Активность high ≠ подтверждённая выносливость для длительных нагрузок",
+    "fix": "Поле «выносливость / подходит для спорта» в карточке",
+    "retest": "Не проводилась: нужны новые данные"
+   },
+   {
+    "id": "sc-32…sc-36",
+    "request": "5 сценариев (в основном «ограниченное время»)",
+    "gold": "по эталону",
+    "answer": "нет ответа: HTTP 429, суточный лимит 200 000 токенов",
+    "type": "Инфраструктура (лимит API)",
+    "cause": "Бесплатный тариф Groq исчерпан на 31-м сценарии",
+    "fix": "Платный Dev Tier или прогон в другой день; в метриках засчитаны как «нет ответа»",
+    "retest": "Не проводилась: лимит API"
+   }
+  ],
+  "summary_types": [
+   {
+    "type": "Постановка / разметка: «нет данных» о человеке",
+    "count": "5 сценариев",
+    "action": "Правило отказа v2 — исправлено: все 5 стали 10/10"
+   },
+   {
+    "type": "Ошибка модели: лишняя строгость, неверное чтение полей",
+    "count": "≈ 8 сценариев",
+    "action": "Промпт v3 и json_schema; повторный замер после восстановления лимита"
+   },
+   {
+    "type": "Неполный ответ модели (пропущены кандидаты)",
+    "count": "6 сценариев, 26 пар",
+    "action": "Structured Outputs; пока пропуск = «нет данных» (D)"
+   },
+   {
+    "type": "Недостаток данных в карточке",
+    "count": "4 сценария",
+    "action": "Новые поля: гипоаллергенность, выгул, выносливость"
+   },
+   {
+    "type": "Пробел в правилах",
+    "count": "1 сценарий",
+    "action": "Правило «собака + меньше часа в день»"
+   },
+   {
+    "type": "Спорная / противоречивая разметка и бизнес-процесс",
+    "count": "3 сценария",
+    "action": "Повторное согласование; решение по альтернативам"
+   },
+   {
+    "type": "Лимит API (не выполнено)",
+    "count": "5 сценариев",
+    "action": "Засчитаны как «нет ответа»"
+   }
+  ],
+  "refusal": "Правило отказа сравнивалось в трёх состояниях на одних и тех же ответах модели. C (без правила): macro F1 0,403, F1 «Недостаточно данных» 0,024, нарушений 12 из 81 выданной рекомендации. D (v1: проверка жёстких ограничений по карточке, пропуск = «нет данных», уточнение при ≥ 2 пустых полях анкеты): macro F1 0,458, нарушений 9 из 63, верных отказов 11 из 18. D2 (v2: плюс «нет данных» для всех кандидатов при неполной анкете): macro F1 0,645, F1 «Недостаточно данных» 0,607. Accuracy растёт с 0,469 до 0,614, выданных рекомендаций становится меньше (81 → 63), а доля нарушений снижается с 14,8 % до 14,3 %. Правило отказа не использует «уверенность», которую называет модель: только полноту анкеты и подтверждённые поля карточки.",
+  "conclusion": "По правилу METRICS.md (5 невыполненных сценариев засчитаны как «нет ответа») итоговый вариант D2 даёт macro F1 0,645 против 0,504 у baseline и выигрывает по классам «Подходит» (0,639 против 0,566) и «Недостаточно данных» (0,607 против 0,191), но проигрывает по «Не подходит» (0,688 против 0,755). На 31 выполненном сценарии D2 лучше baseline по всем трём классам (0,642 / 0,763 / 0,672 против 0,612 / 0,754 / 0,225), но это повторная проверка на наборе разработки. По ранжированию ИИ уступает правилам: NDCG@5 0,604 против 0,853, Recall@5 0,575 против 0,967 — модель слишком часто отбрасывает подходящих. Доля нарушений 14,3 % при пороге 2 %. Критерий приёмки не выполнен: функцию нельзя включать для реальных пользователей без промпта v3 и повторного независимого замера."
+ },
+ "usage": {
+  "B": {
+   "n": 31,
+   "prompt_avg": 1700,
+   "completion_avg": 474,
+   "reasoning_avg": 226,
+   "fingerprints": 21
+  },
+  "C": {
+   "n": 31,
+   "prompt_avg": 3024,
+   "completion_avg": 372,
+   "reasoning_avg": 132,
+   "fingerprints": 18
+  }
+ },
+ "cost": {
+  "per_request_usd": 0.0003384,
+  "requests_month": [
+   1350,
+   13500
+  ],
+  "tokens_in_month": [
+   4082400,
+   40824000
+  ],
+  "tokens_out_month": [
+   502200,
+   5022000
+  ],
+  "month_usd": [
+   0.45684,
+   4.5684
+  ],
+  "month_kzt": [
+   207.9170208,
+   2079.170208
+  ],
+  "year_usd": [
+   5.48208,
+   54.8208
+  ],
+  "year_kzt": [
+   2495.0042496,
+   24950.042496
+  ],
+  "free_tier_ok": [
+   "да",
+   "нет"
+  ],
+  "cpu_server_usd": 109.0084,
+  "gpu_server_usd": 288.24,
+  "breakeven_cpu": 322128.841607565,
+  "breakeven_gpu": 851773.04964539,
+  "times_cpu": 238.613956746344,
+  "times_gpu": 630.942999737326,
+  "cpu_capacity": 129600,
+  "cpu_can_reach": "нет",
+  "infra_current_usd": 13,
+  "tokens_source": "Фактическое среднее usage из прогона 2026-11-24_231857_openai_gpt-oss-20b, вариант C, 31 запросов",
+  "tokens_in": 3024,
+  "tokens_out": 372,
+  "usd_kzt": 455.12
+ },
+ "n_animals": 50,
+ "images": {
+  "quality": "evals/results/2026-11-24_231857_openai_gpt-oss-20b/quality.png",
+  "latency": "evals/results/2026-11-24_231857_openai_gpt-oss-20b/latency.png",
+  "errors": "evals/results/2026-11-24_231857_openai_gpt-oss-20b/errors.png",
+  "confusion_A": "evals/results/2026-11-24_231857_openai_gpt-oss-20b/confusion_A.png",
+  "confusion_D": "evals/results/2026-11-24_231857_openai_gpt-oss-20b/confusion_D.png",
+  "confusion_D2": "evals/results/2026-11-24_231857_openai_gpt-oss-20b/confusion_D2.png",
+  "cost_chart": "evals/results/cost_chart.png",
+  "screen_reco": "docs/lab12/img/recommendations.jpg",
+  "screen_chat": "docs/lab12/img/chat_clarify.jpg",
+  "screen_handoff": "docs/lab12/img/handoff.jpg"
+ }
+}

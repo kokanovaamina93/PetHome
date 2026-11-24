@@ -1,0 +1,536 @@
+{
+ "meta": {
+  "run_id": "2026-11-24_231857_openai_gpt-oss-20b",
+  "started_utc": "2026-11-24T18:18:57+00:00",
+  "provider_base_url": "https://api.groq.com/openai/v1",
+  "model": "openai/gpt-oss-20b",
+  "prompt_version": "reco-v1",
+  "params": {
+   "temperature": 0,
+   "seed": 42,
+   "max_tokens": 2500,
+   "response_format": "json_object",
+   "reasoning_effort": "low"
+  },
+  "determinism_note": "seed поддерживается провайдером в режиме best effort; детерминированность не гарантируется",
+  "catalog_version": "f45debb02649",
+  "n_scenarios": 36,
+  "python": "3.11.4",
+  "git_commit": "f1d5191",
+  "finished_utc": "2026-11-24T20:23:00+00:00",
+  "complete": false,
+  "api_errors": [
+   {
+    "id": "sc-07",
+    "variant": "C",
+    "attempt": 1,
+    "error": "HTTP 429: {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-20b` in organization `org_01m86z9gnhektt1sseew0wyrn2` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 5262, Requested 3698. Please try again in 7.199999999s. Need more tokens? Upgrade to Dev Tier today at https:/",
+    "utc": "2026-11-24T18:24:15+00:00"
+   },
+   {
+    "id": "sc-32",
+    "variant": "C",
+    "attempt": 1,
+    "error": "HTTP 429: {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-20b` in organization `org_01m86z9gnhektt1sseew0wyrn2` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 196935, Requested 3552. Please try again in 3m30.384s. Need more tokens? Upgrade to Dev Tier today at https://c",
+    "utc": "2026-11-24T18:45:20+00:00"
+   }
+  ],
+  "completed_scenarios": 31,
+  "not_completed": [
+   "sc-32",
+   "sc-33",
+   "sc-34",
+   "sc-35",
+   "sc-36"
+  ],
+  "not_completed_reason": "не выполнено: исчерпан суточный лимит бесплатного тарифа Groq (200 000 токенов), прогон закрыт 25.11.2026"
+ },
+ "gold": "gold.jsonl",
+ "results": {
+  "A": {
+   "accuracy": 0.5944444444444444,
+   "macro_precision": 0.7377132671250318,
+   "macro_recall": 0.5716637039963132,
+   "macro_f1": 0.5042854875864726,
+   "per_class": {
+    "suitable": {
+     "precision": 0.3949579831932773,
+     "recall": 1.0,
+     "f1": 0.5662650602409639,
+     "support": 94
+    },
+    "unsuitable": {
+     "precision": 1.0,
+     "recall": 0.6065573770491803,
+     "f1": 0.7551020408163265,
+     "support": 183
+    },
+    "insufficient": {
+     "precision": 0.8181818181818182,
+     "recall": 0.10843373493975904,
+     "f1": 0.19148936170212766,
+     "support": 83
+    }
+   },
+   "precision_at_5": 0.799074074074074,
+   "recall_at_5": 0.9666666666666667,
+   "ndcg_at_5": 0.8531871114897767,
+   "violation_rate": 0.2565789473684211,
+   "violations": 39,
+   "recommended_items": 152,
+   "explanation_error_rate": 0.0,
+   "correct_refusal": "2/18",
+   "clarify_accuracy": 0.5277777777777778,
+   "latency_mean_s": 0.0012738888888888889,
+   "latency_p95_s": 0.00259,
+   "api_errors": 0,
+   "parse_errors": 0,
+   "confusion": {
+    "suitable": {
+     "suitable": 94,
+     "unsuitable": 0,
+     "insufficient": 0,
+     "missing": 0
+    },
+    "unsuitable": {
+     "suitable": 70,
+     "unsuitable": 111,
+     "insufficient": 2,
+     "missing": 0
+    },
+    "insufficient": {
+     "suitable": 74,
+     "unsuitable": 0,
+     "insufficient": 9,
+     "missing": 0
+    }
+   },
+   "per_category": {
+    "apartment": {
+     "p5": 0.7125,
+     "ndcg5": 0.7998037049627125,
+     "violations": 5,
+     "n": 4
+    },
+    "house": {
+     "p5": 0.95,
+     "ndcg5": 0.8810706688919452,
+     "violations": 1,
+     "n": 4
+    },
+    "family_kids": {
+     "p5": 1.0,
+     "ndcg5": 0.971736649560532,
+     "violations": 0,
+     "n": 3
+    },
+    "no_experience": {
+     "p5": 0.65,
+     "ndcg5": 0.679665140678938,
+     "violations": 4,
+     "n": 4
+    },
+    "active": {
+     "p5": 0.5666666666666667,
+     "ndcg5": 1.0,
+     "violations": 3,
+     "n": 2
+    },
+    "limited_time": {
+     "p5": 1.0,
+     "ndcg5": 1.0,
+     "violations": 0,
+     "n": 1
+    }
+   }
+  },
+  "B": {
+   "accuracy": 0.5138888888888888,
+   "macro_precision": 0.6112544362544363,
+   "macro_recall": 0.48653864382071943,
+   "macro_f1": 0.5305412880686733,
+   "per_class": {
+    "suitable": {
+     "precision": 0.6060606060606061,
+     "recall": 0.6382978723404256,
+     "f1": 0.6217616580310881,
+     "support": 94
+    },
+    "unsuitable": {
+     "precision": 0.7027027027027027,
+     "recall": 0.5683060109289617,
+     "f1": 0.6283987915407855,
+     "support": 183
+    },
+    "insufficient": {
+     "precision": 0.525,
+     "recall": 0.25301204819277107,
+     "f1": 0.34146341463414637,
+     "support": 83
+    }
+   },
+   "precision_at_5": 0.7833333333333333,
+   "recall_at_5": 0.637962962962963,
+   "ndcg_at_5": 0.6400093541876887,
+   "violation_rate": 0.125,
+   "violations": 10,
+   "recommended_items": 80,
+   "explanation_error_rate": 0.0,
+   "correct_refusal": "9/18",
+   "clarify_accuracy": 0.6111111111111112,
+   "latency_mean_s": 1.0584516129032258,
+   "latency_p95_s": 1.318,
+   "api_errors": 5,
+   "parse_errors": 0,
+   "confusion": {
+    "suitable": {
+     "suitable": 60,
+     "unsuitable": 24,
+     "insufficient": 4,
+     "missing": 6
+    },
+    "unsuitable": {
+     "suitable": 10,
+     "unsuitable": 104,
+     "insufficient": 15,
+     "missing": 54
+    },
+    "insufficient": {
+     "suitable": 29,
+     "unsuitable": 20,
+     "insufficient": 21,
+     "missing": 13
+    }
+   },
+   "per_category": {
+    "apartment": {
+     "p5": 0.75,
+     "ndcg5": 0.5343090822438928,
+     "violations": 1,
+     "n": 4
+    },
+    "house": {
+     "p5": 1.0,
+     "ndcg5": 0.6731338894250956,
+     "violations": 0,
+     "n": 4
+    },
+    "family_kids": {
+     "p5": 0.9333333333333333,
+     "ndcg5": 0.8832307992411995,
+     "violations": 1,
+     "n": 3
+    },
+    "no_experience": {
+     "p5": 0.575,
+     "ndcg5": 0.5101760227447111,
+     "violations": 2,
+     "n": 4
+    },
+    "active": {
+     "p5": 1.0,
+     "ndcg5": 1.0,
+     "violations": 0,
+     "n": 2
+    },
+    "limited_time": {
+     "p5": 0.0,
+     "ndcg5": 0.0,
+     "violations": 0,
+     "n": 1
+    }
+   }
+  },
+  "C": {
+   "accuracy": 0.46944444444444444,
+   "macro_precision": 0.559452693861296,
+   "macro_recall": 0.40143109351719164,
+   "macro_f1": 0.4028846338144252,
+   "per_class": {
+    "suitable": {
+     "precision": 0.5698924731182796,
+     "recall": 0.5638297872340425,
+     "f1": 0.5668449197860964,
+     "support": 94
+    },
+    "unsuitable": {
+     "precision": 0.6084656084656085,
+     "recall": 0.6284153005464481,
+     "f1": 0.6182795698924732,
+     "support": 183
+    },
+    "insufficient": {
+     "precision": 0.5,
+     "recall": 0.012048192771084338,
+     "f1": 0.023529411764705882,
+     "support": 83
+    }
+   },
+   "precision_at_5": 0.8037037037037037,
+   "recall_at_5": 0.5861111111111111,
+   "ndcg_at_5": 0.611265621091113,
+   "violation_rate": 0.14814814814814814,
+   "violations": 12,
+   "recommended_items": 81,
+   "explanation_error_rate": 0.0,
+   "correct_refusal": "7/18",
+   "clarify_accuracy": 0.5277777777777778,
+   "latency_mean_s": 0.9831290322580645,
+   "latency_p95_s": 1.227,
+   "api_errors": 5,
+   "parse_errors": 0,
+   "confusion": {
+    "suitable": {
+     "suitable": 53,
+     "unsuitable": 39,
+     "insufficient": 1,
+     "missing": 1
+    },
+    "unsuitable": {
+     "suitable": 12,
+     "unsuitable": 115,
+     "insufficient": 0,
+     "missing": 56
+    },
+    "insufficient": {
+     "suitable": 28,
+     "unsuitable": 35,
+     "insufficient": 1,
+     "missing": 19
+    }
+   },
+   "per_category": {
+    "apartment": {
+     "p5": 1.0,
+     "ndcg5": 0.7765732350040718,
+     "violations": 0,
+     "n": 4
+    },
+    "house": {
+     "p5": 1.0,
+     "ndcg5": 0.6698317787344101,
+     "violations": 0,
+     "n": 4
+    },
+    "family_kids": {
+     "p5": 0.9333333333333333,
+     "ndcg5": 0.5947423287170982,
+     "violations": 1,
+     "n": 3
+    },
+    "no_experience": {
+     "p5": 0.6666666666666666,
+     "ndcg5": 0.6502654187014827,
+     "violations": 1,
+     "n": 4
+    },
+    "active": {
+     "p5": 0.5,
+     "ndcg5": 0.4159362318644413,
+     "violations": 0,
+     "n": 2
+    },
+    "limited_time": {
+     "p5": 0.0,
+     "ndcg5": 0.0,
+     "violations": 0,
+     "n": 1
+    }
+   }
+  },
+  "D": {
+   "accuracy": 0.5194444444444445,
+   "macro_precision": 0.534382422442124,
+   "macro_recall": 0.44738540255662806,
+   "macro_f1": 0.4576817225641483,
+   "per_class": {
+    "suitable": {
+     "precision": 0.5824175824175825,
+     "recall": 0.5638297872340425,
+     "f1": 0.572972972972973,
+     "support": 94
+    },
+    "unsuitable": {
+     "precision": 0.6318407960199005,
+     "recall": 0.6939890710382514,
+     "f1": 0.6614583333333334,
+     "support": 183
+    },
+    "insufficient": {
+     "precision": 0.3888888888888889,
+     "recall": 0.08433734939759036,
+     "f1": 0.1386138613861386,
+     "support": 83
+    }
+   },
+   "precision_at_5": 0.8148148148148148,
+   "recall_at_5": 0.575,
+   "ndcg_at_5": 0.6035635814423618,
+   "violation_rate": 0.14285714285714285,
+   "violations": 9,
+   "recommended_items": 63,
+   "explanation_error_rate": 0.0,
+   "correct_refusal": "11/18",
+   "clarify_accuracy": 0.6388888888888888,
+   "latency_mean_s": 0.9831290322580645,
+   "latency_p95_s": 1.227,
+   "api_errors": 5,
+   "parse_errors": 0,
+   "confusion": {
+    "suitable": {
+     "suitable": 53,
+     "unsuitable": 39,
+     "insufficient": 1,
+     "missing": 1
+    },
+    "unsuitable": {
+     "suitable": 10,
+     "unsuitable": 127,
+     "insufficient": 10,
+     "missing": 36
+    },
+    "insufficient": {
+     "suitable": 28,
+     "unsuitable": 35,
+     "insufficient": 7,
+     "missing": 13
+    }
+   },
+   "per_category": {
+    "apartment": {
+     "p5": 1.0,
+     "ndcg5": 0.7765732350040718,
+     "violations": 0,
+     "n": 4
+    },
+    "house": {
+     "p5": 1.0,
+     "ndcg5": 0.6698317787344101,
+     "violations": 0,
+     "n": 4
+    },
+    "family_kids": {
+     "p5": 1.0,
+     "ndcg5": 0.5947423287170982,
+     "violations": 0,
+     "n": 3
+    },
+    "no_experience": {
+     "p5": 0.6666666666666666,
+     "ndcg5": 0.6156062402821016,
+     "violations": 1,
+     "n": 4
+    },
+    "active": {
+     "p5": 0.5,
+     "ndcg5": 0.4159362318644413,
+     "violations": 0,
+     "n": 2
+    },
+    "limited_time": {
+     "p5": 0.0,
+     "ndcg5": 0.0,
+     "violations": 0,
+     "n": 1
+    }
+   }
+  },
+  "D2": {
+   "accuracy": 0.6138888888888889,
+   "macro_precision": 0.735789449499127,
+   "macro_recall": 0.5839315872955839,
+   "macro_f1": 0.6447695025812373,
+   "per_class": {
+    "suitable": {
+     "precision": 0.7361111111111112,
+     "recall": 0.5638297872340425,
+     "f1": 0.6385542168674699,
+     "support": 94
+    },
+    "unsuitable": {
+     "precision": 0.6827956989247311,
+     "recall": 0.6939890710382514,
+     "f1": 0.6883468834688347,
+     "support": 183
+    },
+    "insufficient": {
+     "precision": 0.7884615384615384,
+     "recall": 0.4939759036144578,
+     "f1": 0.6074074074074073,
+     "support": 83
+    }
+   },
+   "precision_at_5": 0.8148148148148148,
+   "recall_at_5": 0.575,
+   "ndcg_at_5": 0.6035635814423618,
+   "violation_rate": 0.14285714285714285,
+   "violations": 9,
+   "recommended_items": 63,
+   "explanation_error_rate": 0.0,
+   "correct_refusal": "11/18",
+   "clarify_accuracy": 0.6388888888888888,
+   "latency_mean_s": 0.9831290322580645,
+   "latency_p95_s": 1.227,
+   "api_errors": 5,
+   "parse_errors": 0,
+   "confusion": {
+    "suitable": {
+     "suitable": 53,
+     "unsuitable": 39,
+     "insufficient": 1,
+     "missing": 1
+    },
+    "unsuitable": {
+     "suitable": 10,
+     "unsuitable": 127,
+     "insufficient": 10,
+     "missing": 36
+    },
+    "insufficient": {
+     "suitable": 9,
+     "unsuitable": 20,
+     "insufficient": 41,
+     "missing": 13
+    }
+   },
+   "per_category": {
+    "apartment": {
+     "p5": 1.0,
+     "ndcg5": 0.7765732350040718,
+     "violations": 0,
+     "n": 4
+    },
+    "house": {
+     "p5": 1.0,
+     "ndcg5": 0.6698317787344101,
+     "violations": 0,
+     "n": 4
+    },
+    "family_kids": {
+     "p5": 1.0,
+     "ndcg5": 0.5947423287170982,
+     "violations": 0,
+     "n": 3
+    },
+    "no_experience": {
+     "p5": 0.6666666666666666,
+     "ndcg5": 0.6156062402821016,
+     "violations": 1,
+     "n": 4
+    },
+    "active": {
+     "p5": 0.5,
+     "ndcg5": 0.4159362318644413,
+     "violations": 0,
+     "n": 2
+    },
+    "limited_time": {
+     "p5": 0.0,
+     "ndcg5": 0.0,
+     "violations": 0,
+     "n": 1
+    }
+   }
+  }
+ }
+}
