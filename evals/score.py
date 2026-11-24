@@ -34,6 +34,8 @@ if meta["catalog_version"] != seed_animals.catalog_version():
 scen = {json.loads(s)["id"]: json.loads(s) for s in open(ROOT / "evals/scenarios.jsonl", encoding="utf-8")}
 gold = {json.loads(s)["id"]: json.loads(s) for s in open(gold_path, encoding="utf-8")}
 VARIANTS = {"A": "A. Правила (baseline)", "B": "B. Zero-shot", "C": "C. Few-shot", "D": "D. Few-shot + отказ"}
+if (RAW / "D2.jsonl").exists():
+    VARIANTS["D2"] = "D2. Отказ v2 (повторная проверка)"
 pred = {v: {json.loads(s)["id"]: json.loads(s) for s in open(RAW / f"{v}.jsonl", encoding="utf-8")} for v in VARIANTS}
 CL = list(R.LABELS)
 
@@ -203,7 +205,7 @@ import matplotlib  # noqa: E402
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
 
-COL = ["#9AA0A6", "#7C6FD6", "#4B3FB5", "#2E7D5B"]
+COL = ["#9AA0A6", "#7C6FD6", "#4B3FB5", "#2E7D5B", "#C2620C"]
 plt.rcParams.update({"font.family": "Arial", "font.size": 10})
 ms = [
     ("macro_f1", "Macro F1"),
@@ -213,15 +215,15 @@ ms = [
     ("ndcg_at_5", "NDCG@5"),
 ]
 fig, ax = plt.subplots(figsize=(9, 4))
-w = 0.2
+w = 0.8 / len(VARIANTS)
 for i, v in enumerate(VARIANTS):
     vals = [results[v][k] or 0 for k, _ in ms]
-    bars = ax.bar([j + (i - 1.5) * w for j in range(len(ms))], vals, w, label=VARIANTS[v], color=COL[i])
+    bars = ax.bar([j + (i - (len(VARIANTS) - 1) / 2) * w for j in range(len(ms))], vals, w, label=VARIANTS[v], color=COL[i])
     ax.bar_label(bars, fmt="%.2f", fontsize=7, padding=1)
 ax.set_xticks(range(len(ms)), [n for _, n in ms])
 ax.set_ylim(0, 1.12)
 ax.set_title("Качество подбора: четыре варианта")
-ax.legend(ncol=4, fontsize=8, loc="upper center", bbox_to_anchor=(0.5, -0.1), frameon=False)
+ax.legend(ncol=len(VARIANTS), fontsize=8, loc="upper center", bbox_to_anchor=(0.5, -0.1), frameon=False)
 ax.spines[["top", "right"]].set_visible(False)
 fig.tight_layout()
 fig.savefig(OUT / "quality.png", dpi=180)
@@ -243,7 +245,7 @@ fig, ax = plt.subplots(figsize=(7, 3.4))
 kinds = [("violations", "Нарушения ограничений"), ("api_errors", "Ошибки API"), ("parse_errors", "Неразобранный ответ")]
 for i, v in enumerate(VARIANTS):
     vals = [results[v][k] for k, _ in kinds]
-    bars = ax.bar([j + (i - 1.5) * w for j in range(len(kinds))], vals, w, label=VARIANTS[v], color=COL[i])
+    bars = ax.bar([j + (i - (len(VARIANTS) - 1) / 2) * w for j in range(len(kinds))], vals, w, label=VARIANTS[v], color=COL[i])
     ax.bar_label(bars, fontsize=7)
 ax.set_xticks(range(len(kinds)), [n for _, n in kinds])
 ax.set_title("Ошибки по вариантам (шт.)")
@@ -323,18 +325,18 @@ for v, r in results.items():
         f"{f3(r['precision_at_5'])} | {f3(r['recall_at_5'])} | {f3(r['ndcg_at_5'])} | {r['violations']}/{r['recommended_items']} | "
         f"{f3(r['explanation_error_rate'])} | {r['correct_refusal']} | {f3(r['clarify_accuracy'])} | {f3(r['latency_mean_s'])} |"
     )
-L += ["", "## F1 по классам", "", "| Класс | " + " | ".join(VARIANTS.values()) + " |", "|---|" + "---|" * 4]
+L += ["", "## F1 по классам", "", "| Класс | " + " | ".join(VARIANTS.values()) + " |", "|---|" + "---|" * len(VARIANTS)]
 for c in CL:
     L.append(
         f"| {R.LABELS_RU[c]} ({results['A']['per_class'][c]['support']}) | "
         + " | ".join(f3(results[v]["per_class"][c]["f1"]) for v in VARIANTS)
         + " |"
     )
-best = max("BCD", key=lambda v: results[v]["macro_f1"])
-win = all(results["D"]["per_class"][c]["f1"] > results["A"]["per_class"][c]["f1"] for c in CL)
-L += [
-    "",
-    f"D лучше baseline по F1 каждого класса: **{'да' if win else 'НЕТ'}**. Лучший ИИ-вариант по macro F1: {VARIANTS[best]}.",
-]
+best = max([v for v in VARIANTS if v != "A"], key=lambda v: results[v]["macro_f1"])
+L.append("")
+for v in [x for x in VARIANTS if x in ("D", "D2")]:
+    win = all(results[v]["per_class"][c]["f1"] > results["A"]["per_class"][c]["f1"] for c in CL)
+    L.append(f"{VARIANTS[v]} лучше baseline по F1 каждого класса: **{'да' if win else 'НЕТ'}**.")
+L.append(f"Лучший ИИ-вариант по macro F1: {VARIANTS[best]}.")
 (OUT / "summary.md").write_text("\n".join(L) + "\n", encoding="utf-8")
 print("\n".join(L))

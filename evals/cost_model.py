@@ -12,7 +12,7 @@ from pathlib import Path
 from openpyxl import Workbook
 from openpyxl.chart import LineChart, Reference
 from openpyxl.comments import Comment
-from openpyxl.styles import Alignment, Font, PatternFill
+from openpyxl.styles import Font, PatternFill
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "evals/results"

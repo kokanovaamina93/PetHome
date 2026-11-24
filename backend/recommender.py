@@ -23,6 +23,9 @@ import urllib.error
 import urllib.request
 
 PROMPT_VERSION = "reco-v1"
+# v1 — замер 24.11; v2 (25.11, после разбора ошибок): при неполной анкете пары, не исключённые правилами,
+# получают «недостаточно данных» — о человеке слишком мало сведений, чтобы судить о совместимости
+REFUSAL_VERSION = os.environ.get("REFUSAL_VERSION", "refusal-v2")
 LABELS = ("suitable", "unsuitable", "insufficient")
 LABELS_RU = {"suitable": "Подходит", "unsuitable": "Не подходит", "insufficient": "Недостаточно данных"}
 TOP_K = 5
@@ -603,11 +606,13 @@ QUESTIONS = {
 }
 
 
-def apply_refusal(result: dict, profile: dict, text: str, animals: list[dict]) -> dict:
-    """Детерминированная надстройка над ответом модели (вариант D)."""
+def apply_refusal(result: dict, profile: dict, text: str, animals: list[dict], version: str | None = None) -> dict:
+    """Детерминированная надстройка над ответом модели (вариант D). version: refusal-v1 | refusal-v2."""
+    version = version or REFUSAL_VERSION
     by_id = {a["id"]: a for a in animals}
     out = dict(result)
     miss = missing_required(profile, text)
+    incomplete = len(miss) >= 2
     pairs, notes = [], []
     for pr in result["pairs"]:
         label_rules, why = classify_pair_rules(profile, by_id[pr["animal_id"]], text)
@@ -620,13 +625,15 @@ def apply_refusal(result: dict, profile: dict, text: str, animals: list[dict]) -
             reason = pr.get("reason", "")
         if lab not in LABELS:
             lab = "insufficient"
+        if version == "refusal-v2" and incomplete and label_rules != "unsuitable":
+            lab, reason = "insufficient", "мало сведений о человеке: " + ", ".join(miss)
         pairs.append({**pr, "label": lab, "reason": reason})
     labels = {p["animal_id"]: p["label"] for p in pairs}
     top = [i for i in result["top"] if labels.get(i) == "suitable"]
     removed = [i for i in result["top"] if i not in top]
     if removed:
         notes.append(f"убрано из рекомендаций после проверки ограничений: {removed}")
-    if len(miss) >= 2:  # анкета неполная -> уточняем, не рекомендуем
+    if incomplete:  # анкета неполная -> уточняем, не рекомендуем
         out.update(action="clarify", question=" ".join(QUESTIONS[m] for m in miss[:2]), top=[])
         notes.append(f"не заполнены обязательные поля: {miss}")
     elif not top:
@@ -639,6 +646,7 @@ def apply_refusal(result: dict, profile: dict, text: str, animals: list[dict]) -
         out.update(action="recommend", top=top)
     out.update(
         variant="D",
+        refusal_version=version,
         pairs=pairs,
         refusal_notes=notes,
         handoff=out["action"] != "recommend",
