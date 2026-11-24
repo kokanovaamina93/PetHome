@@ -238,3 +238,30 @@ be.column_dimensions["D"].width = 16
 out = OUT / "cost-model.xlsx"
 wb.save(out)
 print(out, "| токены:", tok_in, tok_out, "|", tok_src)
+
+# ---------------------------------------------------------------- PNG-график для Word и Wiki (те же входные данные)
+import matplotlib  # noqa: E402
+
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt  # noqa: E402
+
+per_req = tok_in / 1e6 * 0.075 + tok_out / 1e6 * 0.30
+cpu = 59.49 * 1.16 + 4 * 10
+gpu = 214 * 1.16 + 4 * 10
+xs = [1_000, 10_000, 50_000, 100_000, 250_000, 500_000, 1_000_000, 2_000_000, 3_000_000]
+plt.rcParams.update({"font.family": "Arial", "font.size": 10})
+fig, ax = plt.subplots(figsize=(7.5, 3.8))
+ax.plot(xs, [x * per_req for x in xs], marker="o", color="#4B3FB5", label="Облачный API (Groq)")
+ax.plot(xs, [cpu] * len(xs), color="#2E7D5B", label=f"Свой CPU-сервер ≈ ${cpu:.0f}/мес")
+ax.plot(xs, [gpu] * len(xs), color="#C2620C", label=f"Свой GPU-сервер ≈ ${gpu:.0f}/мес")
+ax.axvline(1350, color="#9AA0A6", ls="--", lw=1)
+ax.text(1500, gpu * 1.05, "прогноз PetHome\n1 350 запросов/мес", fontsize=8, color="#555")
+ax.set_xscale("log")
+ax.set_xlabel("запросов в месяц (логарифмическая шкала)")
+ax.set_ylabel("$ в месяц")
+ax.set_title("Стоимость: API против собственного сервера")
+ax.legend(frameon=False, fontsize=8)
+ax.spines[["top", "right"]].set_visible(False)
+fig.tight_layout()
+fig.savefig(OUT / "cost_chart.png", dpi=180)
+print(OUT / "cost_chart.png")

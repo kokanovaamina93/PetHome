@@ -1,0 +1,6 @@
+{
+  "name": "pethome-lab12-report",
+  "private": true,
+  "description": "Сборка Word-отчёта ЛЗ 12: node build_report.cjs",
+  "dependencies": { "docx": "^9.5.1" }
+}
