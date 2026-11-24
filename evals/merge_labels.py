@@ -17,7 +17,16 @@ L = ROOT / "evals/labeling"
 CODE = {"Подходит": "suitable", "Не подходит": "unsuitable", "Недостаточно данных": "insufficient"}
 RU = {v: k for k, v in CODE.items()}
 YN = {"да": "yes", "нет": "no", "yes": "yes", "no": "no"}
-SCEN = {json.loads(x)["id"]: json.loads(x) for x in open(ROOT / "evals/scenarios.jsonl", encoding="utf-8")}
+REAL = "--set" in sys.argv and sys.argv[sys.argv.index("--set") + 1] == "real"
+FILES = {
+    "scenarios": "evals/scenarios_real.jsonl" if REAL else "evals/scenarios.jsonl",
+    "Fariza": "5_real_labeling_Fariza.xlsx" if REAL else "1_labeling_Fariza.xlsx",
+    "Amina": "6_real_labeling_Amina.xlsx" if REAL else "2_labeling_Amina.xlsx",
+    "disputes": "7_real_disputes.xlsx" if REAL else "3_disputes.xlsx",
+    "gold": "evals/gold_real.jsonl" if REAL else "evals/gold.jsonl",
+    "agreement": "evals/results/agreement_real.json" if REAL else "evals/results/agreement.json",
+}
+SCEN = {json.loads(x)["id"]: json.loads(x) for x in open(ROOT / FILES["scenarios"], encoding="utf-8")}
 ANIMALS = {a["id"]: a for a in json.loads((ROOT / "backend/data/animals.json").read_text(encoding="utf-8"))}
 
 
@@ -54,8 +63,8 @@ def kappa(a, b):
     return po, (po - pe) / (1 - pe) if pe < 1 else 1.0
 
 
-pa, sa = read(L / "1_labeling_Fariza.xlsx")
-pb, sb = read(L / "2_labeling_Amina.xlsx")
+pa, sa = read(L / FILES["Fariza"])
+pb, sb = read(L / FILES["Amina"])
 empty = [k for k in pa if not pa[k] or not pb.get(k)] + [
     k for k in sa if not sa[k]["clarify"] or not sa[k]["allowed"] or not sb[k]["clarify"] or not sb[k]["allowed"]
 ]
@@ -76,9 +85,9 @@ report = {
 }
 print(json.dumps(report, ensure_ascii=False, indent=1))
 (ROOT / "evals/results").mkdir(exist_ok=True)
-(ROOT / "evals/results/agreement.json").write_text(json.dumps(report, ensure_ascii=False, indent=1), encoding="utf-8")
+(ROOT / FILES["agreement"]).write_text(json.dumps(report, ensure_ascii=False, indent=1), encoding="utf-8")
 
-disp_path = L / "3_disputes.xlsx"
+disp_path = L / FILES["disputes"]
 if "--write" not in sys.argv:
     from openpyxl.styles import Alignment
     from openpyxl.worksheet.datavalidation import DataValidation
@@ -135,7 +144,7 @@ if disp_path.exists():
             if not dec or not r[8]:
                 sys.exit(f"Спорный случай без решения или без описания согласования: {r[:3]}")
             resolved[(r[0], r[1], r[2] or "")] = dec
-with open(ROOT / "evals/gold.jsonl", "w", encoding="utf-8") as f:
+with open(ROOT / FILES["gold"], "w", encoding="utf-8") as f:
     for s in sorted(sa):
         pairs = {}
         for (sid, aid), lab in pa.items():
@@ -159,4 +168,4 @@ with open(ROOT / "evals/gold.jsonl", "w", encoding="utf-8") as f:
             )
             + "\n"
         )
-print("gold.jsonl записан")
+print(FILES["gold"], "записан")

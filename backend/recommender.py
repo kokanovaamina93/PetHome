@@ -22,10 +22,14 @@ import time
 import urllib.error
 import urllib.request
 
-PROMPT_VERSION = "reco-v1"
+# reco-v1 — замер 24.11 (сохранён дословно); reco-v3 — 25.11, после разбора ошибок (см. evals/error_analysis.json)
+PROMPT_VERSION = os.environ.get("PROMPT_VERSION", "reco-v3")
+# rules-v1 — 18 правил замера 24.11; rules-v2 — плюс R19 «собака при нехватке времени»
+RULES_VERSION = os.environ.get("RULES_VERSION", "rules-v2")
 # v1 — замер 24.11; v2 (25.11, после разбора ошибок): при неполной анкете пары, не исключённые правилами,
 # получают «недостаточно данных» — о человеке слишком мало сведений, чтобы судить о совместимости
-REFUSAL_VERSION = os.environ.get("REFUSAL_VERSION", "refusal-v2")
+# refusal-v3 (25.11): v2 + порядок рекомендаций по баллам правил R15–R18 среди всех проверенных «подходит»
+REFUSAL_VERSION = os.environ.get("REFUSAL_VERSION", "refusal-v3")
 LABELS = ("suitable", "unsuitable", "insufficient")
 LABELS_RU = {"suitable": "Подходит", "unsuitable": "Не подходит", "insufficient": "Недостаточно данных"}
 TOP_K = 5
@@ -161,6 +165,9 @@ def _hard_violations(p: dict, a: dict) -> list[str]:
         v.append("R9: сложный уход при недостатке времени")
     if p["activity"] == "low" and a["activity"] == "high" and a["type"] == "dog":
         v.append("R10: очень активная собака для спокойного образа жизни")
+    if (RULES_VERSION != "rules-v1" and p["time_per_day"] == "low" and a["type"] == "dog"
+            and not (a["activity"] == "low" and a["care_level"] == "low")):
+        v.append("R19: собаке нужно больше часа в день, а времени мало")
     return v
 
 
@@ -413,6 +420,85 @@ FEW_SHOT = [
     ),
 ]
 
+SYSTEM_V3 = """Ты — помощник платформы PetHome, которая помогает людям выбрать животное из приюта.
+Тебе дают анкету человека, его свободный запрос и список животных-кандидатов (существуют только они).
+Для КАЖДОГО кандидата из списка поставь ровно одну метку (пропускать кандидатов нельзя):
+- suitable — по подтверждённым данным карточки животное подходит человеку;
+- unsuitable — нарушено ОБЯЗАТЕЛЬНОЕ ограничение человека: другой вид; ребёнок в семье, а животное не ладит с детьми (no);
+  есть другое животное, а это не ладит с животными (no); квартира, а apartment_ok = no; нет опыта, а beginner_ok = no;
+  человек не готов гулять, а это собака; мало времени, а уход сложный или собака активная; просит конкретную породу — другая порода;
+- insufficient — по важному для ЭТОГО человека вопросу данных нет: свойство животного unknown ИЛИ человек не сообщил
+  о себе главного (жильё, дети, другие животные, время, опыт), ИЛИ нужное свойство вообще не описано в карточке
+  (гипоаллергенность, выносливость для спорта, безопасный выгул).
+Важно:
+- Разница в активности на один уровень (low/medium или medium/high) — НЕ причина для unsuitable: учти её только в порядке top.
+- apartment_ok касается только квартиры. Для частного дома это поле не ограничение.
+- Не применяй ограничение, которого у человека нет (нет других животных — совместимость с животными не важна; нет детей — не важна совместимость с детьми).
+- unknown — это не «да». Не придумывай свойств, которых нет в карточке.
+top — до 5 лучших из suitable по убыванию соответствия. action: recommend — есть suitable; clarify — о человеке не хватает
+главного; no_safe_match — безопасных вариантов нет. Ты ничего не одобряешь: решение принимает сотрудник приюта.
+Запрос может быть на русском, казахском или смеси. reason — коротко по-русски, со ссылкой на конкретное поле."""
+
+_EX_ANIMALS_3 = [
+    {"id": 9101, "type": "dog", "breed": "Бигль", "size": "medium", "activity": "high", "good_with_kids": "yes",
+     "good_with_pets": "no", "apartment_ok": "yes", "beginner_ok": "yes", "care_level": "low", "age_group": "adult"},
+    {"id": 9102, "type": "dog", "breed": "Ши-тцу", "size": "small", "activity": "medium", "good_with_kids": "yes",
+     "good_with_pets": "yes", "apartment_ok": "yes", "beginner_ok": "yes", "care_level": "medium", "age_group": "adult"},
+    {"id": 9103, "type": "dog", "breed": "Аляскинский маламут", "size": "large", "activity": "high", "good_with_kids": "yes",
+     "good_with_pets": "unknown", "apartment_ok": "no", "beginner_ok": "no", "care_level": "high", "age_group": "young"},
+    {"id": 9104, "type": "cat", "breed": "Метис", "size": "small", "activity": "low", "good_with_kids": "unknown",
+     "good_with_pets": "yes", "apartment_ok": "yes", "beginner_ok": "yes", "care_level": "low", "age_group": "senior"},
+]
+FEW_SHOT_V3 = [
+    (
+        {"profile": {"preferred_type": "dog", "housing": "house", "kids": "none", "other_pets": "none", "time_per_day": "high",
+                     "experience": "some", "activity": "medium", "walks_ready": "yes"},
+         "text": "Свой дом, много времени, хотим собаку", "candidates": _EX_ANIMALS_3},
+        {"action": "recommend", "question": None, "top": [9102, 9101], "pairs": [
+            {"animal_id": 9101, "label": "suitable", "reason": "активность high — на уровень выше запроса, это не исключение; других животных нет, поэтому good_with_pets не важно"},
+            {"animal_id": 9102, "label": "suitable", "reason": "активность medium совпадает, ладит с детьми и животными"},
+            {"animal_id": 9103, "label": "unsuitable", "reason": "beginner_ok = no, а опыт небольшой; apartment_ok для дома не важно"},
+            {"animal_id": 9104, "label": "unsuitable", "reason": "человек ищет собаку, а это кошка"}]},
+    ),
+    (
+        {"profile": {"preferred_type": "dog"}, "text": "собака для пробежек", "candidates": _EX_ANIMALS_3},
+        {"action": "clarify", "question": "Где вы живёте, есть ли дети или другие животные и сколько времени в день готовы уделять собаке?",
+         "top": [], "pairs": [
+            {"animal_id": 9101, "label": "insufficient", "reason": "о человеке неизвестны жильё, дети, время и опыт"},
+            {"animal_id": 9102, "label": "insufficient", "reason": "о человеке неизвестны жильё, дети, время и опыт"},
+            {"animal_id": 9103, "label": "insufficient", "reason": "о человеке неизвестны жильё, дети, время и опыт"},
+            {"animal_id": 9104, "label": "unsuitable", "reason": "человек ищет собаку, а это кошка"}]},
+    ),
+    (
+        {"profile": {"preferred_type": "any", "housing": "apartment", "kids": "under6", "other_pets": "dog", "time_per_day": "low",
+                     "experience": "none"},
+         "text": "Ребёнку 3 года, дома есть собака, времени мало", "candidates": _EX_ANIMALS_3},
+        {"action": "no_safe_match", "question": None, "top": [], "pairs": [
+            {"animal_id": 9101, "label": "unsuitable", "reason": "good_with_pets = no, а дома есть собака"},
+            {"animal_id": 9102, "label": "unsuitable", "reason": "собаке нужно больше часа в день, а времени мало"},
+            {"animal_id": 9103, "label": "unsuitable", "reason": "apartment_ok = no, beginner_ok = no"},
+            {"animal_id": 9104, "label": "insufficient", "reason": "good_with_kids = unknown, а в семье ребёнок до 6 лет"}]},
+    ),
+]
+PROMPTS = {"reco-v1": (SYSTEM, FEW_SHOT), "reco-v3": (SYSTEM_V3, FEW_SHOT_V3)}
+
+# Structured Outputs (reco-v3): схема заставляет вернуть метку для каждого кандидата
+RESPONSE_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "action": {"type": "string", "enum": ["recommend", "clarify", "no_safe_match"]},
+        "question": {"type": ["string", "null"]},
+        "pairs": {"type": "array", "items": {"type": "object", "properties": {
+            "animal_id": {"type": "integer"},
+            "label": {"type": "string", "enum": ["suitable", "unsuitable", "insufficient"]},
+            "reason": {"type": "string"}}, "required": ["animal_id", "label", "reason"], "additionalProperties": False}},
+        "top": {"type": "array", "items": {"type": "integer"}},
+    },
+    "required": ["action", "question", "pairs", "top"],
+    "additionalProperties": False,
+}
+
+
 _PHONE = re.compile(r"(?:\+?\d[\s\-()]*){7,}\d")
 _EMAIL = re.compile(r"[\w.+-]+@[\w-]+\.[\w.]+")
 
@@ -443,10 +529,11 @@ def _compact(a: dict) -> dict:
     return {k: n[k] for k in keys if n[k] not in ("", None)}
 
 
-def build_messages(profile: dict, text: str, animals: list[dict], mode: str) -> list[dict]:
-    msgs = [{"role": "system", "content": SYSTEM}]
+def build_messages(profile: dict, text: str, animals: list[dict], mode: str, version: str | None = None) -> list[dict]:
+    system, few = PROMPTS[version or PROMPT_VERSION]
+    msgs = [{"role": "system", "content": system}]
     if mode == "few":
-        for inp, out in FEW_SHOT:
+        for inp, out in few:
             msgs.append({"role": "user", "content": json.dumps(inp, ensure_ascii=False)})
             msgs.append({"role": "assistant", "content": json.dumps(out, ensure_ascii=False)})
     payload = {
@@ -521,33 +608,42 @@ def llm_recommend(
     base_url: str | None = None,
     model: str | None = None,
     api_key: str | None = None,
+    version: str | None = None,
 ) -> dict:
     base_url = (base_url or AI_BASE_URL).rstrip("/")
     model = model or AI_MODEL
     api_key = AI_API_KEY if api_key is None else api_key
+    version = version or PROMPT_VERSION
+    structured = version != "reco-v1" and os.environ.get("AI_STRUCTURED", "1") != "0"
     body = {
         "model": model,
-        "messages": build_messages(profile, text, animals, mode),
+        "messages": build_messages(profile, text, animals, mode, version),
         "temperature": 0,
         "seed": 42,
         "max_tokens": 2500,
-        "response_format": {"type": "json_object"},
+        "response_format": {"type": "json_schema", "json_schema": {"name": "pethome_reco", "strict": True,
+                                                                    "schema": RESPONSE_SCHEMA}}
+        if structured else {"type": "json_object"},
     }
     if "gpt-oss" in model:
         body["reasoning_effort"] = "low"  # рассуждения тоже оплачиваются как выходные токены
-    req = urllib.request.Request(
-        base_url + "/chat/completions",
-        data=json.dumps(body).encode(),
-        headers={
-            "Content-Type": "application/json",
-            "User-Agent": "pethome-reco/1.0",
-            **({"Authorization": "Bearer " + api_key} if api_key else {}),
-        },
-    )
+
+    def make_req():
+        return urllib.request.Request(
+            base_url + "/chat/completions",
+            data=json.dumps(body).encode(),
+            headers={
+                "Content-Type": "application/json",
+                "User-Agent": "pethome-reco/1.0",
+                **({"Authorization": "Bearer " + api_key} if api_key else {}),
+            },
+        )
+
+    req = make_req()
     if not api_key and "localhost" not in base_url:
         raise AIUnavailable("не задан AI_API_KEY", "not_configured")
     t0 = time.perf_counter()
-    for attempt in (1, 2):
+    for attempt in (1, 2, 3):
         try:
             with urllib.request.urlopen(req, timeout=AI_TIMEOUT) as r:
                 data = json.loads(r.read())
@@ -561,10 +657,17 @@ def llm_recommend(
             if e.code == 429:
                 wait = _retry_after(e, body)
                 # минутный лимит токенов: Groq просит подождать несколько секунд — ждём один раз и повторяем
-                if attempt == 1 and 0 < wait <= float(os.environ.get("AI_MAX_RETRY_WAIT", "8")):
+                if attempt < 3 and 0 < wait <= float(os.environ.get("AI_MAX_RETRY_WAIT", "8")):
                     time.sleep(wait + 0.3)
                     continue
                 raise AIUnavailable(f"HTTP 429: {body[:300]}", "rate_limit") from e
+            if e.code == 400 and structured and attempt < 3 and re.search(r"schema|response_format", body):
+                # провайдер не принял схему для этой модели — повторяем в режиме JSON (фиксируется в ответе)
+                structured = False
+                body_fmt = {"type": "json_object"}
+                body.update(response_format=body_fmt)
+                req = make_req()
+                continue
             kind = "auth" if e.code in (401, 403) else "model" if e.code in (400, 404) else "network"
             raise AIUnavailable(f"HTTP {e.code}: {body[:300]}", kind) from e
         except TimeoutError as e:
@@ -583,10 +686,11 @@ def llm_recommend(
         model=data.get("model", model),
         system_fingerprint=data.get("system_fingerprint"),
         finish_reason=choice.get("finish_reason"),
+        structured_output=structured,
+        prompt_version=version,
         usage=data.get("usage", {}),
         latency_s=round(time.perf_counter() - t0, 3),
         source="ai",
-        prompt_version=PROMPT_VERSION,
     )
     return out
 
@@ -625,11 +729,16 @@ def apply_refusal(result: dict, profile: dict, text: str, animals: list[dict], v
             reason = pr.get("reason", "")
         if lab not in LABELS:
             lab = "insufficient"
-        if version == "refusal-v2" and incomplete and label_rules != "unsuitable":
+        if version in ("refusal-v2", "refusal-v3") and incomplete and label_rules != "unsuitable":
             lab, reason = "insufficient", "мало сведений о человеке: " + ", ".join(miss)
         pairs.append({**pr, "label": lab, "reason": reason})
     labels = {p["animal_id"]: p["label"] for p in pairs}
     top = [i for i in result["top"] if labels.get(i) == "suitable"]
+    if version == "refusal-v3":
+        prof = profile_with_text(profile, text)
+        ranked = sorted((i for i, lab in labels.items() if lab == "suitable"),
+                        key=lambda i: (-_score(prof, norm_animal(by_id[i]), text), i))
+        top = ranked[:TOP_K]
     removed = [i for i in result["top"] if i not in top]
     if removed:
         notes.append(f"убрано из рекомендаций после проверки ограничений: {removed}")

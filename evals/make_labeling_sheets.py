@@ -1,9 +1,11 @@
-"""Создаёт две независимые таблицы разметки: evals/labeling/1_labeling_Fariza.xlsx и 2_labeling_Amina.xlsx.
+"""Создаёт две независимые таблицы разметки: evals/labeling/1_labeling_Fariza.xlsx и 2_labeling_Amina.xlsx
+(с --set real — 5_real_labeling_Fariza.xlsx и 6_real_labeling_Amina.xlsx для реальных обращений).
 Запускать ПОСЛЕ import_animal_cards.py: в таблицу попадают подтверждённые карточки.
 Порядок пар перемешан по-разному в двух файлах, чтобы разметчицы не сверялись построчно."""
 
 import json
 import random
+import sys
 from pathlib import Path
 from openpyxl import Workbook
 from openpyxl.styles import Alignment, Font, PatternFill
@@ -12,7 +14,16 @@ from openpyxl.worksheet.datavalidation import DataValidation
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "evals/labeling"
 animals = {a["id"]: a for a in json.loads((ROOT / "backend/data/animals.json").read_text(encoding="utf-8"))}
-sc = [json.loads(s) for s in open(ROOT / "evals/scenarios.jsonl", encoding="utf-8")]
+REAL = "--set" in sys.argv and sys.argv[sys.argv.index("--set") + 1] == "real"
+FILES = {
+    "scenarios": "evals/scenarios_real.jsonl" if REAL else "evals/scenarios.jsonl",
+    "Fariza": "5_real_labeling_Fariza.xlsx" if REAL else "1_labeling_Fariza.xlsx",
+    "Amina": "6_real_labeling_Amina.xlsx" if REAL else "2_labeling_Amina.xlsx",
+    "disputes": "7_real_disputes.xlsx" if REAL else "3_disputes.xlsx",
+    "gold": "evals/gold_real.jsonl" if REAL else "evals/gold.jsonl",
+    "agreement": "evals/results/agreement_real.json" if REAL else "evals/results/agreement.json",
+}
+sc = [json.loads(s) for s in open(ROOT / FILES["scenarios"], encoding="utf-8")]
 RU = {
     "preferred_type": "вид",
     "housing": "жильё",
@@ -136,6 +147,6 @@ def make(name, seed):
     print(path.name, "пар:", len(pairs))
 
 
-name_file = {"Fariza": "1_labeling_Fariza.xlsx", "Amina": "2_labeling_Amina.xlsx"}
+name_file = {"Fariza": FILES["Fariza"], "Amina": FILES["Amina"]}
 make("Fariza", 1)
 make("Amina", 2)

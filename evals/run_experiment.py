@@ -30,7 +30,8 @@ import recommender as R  # noqa: E402
 import seed_animals  # noqa: E402
 
 catalog = {a["id"]: a for a in seed_animals.catalog()}
-scenarios = [json.loads(s) for s in open(ROOT / "evals/scenarios.jsonl", encoding="utf-8")]
+SCEN_FILE = Path(sys.argv[sys.argv.index("--scenarios") + 1]) if "--scenarios" in sys.argv else ROOT / "evals/scenarios.jsonl"
+scenarios = [json.loads(s) for s in open(SCEN_FILE, encoding="utf-8")]
 if "--limit" in sys.argv:
     scenarios = scenarios[: int(sys.argv[sys.argv.index("--limit") + 1])]
 
@@ -50,6 +51,10 @@ meta = {
     "provider_base_url": R.AI_BASE_URL,
     "model": R.AI_MODEL,
     "prompt_version": R.PROMPT_VERSION,
+    "rules_version": getattr(R, "RULES_VERSION", "rules-v1"),
+    "refusal_version": getattr(R, "REFUSAL_VERSION", "refusal-v1"),
+    "structured_output": R.PROMPT_VERSION != "reco-v1",
+    "scenarios_file": SCEN_FILE.name,
     "params": {
         "temperature": 0,
         "seed": 42,
@@ -71,8 +76,9 @@ if prev:
     if prev["catalog_version"] != meta["catalog_version"] or prev["prompt_version"] != meta["prompt_version"]:
         sys.exit("Каталог или промпт изменились — продолжать этот прогон нельзя")
 (out / "prompts").mkdir(exist_ok=True)
-(out / "prompts/system.txt").write_text(R.SYSTEM, encoding="utf-8")
-(out / "prompts/few_shot.json").write_text(json.dumps(R.FEW_SHOT, ensure_ascii=False, indent=1), encoding="utf-8")
+_system, _few = R.PROMPTS[R.PROMPT_VERSION] if hasattr(R, "PROMPTS") else (R.SYSTEM, R.FEW_SHOT)
+(out / "prompts/system.txt").write_text(_system, encoding="utf-8")
+(out / "prompts/few_shot.json").write_text(json.dumps(_few, ensure_ascii=False, indent=1), encoding="utf-8")
 
 files = {v: open(out / f"{v}.jsonl", "a" if RESUME else "w", encoding="utf-8", buffering=1) for v in "ABCD"}
 errors = prev.get("api_errors", [])
@@ -132,5 +138,6 @@ meta["finished_utc"] = None if stopped else datetime.now(timezone.utc).isoformat
 meta["complete"] = not stopped
 meta["api_errors"] = errors
 (out / "meta.json").write_text(json.dumps(meta, ensure_ascii=False, indent=1), encoding="utf-8")
-(ROOT / "evals/raw/LATEST").write_text(run_id)
+if SCEN_FILE.name == "scenarios.jsonl":
+    (ROOT / "evals/raw/LATEST").write_text(run_id)
 print("готово:", out, "ошибок API:", len(errors))

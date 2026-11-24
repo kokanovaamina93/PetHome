@@ -31,11 +31,14 @@ meta = json.loads((RAW / "meta.json").read_text(encoding="utf-8"))
 catalog = {a["id"]: a for a in seed_animals.catalog()}
 if meta["catalog_version"] != seed_animals.catalog_version():
     sys.exit("Каталог изменился после прогона — сравнение некорректно, перезапустите run_experiment.py")
-scen = {json.loads(s)["id"]: json.loads(s) for s in open(ROOT / "evals/scenarios.jsonl", encoding="utf-8")}
+_sf = ROOT / "evals" / meta.get("scenarios_file", "scenarios.jsonl")
+scen = {json.loads(s)["id"]: json.loads(s) for s in open(_sf, encoding="utf-8")}
 gold = {json.loads(s)["id"]: json.loads(s) for s in open(gold_path, encoding="utf-8")}
 VARIANTS = {"A": "A. Правила (baseline)", "B": "B. Zero-shot", "C": "C. Few-shot", "D": "D. Few-shot + отказ"}
 if (RAW / "D2.jsonl").exists():
     VARIANTS["D2"] = "D2. Отказ v2 (повторная проверка)"
+if (RAW / "D3.jsonl").exists():
+    VARIANTS["D3"] = "D3. Отказ v3 + ранжирование правилами (повторная проверка)"
 pred = {v: {json.loads(s)["id"]: json.loads(s) for s in open(RAW / f"{v}.jsonl", encoding="utf-8")} for v in VARIANTS}
 CL = list(R.LABELS)
 
@@ -205,7 +208,7 @@ import matplotlib  # noqa: E402
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
 
-COL = ["#9AA0A6", "#7C6FD6", "#4B3FB5", "#2E7D5B", "#C2620C"]
+COL = ["#9AA0A6", "#7C6FD6", "#4B3FB5", "#2E7D5B", "#C2620C", "#B8336A"]
 plt.rcParams.update({"font.family": "Arial", "font.size": 10})
 ms = [
     ("macro_f1", "Macro F1"),
@@ -334,7 +337,7 @@ for c in CL:
     )
 best = max([v for v in VARIANTS if v != "A"], key=lambda v: results[v]["macro_f1"])
 L.append("")
-for v in [x for x in VARIANTS if x in ("D", "D2")]:
+for v in [x for x in VARIANTS if x in ("D", "D2", "D3")]:
     win = all(results[v]["per_class"][c]["f1"] > results["A"]["per_class"][c]["f1"] for c in CL)
     L.append(f"{VARIANTS[v]} лучше baseline по F1 каждого класса: **{'да' if win else 'НЕТ'}**.")
 L.append(f"Лучший ИИ-вариант по macro F1: {VARIANTS[best]}.")
