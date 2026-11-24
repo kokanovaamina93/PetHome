@@ -96,7 +96,7 @@ for s in scenarios:
                 if "429" in msg and ("per day" in msg or "TPD" in msg or "RPD" in msg):
                     m = re.search(r"try again in (?:(\d+)m)?([\d.]+)s", msg)
                     wait = (int(m.group(1) or 0) * 60 + float(m.group(2))) if m else 1e9
-                    if wait <= 600:  # скользящее окно суток: подождать несколько минут дешевле, чем бросить прогон
+                    if wait <= float(os.environ.get("EVAL_MAX_DAILY_WAIT", "600")):  # скользящее окно суток: подождать несколько минут дешевле, чем бросить прогон
                         print(f"суточный лимит, ждём {wait:.0f} с", flush=True)
                         time.sleep(wait + 5)
                         continue
