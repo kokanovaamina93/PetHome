@@ -184,10 +184,38 @@ def _type_from_text(text: str) -> str | None:
     return "cat" if cat and not dog else "dog" if dog and not cat else None
 
 
-def classify_pair_rules(profile: dict, animal: dict, text: str = "") -> tuple[str, list[str]]:
+# Явные сведения из свободного текста (чат). Анкета важнее: текст заполняет только пустые поля.
+_TEXT_FACTS = [
+    ("housing", "apartment", r"квартир|пәтер|apartment|однушк|студи[июя]"),
+    ("housing", "house", r"частн\w* дом|сво[йё]м? дом|в доме|дом за городом|дом с |үйім|үй бар|house"),
+    ("kids", "none", r"детей нет|без детей|нет детей"),
+    ("kids", "under6", r"малыш|младен|кішкентай|\b[1-5]\s*(год|года|лет)\b|годовал"),
+    ("kids", "over6", r"школьн|подрост|\b([6-9]|1[0-7])\s*(год|года|лет)\b|сын|доч|дет[иейя]|ребён|ребен|бала"),
+    ("other_pets", "none", r"других животных нет|нет (других )?животных"),
+    ("other_pets", "cat", r"есть (ещё |уже )?(кошка|кот)\b|уже есть кот|мысық та бар|дома (уже )?(есть )?кот"),
+    ("other_pets", "dog", r"есть (ещё |уже )?(одна )?(собака|пёс|пес)|ит те бар|взрослая собака"),
+    ("time_per_day", "low", r"мало времени|допоздна|по 1[0-2] час|командировк|почти нет|никого нет дома"),
+    ("time_per_day", "high", r"работаю из дома|много (свободного )?времени|пенсионер|учусь онлайн|весь день дома"),
+    ("experience", "none", r"нет опыта|опыта нет|никогда не было|первый питомец|первый в жизни|впервые|не было (собак|кошек)"),
+    ("experience", "some", r"есть опыт|опыт с|был[аи]? (кошка|собака|кот)|раньше (была|был)|(была|был) раньше|жил[аи]? (кошка|собака|кот)"),
+    ("walks_ready", "no", r"гулять не смогу|не смогу гулять|не могу гулять"),
+    ("walks_ready", "yes", r"гуляю|гулять (утром|дважды|два раза)|серуендеймін|могу гулять"),
+]
+_TEXT_FACTS_RX = [(f, v, re.compile(rx, re.I)) for f, v, rx in _TEXT_FACTS]
+
+
+def profile_with_text(profile: dict | None, text: str = "") -> dict:
     p = clean_profile(profile)
+    for field, value, rx in _TEXT_FACTS_RX:
+        if not p[field] and rx.search(text or ""):
+            p[field] = value
     if not p["preferred_type"]:
         p["preferred_type"] = _type_from_text(text)
+    return p
+
+
+def classify_pair_rules(profile: dict, animal: dict, text: str = "") -> tuple[str, list[str]]:
+    p = profile_with_text(profile, text)
     a = norm_animal(animal)
     hv = _hard_violations(p, a)
     if hv:
@@ -203,7 +231,7 @@ def baseline_recommend(profile: dict, animals: list[dict], text: str = "") -> di
         label, why = classify_pair_rules(profile, animal, text)
         pairs.append({"animal_id": animal["id"], "label": label, "reason": "; ".join(why) or "все правила выполнены"})
         if label == "suitable":
-            scored.append((_score(clean_profile(profile), norm_animal(animal), text), -animal["id"], animal["id"]))
+            scored.append((_score(profile_with_text(profile, text), norm_animal(animal), text), -animal["id"], animal["id"]))
     top = [i for *_, i in sorted(scored, reverse=True)[:TOP_K]]
     return {
         "variant": "A",
@@ -501,8 +529,8 @@ def llm_recommend(
 
 
 # ============================================================ D. проверка ограничений + правило отказа
-def missing_required(profile: dict) -> list[str]:
-    p = clean_profile(profile)
+def missing_required(profile: dict, text: str = "") -> list[str]:
+    p = profile_with_text(profile, text)
     return [f for f in REQUIRED_FIELDS if not p[f]]
 
 
@@ -519,7 +547,7 @@ def apply_refusal(result: dict, profile: dict, text: str, animals: list[dict]) -
     """Детерминированная надстройка над ответом модели (вариант D)."""
     by_id = {a["id"]: a for a in animals}
     out = dict(result)
-    miss = missing_required(profile)
+    miss = missing_required(profile, text)
     pairs, notes = [], []
     for pr in result["pairs"]:
         label_rules, why = classify_pair_rules(profile, by_id[pr["animal_id"]], text)
@@ -586,15 +614,31 @@ def explanation_errors(reason: str, animal: dict) -> list[str]:
 
 
 # ============================================================ для сайта
+SITE_MAX_CANDIDATES = int(os.environ.get("AI_MAX_CANDIDATES", "12"))
+
+
+def site_pool(profile: dict, text: str, animals: list[dict]) -> list[dict]:
+    """Гибрид для сайта: правила R1–R10 отсекают явно неподходящих, модели уходит не больше 12 кандидатов
+    (лимит бесплатного тарифа Groq — 8000 токенов в минуту). Сначала те, кого правила считают подходящими."""
+    ranked = []
+    for a in animals:
+        label, _ = classify_pair_rules(profile, a, text)
+        if label == "unsuitable":
+            continue
+        score = _score(profile_with_text(profile, text), norm_animal(a), text) if label == "suitable" else -1
+        ranked.append((label == "suitable", score, -a["id"], a))
+    ranked.sort(key=lambda x: x[:3], reverse=True)
+    return [x[3] for x in ranked[:SITE_MAX_CANDIDATES]]
+
+
 def recommend_for_site(profile: dict, text: str, animals: list[dict], ai_enabled: bool) -> dict:
-    """Предфильтр (доступность, вид) -> D. При отключении/недоступности ИИ — правила A с пометкой."""
-    p = clean_profile(profile)
-    want = p["preferred_type"] if p["preferred_type"] in ("cat", "dog") else _type_from_text(text)
-    pool = [
-        a
-        for a in animals
-        if (a.get("status") or "available") == "available" and (not want or norm_animal(a)["type"] == want)
-    ][:25]
+    """Предфильтр правилами -> D. При отключении/недоступности ИИ — правила A с пометкой."""
+    pool = site_pool(profile, text, animals)
+    if not pool:  # правила исключили всех: безопасных вариантов нет, модель не нужна
+        r = baseline_recommend(profile, [], text)
+        r.update(mode="ai" if ai_enabled else "disabled", action="no_safe_match", handoff=True, alternatives=[],
+                 question="Свяжитесь с сотрудником приюта — он подберёт варианты лично.")
+        return r
     if ai_enabled and AI_API_KEY or ai_enabled and "localhost" in AI_BASE_URL:
         try:
             r = safe_recommend(profile, text, pool)
