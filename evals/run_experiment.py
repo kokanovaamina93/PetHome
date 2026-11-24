@@ -11,6 +11,7 @@ D не делает отдельного запроса: это ответ C + �
 import json
 import os
 import platform
+import re
 import sys
 import time
 from datetime import datetime, timezone
@@ -93,7 +94,13 @@ for s in scenarios:
                 errors.append({"id": s["id"], "variant": v, "attempt": attempt + 1, "error": msg,
                                "utc": datetime.now(timezone.utc).isoformat(timespec="seconds")})
                 if "429" in msg and ("per day" in msg or "TPD" in msg or "RPD" in msg):
-                    stopped = True  # суточный лимит: останавливаемся, продолжить можно с --resume
+                    m = re.search(r"try again in (?:(\d+)m)?([\d.]+)s", msg)
+                    wait = (int(m.group(1) or 0) * 60 + float(m.group(2))) if m else 1e9
+                    if wait <= 600:  # скользящее окно суток: подождать несколько минут дешевле, чем бросить прогон
+                        print(f"суточный лимит, ждём {wait:.0f} с", flush=True)
+                        time.sleep(wait + 5)
+                        continue
+                    stopped = True  # ждать долго: останавливаемся, продолжить можно с --resume
                     break
                 time.sleep(20 * (attempt + 1))  # минутный лимит или сбой: ждём и повторяем
         else:
