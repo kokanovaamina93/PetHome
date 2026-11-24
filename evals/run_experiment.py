@@ -18,7 +18,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "backend"))
-env = ROOT / "backend/.env"
+env = Path(os.environ.get("PETHOME_ENV_FILE", ROOT / "backend/.env")).expanduser()
 if env.exists():  # ключ кладёт сам пользователь; в git .env не попадает
     for line in env.read_text().splitlines():
         if "=" in line and not line.lstrip().startswith("#"):
