@@ -1,0 +1,46 @@
+{
+ "run_id": "2026-11-24_231857_openai_gpt-oss-20b",
+ "started_utc": "2026-11-24T18:18:57+00:00",
+ "provider_base_url": "https://api.groq.com/openai/v1",
+ "model": "openai/gpt-oss-20b",
+ "prompt_version": "reco-v1",
+ "params": {
+  "temperature": 0,
+  "seed": 42,
+  "max_tokens": 2500,
+  "response_format": "json_object",
+  "reasoning_effort": "low"
+ },
+ "determinism_note": "seed поддерживается провайдером в режиме best effort; детерминированность не гарантируется",
+ "catalog_version": "f45debb02649",
+ "n_scenarios": 36,
+ "python": "3.11.4",
+ "git_commit": "f1d5191",
+ "finished_utc": "2026-11-24T20:23:00+00:00",
+ "complete": false,
+ "api_errors": [
+  {
+   "id": "sc-07",
+   "variant": "C",
+   "attempt": 1,
+   "error": "HTTP 429: {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-20b` in organization `org_01m86z9gnhektt1sseew0wyrn2` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 5262, Requested 3698. Please try again in 7.199999999s. Need more tokens? Upgrade to Dev Tier today at https:/",
+   "utc": "2026-11-24T18:24:15+00:00"
+  },
+  {
+   "id": "sc-32",
+   "variant": "C",
+   "attempt": 1,
+   "error": "HTTP 429: {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-20b` in organization `org_01m86z9gnhektt1sseew0wyrn2` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 196935, Requested 3552. Please try again in 3m30.384s. Need more tokens? Upgrade to Dev Tier today at https://c",
+   "utc": "2026-11-24T18:45:20+00:00"
+  }
+ ],
+ "completed_scenarios": 31,
+ "not_completed": [
+  "sc-32",
+  "sc-33",
+  "sc-34",
+  "sc-35",
+  "sc-36"
+ ],
+ "not_completed_reason": "не выполнено: исчерпан суточный лимит бесплатного тарифа Groq (200 000 токенов), прогон закрыт 25.11.2026"
+}

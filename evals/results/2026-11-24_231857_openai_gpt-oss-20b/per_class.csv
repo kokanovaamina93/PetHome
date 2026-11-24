@@ -1,0 +1,16 @@
+﻿variant,class,precision,recall,f1,support
+A,suitable,0.395,1.0,0.566,94
+A,unsuitable,1.0,0.607,0.755,183
+A,insufficient,0.818,0.108,0.191,83
+B,suitable,0.606,0.638,0.622,94
+B,unsuitable,0.703,0.568,0.628,183
+B,insufficient,0.525,0.253,0.341,83
+C,suitable,0.57,0.564,0.567,94
+C,unsuitable,0.608,0.628,0.618,183
+C,insufficient,0.5,0.012,0.024,83
+D,suitable,0.582,0.564,0.573,94
+D,unsuitable,0.632,0.694,0.661,183
+D,insufficient,0.389,0.084,0.139,83
+D2,suitable,0.736,0.564,0.639,94
+D2,unsuitable,0.683,0.694,0.688,183
+D2,insufficient,0.788,0.494,0.607,83
