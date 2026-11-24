@@ -50,8 +50,11 @@ for row in ws.iter_rows(min_row=2, values_only=True):
                 v = "unknown"
             elif v not in YN:
                 errors.append(f"id {r['id']}: {ru}='{v}'")
+        if key == "special_needs" and v.lower() in ("нет", "-", "—", "no", "none"):
+            v = ""
         a[key] = v
     a["card_confirmed_by"] = str(r.get("Подтвердил(а)") or "")
+    a["card_data_type"] = str(r.get("Тип данных") or "")
 if errors:
     sys.exit("Исправьте ячейки:\n  " + "\n  ".join(errors))
 DATA.write_text(json.dumps(list(animals.values()), ensure_ascii=False, indent=1), encoding="utf-8")

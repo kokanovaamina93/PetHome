@@ -139,6 +139,10 @@ def _hard_violations(p: dict, a: dict) -> list[str]:
     return v
 
 
+# медицинские особые потребности (особенности ухода вроде «вычёсывание» сюда не относятся)
+_MEDICAL = re.compile(r"лечен|лекарств|таблет|инъекц|диет|травм|хрон|операц|инвалид|слеп|глух|болезн|аллерг|диабет", re.I)
+
+
 # Правила неопределённости (нет подтверждённых данных -> «недостаточно данных»)
 def _uncertain(p: dict, a: dict) -> list[str]:
     u = []
@@ -146,8 +150,8 @@ def _uncertain(p: dict, a: dict) -> list[str]:
         u.append("R11: нет данных о совместимости с маленькими детьми")
     if p["other_pets"] in ("cat", "dog") and a["good_with_pets"] == "unknown":
         u.append("R12: нет данных о совместимости с другими животными")
-    if a["special_needs"] and p["experience"] in (None, "none"):
-        u.append("R13: особые потребности требуют консультации")
+    if _MEDICAL.search(a["special_needs"]) and p["experience"] in (None, "none"):
+        u.append("R13: медицинские особые потребности требуют консультации")
     if p["allergy"] == "yes":
         u.append("R14: аллергия — нужна встреча с животным до решения")
     return u
