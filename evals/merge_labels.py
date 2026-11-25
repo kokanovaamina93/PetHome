@@ -17,15 +17,17 @@ L = ROOT / "evals/labeling"
 CODE = {"Подходит": "suitable", "Не подходит": "unsuitable", "Недостаточно данных": "insufficient"}
 RU = {v: k for k, v in CODE.items()}
 YN = {"да": "yes", "нет": "no", "yes": "yes", "no": "no"}
-REAL = "--set" in sys.argv and sys.argv[sys.argv.index("--set") + 1] == "real"
-FILES = {
-    "scenarios": "evals/scenarios_real.jsonl" if REAL else "evals/scenarios.jsonl",
-    "Fariza": "5_real_labeling_Fariza.xlsx" if REAL else "1_labeling_Fariza.xlsx",
-    "Amina": "6_real_labeling_Amina.xlsx" if REAL else "2_labeling_Amina.xlsx",
-    "disputes": "7_real_disputes.xlsx" if REAL else "3_disputes.xlsx",
-    "gold": "evals/gold_real.jsonl" if REAL else "evals/gold.jsonl",
-    "agreement": "evals/results/agreement_real.json" if REAL else "evals/results/agreement.json",
+SET = sys.argv[sys.argv.index("--set") + 1] if "--set" in sys.argv else "test"
+SETS = {
+    "test": ("evals/scenarios.jsonl", "1_labeling_Fariza.xlsx", "2_labeling_Amina.xlsx", "3_disputes.xlsx",
+             "evals/gold.jsonl", "evals/results/agreement.json"),
+    "real": ("evals/scenarios_real.jsonl", "5_real_labeling_Fariza.xlsx", "6_real_labeling_Amina.xlsx",
+             "7_real_disputes.xlsx", "evals/gold_real.jsonl", "evals/results/agreement_real.json"),
+    # v2: разметки Фаризы и Амины, переданные 25.11.2026 (PetHome_Fariza1.xlsx, PetHome_Amina1.xlsx), те же 36 сценариев
+    "v2": ("evals/scenarios.jsonl", "8_labeling_Fariza_v2.xlsx", "9_labeling_Amina_v2.xlsx", "10_disputes_v2.xlsx",
+           "evals/gold_v2.jsonl", "evals/results/agreement_v2.json"),
 }
+FILES = dict(zip(("scenarios", "Fariza", "Amina", "disputes", "gold", "agreement"), SETS[SET]))
 SCEN = {json.loads(x)["id"]: json.loads(x) for x in open(ROOT / FILES["scenarios"], encoding="utf-8")}
 ANIMALS = {a["id"]: a for a in json.loads((ROOT / "backend/data/animals.json").read_text(encoding="utf-8"))}
 
@@ -65,6 +67,9 @@ def kappa(a, b):
 
 pa, sa = read(L / FILES["Fariza"])
 pb, sb = read(L / FILES["Amina"])
+if set(pa) != set(pb) or set(sa) != set(sb):
+    sys.exit(f"Разные наборы ключей: пар только у Фаризы {len(set(pa) - set(pb))}, только у Амины {len(set(pb) - set(pa))}; "
+             f"сценариев {sorted(set(sa) ^ set(sb))}")
 empty = [k for k in pa if not pa[k] or not pb.get(k)] + [
     k for k in sa if not sa[k]["clarify"] or not sa[k]["allowed"] or not sb[k]["clarify"] or not sb[k]["allowed"]
 ]
@@ -74,7 +79,25 @@ keys = sorted(pa)
 po, k = kappa([pa[x] for x in keys], [pb[x] for x in keys])
 pc, kc = kappa([sa[s]["clarify"] for s in sa], [sb[s]["clarify"] for s in sa])
 pr, kr = kappa([sa[s]["allowed"] for s in sa], [sb[s]["allowed"] for s in sa])
+cls = ["suitable", "unsuitable", "insufficient"]
+cross = {RU[x]: {RU[y]: sum(pa[q] == x and pb[q] == y for q in keys) for y in cls} for x in cls}
+per_class = {}
+for c in cls:
+    both = sum(pa[q] == c and pb[q] == c for q in keys)
+    any_ = sum(pa[q] == c or pb[q] == c for q in keys)
+    per_class[RU[c]] = {"Fariza": sum(pa[q] == c for q in keys), "Amina": sum(pb[q] == c for q in keys),
+                        "both": both, "agreement_jaccard": round(both / any_, 3) if any_ else None}
 report = {
+    "set": SET,
+    "files": {"Fariza": FILES["Fariza"], "Amina": FILES["Amina"]},
+    "scenarios": len(sa),
+    "pairs_matched": sum(pa[q] == pb[q] for q in keys),
+    "pairs_disputed": sum(pa[q] != pb[q] for q in keys),
+    "clarify_disputed": sum(sa[s]["clarify"] != sb[s]["clarify"] for s in sa),
+    "allowed_disputed": sum(sa[s]["allowed"] != sb[s]["allowed"] for s in sa),
+    "best_filled": {"Fariza": sum(bool(sa[s]["best"]) for s in sa), "Amina": sum(bool(sb[s]["best"]) for s in sb)},
+    "per_class": per_class,
+    "cross_table_rows_Fariza_cols_Amina": cross,
     "pairs": len(keys),
     "pairs_agreement": round(po, 3),
     "pairs_kappa": round(k, 3),
@@ -133,6 +156,17 @@ if "--write" not in sys.argv:
         help_.append([line])
     help_.column_dimensions["A"].width = 120
     wb.save(disp_path)
+    prelim = ROOT / f"evals/labels_{SET}_preliminary.jsonl"
+    with open(prelim, "w", encoding="utf-8") as f:
+        for s_ in sorted(sa):
+            pairs_ = {str(a): {"Fariza": pa[(sid, a)], "Amina": pb[(sid, a)],
+                               "status": "agreed" if pa[(sid, a)] == pb[(sid, a)] else "disputed"}
+                      for (sid, a) in keys if sid == s_}
+            f.write(json.dumps({"id": s_, "status": "preliminary — не эталон", "pairs": pairs_,
+                                **{fld: {"Fariza": sa[s_][fld], "Amina": sb[s_][fld],
+                                         "status": "agreed" if sa[s_][fld] == sb[s_][fld] else "disputed"}
+                                   for fld in ("clarify", "allowed")}}, ensure_ascii=False) + "\n")
+    print("предварительный датасет ->", prelim.relative_to(ROOT))
     print(f"Спорных строк: {ws.max_row - 1} -> {disp_path.name}. Метки: suitable / unsuitable / insufficient, yes / no")
     sys.exit(0)
 

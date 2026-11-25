@@ -1,0 +1,60 @@
+{
+ "set": "v2",
+ "files": {
+  "Fariza": "8_labeling_Fariza_v2.xlsx",
+  "Amina": "9_labeling_Amina_v2.xlsx"
+ },
+ "scenarios": 36,
+ "pairs_matched": 169,
+ "pairs_disputed": 191,
+ "clarify_disputed": 8,
+ "allowed_disputed": 4,
+ "best_filled": {
+  "Fariza": 0,
+  "Amina": 0
+ },
+ "per_class": {
+  "Подходит": {
+   "Fariza": 139,
+   "Amina": 136,
+   "both": 68,
+   "agreement_jaccard": 0.329
+  },
+  "Не подходит": {
+   "Fariza": 87,
+   "Amina": 81,
+   "both": 37,
+   "agreement_jaccard": 0.282
+  },
+  "Недостаточно данных": {
+   "Fariza": 134,
+   "Amina": 143,
+   "both": 64,
+   "agreement_jaccard": 0.3
+  }
+ },
+ "cross_table_rows_Fariza_cols_Amina": {
+  "Подходит": {
+   "Подходит": 68,
+   "Не подходит": 21,
+   "Недостаточно данных": 50
+  },
+  "Не подходит": {
+   "Подходит": 21,
+   "Не подходит": 37,
+   "Недостаточно данных": 29
+  },
+  "Недостаточно данных": {
+   "Подходит": 47,
+   "Не подходит": 23,
+   "Недостаточно данных": 64
+  }
+ },
+ "pairs": 360,
+ "pairs_agreement": 0.469,
+ "pairs_kappa": 0.186,
+ "clarify_agreement": 0.778,
+ "clarify_kappa": 0.546,
+ "allowed_agreement": 0.889,
+ "allowed_kappa": 0.778
+}

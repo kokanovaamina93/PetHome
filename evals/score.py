@@ -25,7 +25,7 @@ if "--gold" in sys.argv:
     args = [a for a in args if a != str(gold_path)]
 run_id = args[0] if args else (ROOT / "evals/raw/LATEST").read_text().strip()
 RAW = ROOT / "evals/raw" / run_id
-OUT = ROOT / "evals/results" / run_id
+OUT = ROOT / "evals/results" / (run_id if "--gold" not in sys.argv else f"{run_id}__{gold_path.stem}")
 OUT.mkdir(parents=True, exist_ok=True)
 meta = json.loads((RAW / "meta.json").read_text(encoding="utf-8"))
 catalog = {a["id"]: a for a in seed_animals.catalog()}
