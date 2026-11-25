@@ -217,16 +217,16 @@ ms = [
     ("recall_at_5", "Recall@5"),
     ("ndcg_at_5", "NDCG@5"),
 ]
-fig, ax = plt.subplots(figsize=(9, 4))
+fig, ax = plt.subplots(figsize=(9, 4.6))
 w = 0.8 / len(VARIANTS)
 for i, v in enumerate(VARIANTS):
     vals = [results[v][k] or 0 for k, _ in ms]
     bars = ax.bar([j + (i - (len(VARIANTS) - 1) / 2) * w for j in range(len(ms))], vals, w, label=VARIANTS[v], color=COL[i])
-    ax.bar_label(bars, fmt="%.2f", fontsize=7, padding=1)
+    ax.bar_label(bars, fmt="%.2f", fontsize=6 if len(VARIANTS) > 4 else 7, padding=1, rotation=90 if len(VARIANTS) > 4 else 0)
 ax.set_xticks(range(len(ms)), [n for _, n in ms])
-ax.set_ylim(0, 1.12)
-ax.set_title("Качество подбора: четыре варианта")
-ax.legend(ncol=len(VARIANTS), fontsize=8, loc="upper center", bbox_to_anchor=(0.5, -0.1), frameon=False)
+ax.set_ylim(0, 1.2)
+ax.set_title("Качество подбора по вариантам")
+ax.legend(ncol=3, fontsize=8, loc="upper center", bbox_to_anchor=(0.5, -0.1), frameon=False)
 ax.spines[["top", "right"]].set_visible(False)
 fig.tight_layout()
 fig.savefig(OUT / "quality.png", dpi=180)
@@ -234,12 +234,12 @@ plt.close(fig)
 
 fig, ax = plt.subplots(figsize=(6, 3.2))
 vals = [results[v]["latency_mean_s"] or 0 for v in VARIANTS]
-bars = ax.bar([VARIANTS[v] for v in VARIANTS], vals, color=COL)
+bars = ax.bar(list(VARIANTS), vals, color=COL[: len(VARIANTS)])
 ax.bar_label(bars, fmt="%.2f с", fontsize=8)
 ax.set_ylabel("секунд на сценарий")
 ax.set_title("Среднее время ответа")
 ax.spines[["top", "right"]].set_visible(False)
-plt.xticks(fontsize=8)
+ax.set_xlabel("A — правила; B, C — модель; D, D2, D3 — модель + правило отказа (тот же ответ C)", fontsize=8)
 fig.tight_layout()
 fig.savefig(OUT / "latency.png", dpi=180)
 plt.close(fig)

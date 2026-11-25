@@ -17,9 +17,12 @@
   "catalog_version": "f45debb02649",
   "n_scenarios": 36,
   "python": "3.11.4",
-  "git_commit": "f1d5191",
-  "finished_utc": "2026-11-24T20:23:00+00:00",
-  "complete": false,
+  "git_commit": "a0af9d9",
+  "resumed_utc": [
+   "2026-11-24T21:00:49+00:00"
+  ],
+  "finished_utc": "2026-11-25T04:07:48+00:00",
+  "complete": true,
   "api_errors": [
    {
     "id": "sc-07",
@@ -34,17 +37,50 @@
     "attempt": 1,
     "error": "HTTP 429: {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-20b` in organization `org_01m86z9gnhektt1sseew0wyrn2` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 196935, Requested 3552. Please try again in 3m30.384s. Need more tokens? Upgrade to Dev Tier today at https://c",
     "utc": "2026-11-24T18:45:20+00:00"
+   },
+   {
+    "id": "sc-33",
+    "variant": "C",
+    "attempt": 1,
+    "error": "HTTP 429: {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-20b` in organization `org_***` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 199044, Requested 3327. Please try again in 17m4.271999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/s",
+    "utc": "2026-11-24T21:01:59+00:00"
+   },
+   {
+    "id": "sc-34",
+    "variant": "B",
+    "attempt": 1,
+    "error": "HTTP 429: {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-20b` in organization `org_***` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 199933, Requested 2082. Please try again in 14m30.48s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/setting",
+    "utc": "2026-11-24T21:19:38+00:00"
+   },
+   {
+    "id": "sc-34",
+    "variant": "C",
+    "attempt": 1,
+    "error": "HTTP 429: {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-20b` in organization `org_***` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 199481, Requested 3419. Please try again in 20m52.8s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings",
+    "utc": "2026-11-24T21:36:08+00:00"
+   },
+   {
+    "id": "sc-35",
+    "variant": "B",
+    "attempt": 1,
+    "error": "HTTP 429: {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-20b` in organization `org_***` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 199492, Requested 2655. Please try again in 15m27.504s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settin",
+    "utc": "2026-11-24T21:59:42+00:00"
+   },
+   {
+    "id": "sc-35",
+    "variant": "B",
+    "attempt": 2,
+    "error": "HTTP 429: {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-20b` in organization `org_***` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 197144, Requested 4169. Please try again in 9m27.216s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/setting",
+    "utc": "2026-11-24T22:16:37+00:00"
+   },
+   {
+    "id": "sc-35",
+    "variant": "C",
+    "attempt": 1,
+    "error": "HTTP 429: {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-20b` in organization `org_***` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 197780, Requested 3458. Please try again in 8m54.816s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/setting",
+    "utc": "2026-11-24T22:27:24+00:00"
    }
-  ],
-  "completed_scenarios": 31,
-  "not_completed": [
-   "sc-32",
-   "sc-33",
-   "sc-34",
-   "sc-35",
-   "sc-36"
-  ],
-  "not_completed_reason": "не выполнено: исчерпан суточный лимит бесплатного тарифа Groq (200 000 токенов), прогон закрыт 25.11.2026"
+  ]
  },
  "results": {
   "A": {
@@ -81,8 +117,8 @@
    "explanation_error_rate": 0.0,
    "correct_refusal": "2/18",
    "clarify_accuracy": 0.5277777777777778,
-   "latency_mean_s": 0.0012738888888888889,
-   "latency_p95_s": 0.00259,
+   "latency_mean_s": 0.0014383333333333333,
+   "latency_p95_s": 0.00366,
    "api_errors": 0,
    "parse_errors": 0,
    "confusion": {
@@ -145,61 +181,61 @@
    }
   },
   "B": {
-   "accuracy": 0.5138888888888888,
-   "macro_precision": 0.6112544362544363,
-   "macro_recall": 0.48653864382071943,
-   "macro_f1": 0.5305412880686733,
+   "accuracy": 0.575,
+   "macro_precision": 0.5824242137770215,
+   "macro_recall": 0.5283361092317181,
+   "macro_f1": 0.5376761624919854,
    "per_class": {
     "suitable": {
-     "precision": 0.6060606060606061,
-     "recall": 0.6382978723404256,
-     "f1": 0.6217616580310881,
+     "precision": 0.5083333333333333,
+     "recall": 0.648936170212766,
+     "f1": 0.5700934579439252,
      "support": 94
     },
     "unsuitable": {
-     "precision": 0.7027027027027027,
-     "recall": 0.5683060109289617,
-     "f1": 0.6283987915407855,
+     "precision": 0.7267441860465116,
+     "recall": 0.6830601092896175,
+     "f1": 0.704225352112676,
      "support": 183
     },
     "insufficient": {
-     "precision": 0.525,
+     "precision": 0.5121951219512195,
      "recall": 0.25301204819277107,
-     "f1": 0.34146341463414637,
+     "f1": 0.33870967741935476,
      "support": 83
     }
    },
-   "precision_at_5": 0.7833333333333333,
-   "recall_at_5": 0.637962962962963,
-   "ndcg_at_5": 0.6400093541876887,
-   "violation_rate": 0.125,
-   "violations": 10,
-   "recommended_items": 80,
+   "precision_at_5": 0.7972222222222223,
+   "recall_at_5": 0.6935185185185185,
+   "ndcg_at_5": 0.6955649097432443,
+   "violation_rate": 0.2,
+   "violations": 19,
+   "recommended_items": 95,
    "explanation_error_rate": 0.0,
-   "correct_refusal": "9/18",
+   "correct_refusal": "6/18",
    "clarify_accuracy": 0.6111111111111112,
-   "latency_mean_s": 1.0584516129032258,
+   "latency_mean_s": 1.0391944444444445,
    "latency_p95_s": 1.318,
-   "api_errors": 5,
+   "api_errors": 0,
    "parse_errors": 0,
    "confusion": {
     "suitable": {
-     "suitable": 60,
+     "suitable": 61,
      "unsuitable": 24,
      "insufficient": 4,
-     "missing": 6
+     "missing": 5
     },
     "unsuitable": {
-     "suitable": 10,
-     "unsuitable": 104,
-     "insufficient": 15,
-     "missing": 54
+     "suitable": 20,
+     "unsuitable": 125,
+     "insufficient": 16,
+     "missing": 22
     },
     "insufficient": {
-     "suitable": 29,
-     "unsuitable": 20,
+     "suitable": 39,
+     "unsuitable": 23,
      "insufficient": 21,
-     "missing": 13
+     "missing": 0
     }
    },
    "per_category": {
@@ -234,69 +270,69 @@
      "n": 2
     },
     "limited_time": {
-     "p5": 0.0,
-     "ndcg5": 0.0,
-     "violations": 0,
+     "p5": 0.25,
+     "ndcg5": 1.0,
+     "violations": 3,
      "n": 1
     }
    }
   },
   "C": {
-   "accuracy": 0.46944444444444444,
-   "macro_precision": 0.559452693861296,
-   "macro_recall": 0.40143109351719164,
-   "macro_f1": 0.4028846338144252,
+   "accuracy": 0.5583333333333333,
+   "macro_precision": 0.6686495350596505,
+   "macro_recall": 0.4816645958324637,
+   "macro_f1": 0.48671977187180504,
    "per_class": {
     "suitable": {
-     "precision": 0.5698924731182796,
+     "precision": 0.5196078431372549,
      "recall": 0.5638297872340425,
-     "f1": 0.5668449197860964,
+     "f1": 0.5408163265306123,
      "support": 94
     },
     "unsuitable": {
-     "precision": 0.6084656084656085,
-     "recall": 0.6284153005464481,
-     "f1": 0.6182795698924732,
+     "precision": 0.6401869158878505,
+     "recall": 0.7486338797814208,
+     "f1": 0.6901763224181361,
      "support": 183
     },
     "insufficient": {
-     "precision": 0.5,
-     "recall": 0.012048192771084338,
-     "f1": 0.023529411764705882,
+     "precision": 0.8461538461538461,
+     "recall": 0.13253012048192772,
+     "f1": 0.22916666666666669,
      "support": 83
     }
    },
    "precision_at_5": 0.8037037037037037,
    "recall_at_5": 0.5861111111111111,
    "ndcg_at_5": 0.611265621091113,
-   "violation_rate": 0.14814814814814814,
-   "violations": 12,
-   "recommended_items": 81,
+   "violation_rate": 0.2222222222222222,
+   "violations": 20,
+   "recommended_items": 90,
    "explanation_error_rate": 0.0,
-   "correct_refusal": "7/18",
-   "clarify_accuracy": 0.5277777777777778,
-   "latency_mean_s": 0.9831290322580645,
+   "correct_refusal": "4/18",
+   "clarify_accuracy": 0.5555555555555556,
+   "latency_mean_s": 0.9645555555555556,
    "latency_p95_s": 1.227,
-   "api_errors": 5,
+   "api_errors": 0,
    "parse_errors": 0,
    "confusion": {
     "suitable": {
      "suitable": 53,
-     "unsuitable": 39,
+     "unsuitable": 40,
      "insufficient": 1,
-     "missing": 1
+     "missing": 0
     },
     "unsuitable": {
-     "suitable": 12,
-     "unsuitable": 115,
-     "insufficient": 0,
-     "missing": 56
+     "suitable": 20,
+     "unsuitable": 137,
+     "insufficient": 1,
+     "missing": 25
     },
     "insufficient": {
-     "suitable": 28,
-     "unsuitable": 35,
-     "insufficient": 1,
-     "missing": 19
+     "suitable": 29,
+     "unsuitable": 37,
+     "insufficient": 11,
+     "missing": 6
     }
    },
    "per_category": {
@@ -339,61 +375,61 @@
    }
   },
   "D": {
-   "accuracy": 0.5194444444444445,
-   "macro_precision": 0.534382422442124,
-   "macro_recall": 0.44738540255662806,
-   "macro_f1": 0.4576817225641483,
+   "accuracy": 0.6111111111111112,
+   "macro_precision": 0.5686481555644551,
+   "macro_recall": 0.5294403984966725,
+   "macro_f1": 0.5237341726421175,
    "per_class": {
     "suitable": {
-     "precision": 0.5824175824175825,
+     "precision": 0.53,
      "recall": 0.5638297872340425,
-     "f1": 0.572972972972973,
+     "f1": 0.5463917525773196,
      "support": 94
     },
     "unsuitable": {
-     "precision": 0.6318407960199005,
-     "recall": 0.6939890710382514,
-     "f1": 0.6614583333333334,
+     "precision": 0.6607929515418502,
+     "recall": 0.819672131147541,
+     "f1": 0.7317073170731708,
      "support": 183
     },
     "insufficient": {
-     "precision": 0.3888888888888889,
-     "recall": 0.08433734939759036,
-     "f1": 0.1386138613861386,
+     "precision": 0.5151515151515151,
+     "recall": 0.20481927710843373,
+     "f1": 0.2931034482758621,
      "support": 83
     }
    },
    "precision_at_5": 0.8148148148148148,
    "recall_at_5": 0.575,
    "ndcg_at_5": 0.6035635814423618,
-   "violation_rate": 0.14285714285714285,
-   "violations": 9,
-   "recommended_items": 63,
+   "violation_rate": 0.2361111111111111,
+   "violations": 17,
+   "recommended_items": 72,
    "explanation_error_rate": 0.0,
-   "correct_refusal": "11/18",
-   "clarify_accuracy": 0.6388888888888888,
-   "latency_mean_s": 0.9831290322580645,
+   "correct_refusal": "8/18",
+   "clarify_accuracy": 0.6666666666666666,
+   "latency_mean_s": 0.9645555555555556,
    "latency_p95_s": 1.227,
-   "api_errors": 5,
+   "api_errors": 0,
    "parse_errors": 0,
    "confusion": {
     "suitable": {
      "suitable": 53,
-     "unsuitable": 39,
+     "unsuitable": 40,
      "insufficient": 1,
-     "missing": 1
+     "missing": 0
     },
     "unsuitable": {
-     "suitable": 10,
-     "unsuitable": 127,
-     "insufficient": 10,
-     "missing": 36
+     "suitable": 18,
+     "unsuitable": 150,
+     "insufficient": 15,
+     "missing": 0
     },
     "insufficient": {
-     "suitable": 28,
-     "unsuitable": 35,
-     "insufficient": 7,
-     "missing": 13
+     "suitable": 29,
+     "unsuitable": 37,
+     "insufficient": 17,
+     "missing": 0
     }
    },
    "per_category": {
@@ -436,61 +472,61 @@
    }
   },
   "D2": {
-   "accuracy": 0.6138888888888889,
-   "macro_precision": 0.735789449499127,
-   "macro_recall": 0.5839315872955839,
-   "macro_f1": 0.6447695025812373,
+   "accuracy": 0.7055555555555556,
+   "macro_precision": 0.7076873957721294,
+   "macro_recall": 0.6659865832356282,
+   "macro_f1": 0.6817359855334539,
    "per_class": {
     "suitable": {
-     "precision": 0.7361111111111112,
+     "precision": 0.654320987654321,
      "recall": 0.5638297872340425,
-     "f1": 0.6385542168674699,
+     "f1": 0.6057142857142858,
      "support": 94
     },
     "unsuitable": {
-     "precision": 0.6827956989247311,
-     "recall": 0.6939890710382514,
-     "f1": 0.6883468834688347,
+     "precision": 0.7075471698113207,
+     "recall": 0.819672131147541,
+     "f1": 0.759493670886076,
      "support": 183
     },
     "insufficient": {
-     "precision": 0.7884615384615384,
-     "recall": 0.4939759036144578,
-     "f1": 0.6074074074074073,
+     "precision": 0.7611940298507462,
+     "recall": 0.6144578313253012,
+     "f1": 0.68,
      "support": 83
     }
    },
    "precision_at_5": 0.8148148148148148,
    "recall_at_5": 0.575,
    "ndcg_at_5": 0.6035635814423618,
-   "violation_rate": 0.14285714285714285,
-   "violations": 9,
-   "recommended_items": 63,
+   "violation_rate": 0.2361111111111111,
+   "violations": 17,
+   "recommended_items": 72,
    "explanation_error_rate": 0.0,
-   "correct_refusal": "11/18",
-   "clarify_accuracy": 0.6388888888888888,
-   "latency_mean_s": 0.9831290322580645,
+   "correct_refusal": "8/18",
+   "clarify_accuracy": 0.6666666666666666,
+   "latency_mean_s": 0.9645555555555556,
    "latency_p95_s": 1.227,
-   "api_errors": 5,
+   "api_errors": 0,
    "parse_errors": 0,
    "confusion": {
     "suitable": {
      "suitable": 53,
-     "unsuitable": 39,
+     "unsuitable": 40,
      "insufficient": 1,
-     "missing": 1
+     "missing": 0
     },
     "unsuitable": {
-     "suitable": 10,
-     "unsuitable": 127,
-     "insufficient": 10,
-     "missing": 36
+     "suitable": 18,
+     "unsuitable": 150,
+     "insufficient": 15,
+     "missing": 0
     },
     "insufficient": {
-     "suitable": 9,
-     "unsuitable": 20,
-     "insufficient": 41,
-     "missing": 13
+     "suitable": 10,
+     "unsuitable": 22,
+     "insufficient": 51,
+     "missing": 0
     }
    },
    "per_category": {
@@ -515,6 +551,103 @@
     "no_experience": {
      "p5": 0.6666666666666666,
      "ndcg5": 0.6156062402821016,
+     "violations": 1,
+     "n": 4
+    },
+    "active": {
+     "p5": 0.5,
+     "ndcg5": 0.4159362318644413,
+     "violations": 0,
+     "n": 2
+    },
+    "limited_time": {
+     "p5": 0.0,
+     "ndcg5": 0.0,
+     "violations": 0,
+     "n": 1
+    }
+   }
+  },
+  "D3": {
+   "accuracy": 0.7055555555555556,
+   "macro_precision": 0.7076873957721294,
+   "macro_recall": 0.6659865832356282,
+   "macro_f1": 0.6817359855334539,
+   "per_class": {
+    "suitable": {
+     "precision": 0.654320987654321,
+     "recall": 0.5638297872340425,
+     "f1": 0.6057142857142858,
+     "support": 94
+    },
+    "unsuitable": {
+     "precision": 0.7075471698113207,
+     "recall": 0.819672131147541,
+     "f1": 0.759493670886076,
+     "support": 183
+    },
+    "insufficient": {
+     "precision": 0.7611940298507462,
+     "recall": 0.6144578313253012,
+     "f1": 0.68,
+     "support": 83
+    }
+   },
+   "precision_at_5": 0.8148148148148148,
+   "recall_at_5": 0.5861111111111111,
+   "ndcg_at_5": 0.6171940390998322,
+   "violation_rate": 0.2328767123287671,
+   "violations": 17,
+   "recommended_items": 73,
+   "explanation_error_rate": 0.0,
+   "correct_refusal": "8/18",
+   "clarify_accuracy": 0.6666666666666666,
+   "latency_mean_s": 0.9645555555555556,
+   "latency_p95_s": 1.227,
+   "api_errors": 0,
+   "parse_errors": 0,
+   "confusion": {
+    "suitable": {
+     "suitable": 53,
+     "unsuitable": 40,
+     "insufficient": 1,
+     "missing": 0
+    },
+    "unsuitable": {
+     "suitable": 18,
+     "unsuitable": 150,
+     "insufficient": 15,
+     "missing": 0
+    },
+    "insufficient": {
+     "suitable": 10,
+     "unsuitable": 22,
+     "insufficient": 51,
+     "missing": 0
+    }
+   },
+   "per_category": {
+    "apartment": {
+     "p5": 1.0,
+     "ndcg5": 0.7765732350040718,
+     "violations": 0,
+     "n": 4
+    },
+    "house": {
+     "p5": 1.0,
+     "ndcg5": 0.7103688953523166,
+     "violations": 0,
+     "n": 4
+    },
+    "family_kids": {
+     "p5": 1.0,
+     "ndcg5": 0.645878381570832,
+     "violations": 0,
+     "n": 3
+    },
+    "no_experience": {
+     "p5": 0.6666666666666666,
+     "ndcg5": 0.5980541434825117,
      "violations": 1,
      "n": 4
     },
@@ -588,7 +721,10 @@
    "D_violations": "0",
    "D2_P@5": "0.5",
    "D2_NDCG@5": "0.416",
-   "D2_violations": "0"
+   "D2_violations": "0",
+   "D3_P@5": "0.5",
+   "D3_NDCG@5": "0.416",
+   "D3_violations": "0"
   },
   {
    "category": "apartment",
@@ -606,7 +742,10 @@
    "D_violations": "0",
    "D2_P@5": "1.0",
    "D2_NDCG@5": "0.777",
-   "D2_violations": "0"
+   "D2_violations": "0",
+   "D3_P@5": "1.0",
+   "D3_NDCG@5": "0.777",
+   "D3_violations": "0"
   },
   {
    "category": "family_kids",
@@ -624,7 +763,10 @@
    "D_violations": "0",
    "D2_P@5": "1.0",
    "D2_NDCG@5": "0.595",
-   "D2_violations": "0"
+   "D2_violations": "0",
+   "D3_P@5": "1.0",
+   "D3_NDCG@5": "0.646",
+   "D3_violations": "0"
   },
   {
    "category": "house",
@@ -642,16 +784,19 @@
    "D_violations": "0",
    "D2_P@5": "1.0",
    "D2_NDCG@5": "0.67",
-   "D2_violations": "0"
+   "D2_violations": "0",
+   "D3_P@5": "1.0",
+   "D3_NDCG@5": "0.71",
+   "D3_violations": "0"
   },
   {
    "category": "limited_time",
    "A_P@5": "1.0",
    "A_NDCG@5": "1.0",
    "A_violations": "0",
-   "B_P@5": "0.0",
-   "B_NDCG@5": "0.0",
-   "B_violations": "0",
+   "B_P@5": "0.25",
+   "B_NDCG@5": "1.0",
+   "B_violations": "3",
    "C_P@5": "0.0",
    "C_NDCG@5": "0.0",
    "C_violations": "0",
@@ -660,7 +805,10 @@
    "D_violations": "0",
    "D2_P@5": "0.0",
    "D2_NDCG@5": "0.0",
-   "D2_violations": "0"
+   "D2_violations": "0",
+   "D3_P@5": "0.0",
+   "D3_NDCG@5": "0.0",
+   "D3_violations": "0"
   },
   {
    "category": "no_experience",
@@ -678,7 +826,10 @@
    "D_violations": "1",
    "D2_P@5": "0.667",
    "D2_NDCG@5": "0.616",
-   "D2_violations": "1"
+   "D2_violations": "1",
+   "D3_P@5": "0.667",
+   "D3_NDCG@5": "0.598",
+   "D3_violations": "1"
   }
  ],
  "errors": [
@@ -1365,8 +1516,8 @@
    "hard": "",
    "request": "Мало времени, но могу гулять 30 минут два раза в день",
    "gold": "подходят [10]; уточнить=no; можно=yes",
-   "answer": "action=error; top=[]; неверных пар=10/10",
-   "error_type": "ошибка API",
+   "answer": "action=recommend; top=[10, 17, 18, 11]; неверных пар=4/10",
+   "error_type": "нарушение ограничения",
    "cause": "",
    "fix": "",
    "retest": ""
@@ -1378,8 +1529,8 @@
    "hard": "",
    "request": "Часто в командировках, кого посоветуете?",
    "gold": "подходят []; уточнить=yes; можно=no",
-   "answer": "action=error; top=[]; неверных пар=10/10",
-   "error_type": "не задан уточняющий вопрос; ошибка API",
+   "answer": "action=recommend; top=[28]; неверных пар=4/10",
+   "error_type": "нарушение ограничения; рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
    "cause": "",
    "fix": "",
    "retest": ""
@@ -1391,8 +1542,8 @@
    "hard": "contradictory",
    "request": "Хочу персидскую кошку, но на уход времени почти нет",
    "gold": "подходят []; уточнить=yes; можно=no",
-   "answer": "action=error; top=[]; неверных пар=10/10",
-   "error_type": "не задан уточняющий вопрос; ошибка API",
+   "answer": "action=recommend; top=[33, 35, 40, 51, 54]; неверных пар=10/10",
+   "error_type": "нарушение ограничения; рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
    "cause": "",
    "fix": "",
    "retest": ""
@@ -1404,8 +1555,8 @@
    "hard": "",
    "request": "Есть кошка, днём никого нет дома, нужна вторая для компании",
    "gold": "подходят []; уточнить=yes; можно=no",
-   "answer": "action=error; top=[]; неверных пар=10/10",
-   "error_type": "не задан уточняющий вопрос; ошибка API",
+   "answer": "action=no_safe_match; top=[]; неверных пар=0/10",
+   "error_type": "не задан уточняющий вопрос",
    "cause": "",
    "fix": "",
    "retest": ""
@@ -1417,8 +1568,8 @@
    "hard": "insufficient",
    "request": "мне бы просто кого-то, не знаю",
    "gold": "подходят []; уточнить=yes; можно=no",
-   "answer": "action=error; top=[]; неверных пар=10/10",
-   "error_type": "не задан уточняющий вопрос; ошибка API",
+   "answer": "action=recommend; top=[8, 13, 15, 24, 28]; неверных пар=10/10",
+   "error_type": "рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
    "cause": "",
    "fix": "",
    "retest": ""
@@ -1755,8 +1906,8 @@
    "hard": "",
    "request": "Мало времени, но могу гулять 30 минут два раза в день",
    "gold": "подходят [10]; уточнить=no; можно=yes",
-   "answer": "action=error; top=[]; неверных пар=10/10",
-   "error_type": "ошибка API",
+   "answer": "action=no_safe_match; top=[]; неверных пар=1/10",
+   "error_type": "лишний отказ",
    "cause": "",
    "fix": "",
    "retest": ""
@@ -1768,8 +1919,8 @@
    "hard": "",
    "request": "Часто в командировках, кого посоветуете?",
    "gold": "подходят []; уточнить=yes; можно=no",
-   "answer": "action=error; top=[]; неверных пар=10/10",
-   "error_type": "не задан уточняющий вопрос; ошибка API",
+   "answer": "action=recommend; top=[53]; неверных пар=3/10",
+   "error_type": "рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
    "cause": "",
    "fix": "",
    "retest": ""
@@ -1781,8 +1932,8 @@
    "hard": "contradictory",
    "request": "Хочу персидскую кошку, но на уход времени почти нет",
    "gold": "подходят []; уточнить=yes; можно=no",
-   "answer": "action=error; top=[]; неверных пар=10/10",
-   "error_type": "не задан уточняющий вопрос; ошибка API",
+   "answer": "action=recommend; top=[33, 35, 45, 54, 56]; неверных пар=10/10",
+   "error_type": "нарушение ограничения; рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
    "cause": "",
    "fix": "",
    "retest": ""
@@ -1794,21 +1945,8 @@
    "hard": "",
    "request": "Есть кошка, днём никого нет дома, нужна вторая для компании",
    "gold": "подходят []; уточнить=yes; можно=no",
-   "answer": "action=error; top=[]; неверных пар=10/10",
-   "error_type": "не задан уточняющий вопрос; ошибка API",
-   "cause": "",
-   "fix": "",
-   "retest": ""
-  },
-  {
-   "variant": "C",
-   "id": "sc-36",
-   "category": "limited_time",
-   "hard": "insufficient",
-   "request": "мне бы просто кого-то, не знаю",
-   "gold": "подходят []; уточнить=yes; можно=no",
-   "answer": "action=error; top=[]; неверных пар=10/10",
-   "error_type": "не задан уточняющий вопрос; ошибка API",
+   "answer": "action=recommend; top=[42, 43, 57]; неверных пар=4/10",
+   "error_type": "нарушение ограничения; рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
    "cause": "",
    "fix": "",
    "retest": ""
@@ -2132,8 +2270,8 @@
    "hard": "",
    "request": "Мало времени, но могу гулять 30 минут два раза в день",
    "gold": "подходят [10]; уточнить=no; можно=yes",
-   "answer": "action=error; top=[]; неверных пар=10/10",
-   "error_type": "ошибка API",
+   "answer": "action=no_safe_match; top=[]; неверных пар=1/10",
+   "error_type": "лишний отказ",
    "cause": "",
    "fix": "",
    "retest": ""
@@ -2145,8 +2283,8 @@
    "hard": "",
    "request": "Часто в командировках, кого посоветуете?",
    "gold": "подходят []; уточнить=yes; можно=no",
-   "answer": "action=error; top=[]; неверных пар=10/10",
-   "error_type": "не задан уточняющий вопрос; ошибка API",
+   "answer": "action=recommend; top=[53]; неверных пар=3/10",
+   "error_type": "рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
    "cause": "",
    "fix": "",
    "retest": ""
@@ -2158,8 +2296,8 @@
    "hard": "contradictory",
    "request": "Хочу персидскую кошку, но на уход времени почти нет",
    "gold": "подходят []; уточнить=yes; можно=no",
-   "answer": "action=error; top=[]; неверных пар=10/10",
-   "error_type": "не задан уточняющий вопрос; ошибка API",
+   "answer": "action=recommend; top=[33, 35, 45, 54, 56]; неверных пар=9/10",
+   "error_type": "нарушение ограничения; рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
    "cause": "",
    "fix": "",
    "retest": ""
@@ -2171,21 +2309,8 @@
    "hard": "",
    "request": "Есть кошка, днём никого нет дома, нужна вторая для компании",
    "gold": "подходят []; уточнить=yes; можно=no",
-   "answer": "action=error; top=[]; неверных пар=10/10",
-   "error_type": "не задан уточняющий вопрос; ошибка API",
-   "cause": "",
-   "fix": "",
-   "retest": ""
-  },
-  {
-   "variant": "D",
-   "id": "sc-36",
-   "category": "limited_time",
-   "hard": "insufficient",
-   "request": "мне бы просто кого-то, не знаю",
-   "gold": "подходят []; уточнить=yes; можно=no",
-   "answer": "action=error; top=[]; неверных пар=10/10",
-   "error_type": "не задан уточняющий вопрос; ошибка API",
+   "answer": "action=recommend; top=[42, 43, 57]; неверных пар=4/10",
+   "error_type": "нарушение ограничения; рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
    "cause": "",
    "fix": "",
    "retest": ""
@@ -2457,8 +2582,8 @@
    "hard": "",
    "request": "Мало времени, но могу гулять 30 минут два раза в день",
    "gold": "подходят [10]; уточнить=no; можно=yes",
-   "answer": "action=error; top=[]; неверных пар=10/10",
-   "error_type": "ошибка API",
+   "answer": "action=no_safe_match; top=[]; неверных пар=1/10",
+   "error_type": "лишний отказ",
    "cause": "",
    "fix": "",
    "retest": ""
@@ -2470,8 +2595,8 @@
    "hard": "",
    "request": "Часто в командировках, кого посоветуете?",
    "gold": "подходят []; уточнить=yes; можно=no",
-   "answer": "action=error; top=[]; неверных пар=10/10",
-   "error_type": "не задан уточняющий вопрос; ошибка API",
+   "answer": "action=recommend; top=[53]; неверных пар=3/10",
+   "error_type": "рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
    "cause": "",
    "fix": "",
    "retest": ""
@@ -2483,8 +2608,8 @@
    "hard": "contradictory",
    "request": "Хочу персидскую кошку, но на уход времени почти нет",
    "gold": "подходят []; уточнить=yes; можно=no",
-   "answer": "action=error; top=[]; неверных пар=10/10",
-   "error_type": "не задан уточняющий вопрос; ошибка API",
+   "answer": "action=recommend; top=[33, 35, 45, 54, 56]; неверных пар=9/10",
+   "error_type": "нарушение ограничения; рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
    "cause": "",
    "fix": "",
    "retest": ""
@@ -2496,28 +2621,327 @@
    "hard": "",
    "request": "Есть кошка, днём никого нет дома, нужна вторая для компании",
    "gold": "подходят []; уточнить=yes; можно=no",
-   "answer": "action=error; top=[]; неверных пар=10/10",
-   "error_type": "не задан уточняющий вопрос; ошибка API",
+   "answer": "action=recommend; top=[42, 43, 57]; неверных пар=4/10",
+   "error_type": "нарушение ограничения; рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
    "cause": "",
    "fix": "",
    "retest": ""
   },
   {
-   "variant": "D2",
-   "id": "sc-36",
-   "category": "limited_time",
-   "hard": "insufficient",
-   "request": "мне бы просто кого-то, не знаю",
+   "variant": "D3",
+   "id": "sc-02",
+   "category": "apartment",
+   "hard": "",
+   "request": "Небольшая собака для квартиры, гуляю утром и вечером",
+   "gold": "подходят [19, 32, 28, 14, 16]; уточнить=no; можно=yes",
+   "answer": "action=recommend; top=[32, 16]; неверных пар=3/10",
+   "error_type": "ошибки классификации пар",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D3",
+   "id": "sc-04",
+   "category": "apartment",
+   "hard": "",
+   "request": "Дома уже есть кот, ищем ему компанию",
+   "gold": "подходят [51, 35, 42, 54, 33, 40, 45, 48]; уточнить=no; можно=yes",
+   "answer": "action=recommend; top=[40, 54]; неверных пар=7/10",
+   "error_type": "ошибки классификации пар",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D3",
+   "id": "sc-05",
+   "category": "apartment",
+   "hard": "",
+   "request": "У мужа лёгкая аллергия, но очень хотим питомца",
    "gold": "подходят []; уточнить=yes; можно=no",
-   "answer": "action=error; top=[]; неверных пар=10/10",
-   "error_type": "не задан уточняющий вопрос; ошибка API",
+   "answer": "action=no_safe_match; top=[]; неверных пар=6/10",
+   "error_type": "не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D3",
+   "id": "sc-06",
+   "category": "apartment",
+   "hard": "no_safe",
+   "request": "Хочу собаку, но гулять с ней не смогу — работаю допоздна",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=no_safe_match; top=[]; неверных пар=0/10",
+   "error_type": "не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D3",
+   "id": "sc-08",
+   "category": "house",
+   "hard": "",
+   "request": "Живём в доме, есть взрослая собака, дети школьники",
+   "gold": "подходят [28, 9, 12, 29, 32, 19, 10]; уточнить=no; можно=yes",
+   "answer": "action=recommend; top=[10, 32]; неверных пар=5/10",
+   "error_type": "ошибки классификации пар",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D3",
+   "id": "sc-09",
+   "category": "house",
+   "hard": "",
+   "request": "Дом за городом, кошка сможет гулять по участку",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=recommend; top=[43, 52, 57]; неверных пар=10/10",
+   "error_type": "рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D3",
+   "id": "sc-12",
+   "category": "house",
+   "hard": "mixed_kz",
+   "request": "Үйіміз бар, ит керек, күніне екі рет серуендеймін",
+   "gold": "подходят [12, 20, 23, 24, 16, 29, 32, 19, 8, 28]; уточнить=no; можно=yes",
+   "answer": "action=recommend; top=[32, 16]; неверных пар=8/10",
+   "error_type": "ошибки классификации пар",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D3",
+   "id": "sc-13",
+   "category": "family_kids",
+   "hard": "",
+   "request": "Двое детей 3 и 5 лет, нужна добрая собака",
+   "gold": "подходят [26, 13, 28, 30, 16, 17]; уточнить=no; можно=yes",
+   "answer": "action=recommend; top=[13, 16]; неверных пар=4/10",
+   "error_type": "ошибки классификации пар",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D3",
+   "id": "sc-14",
+   "category": "family_kids",
+   "hard": "",
+   "request": "Дочке 10 лет, мечтает о котёнке, будем ухаживать вместе",
+   "gold": "подходят []; уточнить=no; можно=no",
+   "answer": "action=recommend; top=[49, 53, 55, 35]; неверных пар=5/10",
+   "error_type": "нарушение ограничения; рекомендация при отсутствии безопасных",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D3",
+   "id": "sc-16",
+   "category": "family_kids",
+   "hard": "",
+   "request": "Малышу год, хотим питомца, но времени мало",
+   "gold": "подходят [44]; уточнить=yes; можно=no",
+   "answer": "action=recommend; top=[44, 48]; неверных пар=1/10",
+   "error_type": "нарушение ограничения; рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D3",
+   "id": "sc-17",
+   "category": "family_kids",
+   "hard": "mixed_kz",
+   "request": "Балам кішкентай, мысық керек, үйде ит те бар",
+   "gold": "подходят [33, 44, 38]; уточнить=no; можно=yes",
+   "answer": "action=recommend; top=[33]; неверных пар=3/10",
+   "error_type": "ошибки классификации пар",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D3",
+   "id": "sc-20",
+   "category": "no_experience",
+   "hard": "",
+   "request": "Никогда не было собак, нужна послушная и несложная",
+   "gold": "подходят [13, 11, 16]; уточнить=no; можно=yes",
+   "answer": "action=recommend; top=[13, 16, 28]; неверных пар=2/10",
+   "error_type": "нарушение ограничения",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D3",
+   "id": "sc-21",
+   "category": "no_experience",
+   "hard": "contradictory",
+   "request": "Опыта нет, но хочу хаски или овчарку",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=recommend; top=[13]; неверных пар=6/10",
+   "error_type": "нарушение ограничения; рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D3",
+   "id": "sc-22",
+   "category": "no_experience",
+   "hard": "",
+   "request": "Студентка, учусь онлайн, впервые беру кошку",
+   "gold": "подходят [38, 40, 56, 33, 35, 47, 52, 36, 44]; уточнить=no; можно=yes",
+   "answer": "action=recommend; top=[40, 33, 35, 52]; неверных пар=5/10",
+   "error_type": "ошибки классификации пар",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D3",
+   "id": "sc-24",
+   "category": "no_experience",
+   "hard": "",
+   "request": "Хочу взрослую спокойную собаку, не щенка — боюсь не справиться",
+   "gold": "подходят [28]; уточнить=no; можно=yes",
+   "answer": "action=no_safe_match; top=[]; неверных пар=4/10",
+   "error_type": "лишний отказ",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D3",
+   "id": "sc-25",
+   "category": "active",
+   "hard": "",
+   "request": "Бегаю 10 км каждое утро, ищу напарника",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=no_safe_match; top=[]; неверных пар=1/10",
+   "error_type": "не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D3",
+   "id": "sc-26",
+   "category": "active",
+   "hard": "",
+   "request": "Часто ходим в горы, нужна выносливая собака",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=recommend; top=[9, 12, 23, 25, 29]; неверных пар=6/10",
+   "error_type": "рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D3",
+   "id": "sc-28",
+   "category": "active",
+   "hard": "contradictory",
+   "request": "Люблю активный отдых по выходным, в будни работаю по 12 часов",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=recommend; top=[11, 13]; неверных пар=2/10",
+   "error_type": "нарушение ограничения; рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D3",
+   "id": "sc-29",
+   "category": "active",
+   "hard": "",
+   "request": "Велосипед, бег, есть ещё одна собака",
+   "gold": "подходят [19]; уточнить=no; можно=yes",
+   "answer": "action=no_safe_match; top=[]; неверных пар=1/10",
+   "error_type": "лишний отказ",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D3",
+   "id": "sc-31",
+   "category": "limited_time",
+   "hard": "",
+   "request": "Работаю по 10 часов, хочу самостоятельную кошку",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=recommend; top=[33]; неверных пар=4/10",
+   "error_type": "рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D3",
+   "id": "sc-32",
+   "category": "limited_time",
+   "hard": "",
+   "request": "Мало времени, но могу гулять 30 минут два раза в день",
+   "gold": "подходят [10]; уточнить=no; можно=yes",
+   "answer": "action=no_safe_match; top=[]; неверных пар=1/10",
+   "error_type": "лишний отказ",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D3",
+   "id": "sc-33",
+   "category": "limited_time",
+   "hard": "",
+   "request": "Часто в командировках, кого посоветуете?",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=recommend; top=[53]; неверных пар=3/10",
+   "error_type": "рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D3",
+   "id": "sc-34",
+   "category": "limited_time",
+   "hard": "contradictory",
+   "request": "Хочу персидскую кошку, но на уход времени почти нет",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=recommend; top=[33, 35, 45, 54, 56]; неверных пар=9/10",
+   "error_type": "нарушение ограничения; рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
+   "cause": "",
+   "fix": "",
+   "retest": ""
+  },
+  {
+   "variant": "D3",
+   "id": "sc-35",
+   "category": "limited_time",
+   "hard": "",
+   "request": "Есть кошка, днём никого нет дома, нужна вторая для компании",
+   "gold": "подходят []; уточнить=yes; можно=no",
+   "answer": "action=recommend; top=[42, 43, 57]; неверных пар=4/10",
+   "error_type": "нарушение ограничения; рекомендация при отсутствии безопасных; не задан уточняющий вопрос",
    "cause": "",
    "fix": "",
    "retest": ""
   }
  ],
  "analysis": {
-  "intro": "Разобраны все сценарии, где итоговый вариант (D2) ошибся хотя бы в одной паре или выдал запрещённую рекомендацию (23 из 31 выполненного), плюс 5 невыполненных из-за лимита API. «Верных пар» — из 10 кандидатов сценария, порядок A / C / D / D2. Повторная проверка выполнена на том же наборе (без новых запросов к модели), поэтому это проверка на наборе разработки, а не независимая оценка.",
+  "intro": "Разобраны все сценарии, где итоговый вариант (D2) ошибся хотя бы в одной паре или выдал запрещённую рекомендацию: 27 из 36. «Верных пар» — из 10 кандидатов сценария, порядок A / C / D / D2. Повторная проверка выполнена на том же наборе (без новых запросов к модели), поэтому это проверка на наборе разработки, а не независимая оценка.",
   "cases": [
    {
     "id": "sc-11",
@@ -2590,10 +3014,10 @@
     "retest": "Не проводилась: правило добавляется в следующей версии"
    },
    {
-    "id": "sc-21",
-    "request": "Опыта нет, но хочу хаски или овчарку",
+    "id": "sc-21, sc-34",
+    "request": "«Опыта нет, но хочу хаски или овчарку»; «Хочу персидскую кошку, но на уход времени почти нет»",
     "gold": "все — Не подходит, рекомендации нельзя",
-    "answer": "D2: предложил бигля как безопасную альтернативу",
+    "answer": "D2: вместо запрошенной породы предложил другие (бигль; 5 кошек с простым уходом). В sc-34 все 5 эталон помечает «Не подходит»",
     "type": "Дефект бизнес-процесса",
     "cause": "Не определено, можно ли предлагать другую породу вместо запрошенной. Функция по заданию должна предлагать безопасные альтернативы, эталон это запрещает",
     "fix": "Решение команды: альтернативы показывать отдельным блоком «можно обсудить с сотрудником», а не в рекомендациях",
@@ -2620,6 +3044,16 @@
     "retest": "Требует согласования"
    },
    {
+    "id": "sc-35",
+    "request": "Есть кошка, днём никого нет дома, нужна вторая для компании",
+    "gold": "все 10 — Не подходит/нет данных, рекомендации нельзя",
+    "answer": "A и D2: 3 спокойные кошки, которые по карточке ладят с кошками",
+    "type": "Спорная разметка",
+    "cause": "По карточкам эти кошки ладят с другими кошками и подходят для квартиры, но эталон запрещает все варианты. Причина в разметке не указана (как в sc-14)",
+    "fix": "Вынести на повторное согласование; до решения не считать ошибкой модели",
+    "retest": "Требует согласования"
+   },
+   {
     "id": "sc-05, sc-09",
     "request": "аллергия у мужа; кошка будет гулять по участку",
     "gold": "Недостаточно данных",
@@ -2640,14 +3074,24 @@
     "retest": "Не проводилась: нужны новые данные"
    },
    {
-    "id": "sc-32…sc-36",
-    "request": "5 сценариев (в основном «ограниченное время»)",
-    "gold": "по эталону",
-    "answer": "нет ответа: HTTP 429, суточный лимит 200 000 токенов",
-    "type": "Инфраструктура (лимит API)",
-    "cause": "Бесплатный тариф Groq исчерпан на 31-м сценарии",
-    "fix": "Платный Dev Tier или прогон в другой день; в метриках засчитаны как «нет ответа»",
-    "retest": "Не проводилась: лимит API"
+    "id": "sc-32",
+    "request": "Мало времени, но могу гулять 30 минут два раза в день",
+    "gold": "1 собака — Подходит, рекомендовать можно",
+    "answer": "C/D2: отказ «нет безопасных вариантов»; собака со средней активностью названа «Не подходит: не соответствует низкому времени»",
+    "type": "Ошибка модели",
+    "cause": "Модель читает поле time_per_day=low как запрет, хотя в тексте прямо названо 1 час прогулок в день",
+    "fix": "Промпт v3: конкретные цифры из текста важнее поля анкеты; среднюю активность при ежедневных прогулках не исключать",
+    "retest": "Не проводилась: нужен прогон промпта v3"
+   },
+   {
+    "id": "sc-33",
+    "request": "Часто в командировках, кого посоветуете?",
+    "gold": "рекомендации нельзя, нужен уточняющий вопрос",
+    "answer": "C/D2: рекомендована 1 кошка с низкой активностью (эталон — «Недостаточно данных»)",
+    "type": "Недостаток данных в анкете",
+    "cause": "В анкете нет вопроса «кто ухаживает, когда вас нет несколько дней»: поле «мало времени» не передаёт отсутствие по нескольку суток, анкета формально полная, поэтому правило отказа не срабатывает",
+    "fix": "Добавить в анкету вопрос об отъездах; при упоминании командировок или отъездов — уточняющий вопрос",
+    "retest": "Не проводилась: нужен новый вопрос анкеты"
    }
   ],
   "summary_types": [
@@ -2658,8 +3102,8 @@
    },
    {
     "type": "Ошибка модели: лишняя строгость, неверное чтение полей",
-    "count": "≈ 8 сценариев",
-    "action": "Промпт v3 и json_schema; повторный замер после восстановления лимита"
+    "count": "≈ 9 сценариев",
+    "action": "Промпт v3 и json_schema; повторный замер"
    },
    {
     "type": "Неполный ответ модели (пропущены кандидаты)",
@@ -2667,74 +3111,69 @@
     "action": "Structured Outputs; пока пропуск = «нет данных» (D)"
    },
    {
-    "type": "Недостаток данных в карточке",
-    "count": "4 сценария",
-    "action": "Новые поля: гипоаллергенность, выгул, выносливость"
+    "type": "Недостаток данных в карточке или анкете",
+    "count": "5 сценариев",
+    "action": "Новые поля: гипоаллергенность, выгул, выносливость; вопрос об отъездах"
    },
    {
     "type": "Пробел в правилах",
     "count": "1 сценарий",
-    "action": "Правило «собака + меньше часа в день»"
+    "action": "Правило «собака + меньше часа в день» (R19, правила v2)"
    },
    {
     "type": "Спорная / противоречивая разметка и бизнес-процесс",
-    "count": "3 сценария",
-    "action": "Повторное согласование; решение по альтернативам"
-   },
-   {
-    "type": "Лимит API (не выполнено)",
     "count": "5 сценариев",
-    "action": "Засчитаны как «нет ответа»"
+    "action": "Повторное согласование; решение по альтернативам"
    }
   ],
-  "refusal": "Правило отказа сравнивалось в трёх состояниях на одних и тех же ответах модели. C (без правила): macro F1 0,403, F1 «Недостаточно данных» 0,024, нарушений 12 из 81 выданной рекомендации. D (v1: проверка жёстких ограничений по карточке, пропуск = «нет данных», уточнение при ≥ 2 пустых полях анкеты): macro F1 0,458, нарушений 9 из 63, верных отказов 11 из 18. D2 (v2: плюс «нет данных» для всех кандидатов при неполной анкете): macro F1 0,645, F1 «Недостаточно данных» 0,607. Accuracy растёт с 0,469 до 0,614, выданных рекомендаций становится меньше (81 → 63), а доля нарушений снижается с 14,8 % до 14,3 %. Правило отказа не использует «уверенность», которую называет модель: только полноту анкеты и подтверждённые поля карточки.",
-  "conclusion": "По правилу METRICS.md (5 невыполненных сценариев засчитаны как «нет ответа») итоговый вариант D2 даёт macro F1 0,645 против 0,504 у baseline и выигрывает по классам «Подходит» (0,639 против 0,566) и «Недостаточно данных» (0,607 против 0,191), но проигрывает по «Не подходит» (0,688 против 0,755). На 31 выполненном сценарии D2 лучше baseline по всем трём классам (0,642 / 0,763 / 0,672 против 0,612 / 0,754 / 0,225), но это повторная проверка на наборе разработки. По ранжированию ИИ уступает правилам: NDCG@5 0,604 против 0,853, Recall@5 0,575 против 0,967 — модель слишком часто отбрасывает подходящих. Доля нарушений 14,3 % при пороге 2 %. Критерий приёмки не выполнен: функцию нельзя включать для реальных пользователей без промпта v3 и повторного независимого замера."
+  "refusal": "Правило отказа сравнивалось в трёх состояниях на одних и тех же ответах модели (36 сценариев). C (без правила): macro F1 0,487, F1 «Недостаточно данных» 0,229, нарушений 20 из 90 выданных рекомендаций (22,2 %). D (v1: проверка жёстких ограничений по карточке, пропуск = «нет данных», уточнение при ≥ 2 пустых полях анкеты): macro F1 0,524, нарушений 17 из 72, верных отказов 8 из 18 (у C — 4). D2 (v2: плюс «нет данных» для всех кандидатов при неполной анкете): macro F1 0,682, F1 «Недостаточно данных» 0,680, accuracy 0,706 (у C — 0,558). Выданных рекомендаций становится меньше (90 → 72), но доля нарушений почти не меняется (22,2 % → 23,6 %): правило снимает в основном верные рекомендации, а запрещённые остаются в сценариях, где анкета полная (sc-14, sc-34, sc-35). Вариант D3 (v3: плюс ранжирование подходящих по баллам правил R15–R18) даёт те же метки и почти тот же NDCG@5 (0,617 против 0,604). Правило отказа не использует «уверенность», которую называет модель: только полноту анкеты и подтверждённые поля карточки.",
+  "conclusion": "На всех 36 сценариях итоговый вариант D2 даёт macro F1 0,682 против 0,504 у baseline и лучше baseline по F1 каждого класса: «Подходит» 0,606 против 0,566, «Не подходит» 0,759 против 0,755, «Недостаточно данных» 0,680 против 0,191. Но правило отказа v2 придумано после просмотра ошибок на этом же наборе, поэтому это повторная проверка на наборе разработки. По ранжированию ИИ уступает правилам: NDCG@5 0,604 против 0,853, Recall@5 0,575 против 0,967; в категории «ограниченное время» D2 не выдал ни одной верной рекомендации. Доля нарушений 23,6 % (17 из 72) при пороге 2 % (у baseline — 25,7 %). Критерий приёмки не выполнен: функцию нельзя включать для реальных пользователей без промпта v3 и независимого замера на реальных обращениях с ручной разметкой."
  },
  "usage": {
   "B": {
-   "n": 31,
-   "prompt_avg": 1700,
-   "completion_avg": 474,
-   "reasoning_avg": 226,
-   "fingerprints": 21
+   "n": 36,
+   "prompt_avg": 1697,
+   "completion_avg": 466,
+   "reasoning_avg": 220,
+   "fingerprints": 24
   },
   "C": {
-   "n": 31,
-   "prompt_avg": 3024,
-   "completion_avg": 372,
-   "reasoning_avg": 132,
-   "fingerprints": 18
+   "n": 36,
+   "prompt_avg": 3021,
+   "completion_avg": 368,
+   "reasoning_avg": 130,
+   "fingerprints": 20
   }
  },
  "cost": {
-  "per_request_usd": 0.0003384,
+  "per_request_usd": 0.000336975,
   "requests_month": [
    1350,
    13500
   ],
   "tokens_in_month": [
-   4082400,
-   40824000
+   4078350,
+   40783500
   ],
   "tokens_out_month": [
-   502200,
-   5022000
+   496800,
+   4968000
   ],
   "month_usd": [
-   0.45684,
-   4.5684
+   0.45491625,
+   4.5491625
   ],
   "month_kzt": [
-   207.9170208,
-   2079.170208
+   207.0414837,
+   2070.414837
   ],
   "year_usd": [
-   5.48208,
-   54.8208
+   5.458995,
+   54.58995
   ],
   "year_kzt": [
-   2495.0042496,
-   24950.042496
+   2484.4978044,
+   24844.978044
   ],
   "free_tier_ok": [
    "да",
@@ -2742,16 +3181,16 @@
   ],
   "cpu_server_usd": 109.0084,
   "gpu_server_usd": 288.24,
-  "breakeven_cpu": 322128.841607565,
-  "breakeven_gpu": 851773.04964539,
-  "times_cpu": 238.613956746344,
-  "times_gpu": 630.942999737326,
+  "breakeven_cpu": 323491.060167668,
+  "breakeven_gpu": 855375.027821055,
+  "times_cpu": 239.623007531606,
+  "times_gpu": 633.6111317193,
   "cpu_capacity": 129600,
   "cpu_can_reach": "нет",
   "infra_current_usd": 13,
-  "tokens_source": "Фактическое среднее usage из прогона 2026-11-24_231857_openai_gpt-oss-20b, вариант C, 31 запросов",
-  "tokens_in": 3024,
-  "tokens_out": 372,
+  "tokens_source": "Фактическое среднее usage из прогона 2026-11-24_231857_openai_gpt-oss-20b, вариант C, 36 запросов",
+  "tokens_in": 3021,
+  "tokens_out": 368,
   "usd_kzt": 455.12
  },
  "n_animals": 50,

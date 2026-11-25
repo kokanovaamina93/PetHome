@@ -16,9 +16,12 @@
   "catalog_version": "f45debb02649",
   "n_scenarios": 36,
   "python": "3.11.4",
-  "git_commit": "f1d5191",
-  "finished_utc": "2026-11-24T20:23:00+00:00",
-  "complete": false,
+  "git_commit": "a0af9d9",
+  "resumed_utc": [
+   "2026-11-24T21:00:49+00:00"
+  ],
+  "finished_utc": "2026-11-25T04:07:48+00:00",
+  "complete": true,
   "api_errors": [
    {
     "id": "sc-07",
@@ -33,17 +36,50 @@
     "attempt": 1,
     "error": "HTTP 429: {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-20b` in organization `org_01m86z9gnhektt1sseew0wyrn2` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 196935, Requested 3552. Please try again in 3m30.384s. Need more tokens? Upgrade to Dev Tier today at https://c",
     "utc": "2026-11-24T18:45:20+00:00"
+   },
+   {
+    "id": "sc-33",
+    "variant": "C",
+    "attempt": 1,
+    "error": "HTTP 429: {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-20b` in organization `org_***` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 199044, Requested 3327. Please try again in 17m4.271999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/s",
+    "utc": "2026-11-24T21:01:59+00:00"
+   },
+   {
+    "id": "sc-34",
+    "variant": "B",
+    "attempt": 1,
+    "error": "HTTP 429: {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-20b` in organization `org_***` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 199933, Requested 2082. Please try again in 14m30.48s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/setting",
+    "utc": "2026-11-24T21:19:38+00:00"
+   },
+   {
+    "id": "sc-34",
+    "variant": "C",
+    "attempt": 1,
+    "error": "HTTP 429: {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-20b` in organization `org_***` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 199481, Requested 3419. Please try again in 20m52.8s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings",
+    "utc": "2026-11-24T21:36:08+00:00"
+   },
+   {
+    "id": "sc-35",
+    "variant": "B",
+    "attempt": 1,
+    "error": "HTTP 429: {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-20b` in organization `org_***` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 199492, Requested 2655. Please try again in 15m27.504s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settin",
+    "utc": "2026-11-24T21:59:42+00:00"
+   },
+   {
+    "id": "sc-35",
+    "variant": "B",
+    "attempt": 2,
+    "error": "HTTP 429: {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-20b` in organization `org_***` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 197144, Requested 4169. Please try again in 9m27.216s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/setting",
+    "utc": "2026-11-24T22:16:37+00:00"
+   },
+   {
+    "id": "sc-35",
+    "variant": "C",
+    "attempt": 1,
+    "error": "HTTP 429: {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-20b` in organization `org_***` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 197780, Requested 3458. Please try again in 8m54.816s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/setting",
+    "utc": "2026-11-24T22:27:24+00:00"
    }
-  ],
-  "completed_scenarios": 31,
-  "not_completed": [
-   "sc-32",
-   "sc-33",
-   "sc-34",
-   "sc-35",
-   "sc-36"
-  ],
-  "not_completed_reason": "не выполнено: исчерпан суточный лимит бесплатного тарифа Groq (200 000 токенов), прогон закрыт 25.11.2026"
+  ]
  },
  "gold": "gold.jsonl",
  "results": {
@@ -81,8 +117,8 @@
    "explanation_error_rate": 0.0,
    "correct_refusal": "2/18",
    "clarify_accuracy": 0.5277777777777778,
-   "latency_mean_s": 0.0012738888888888889,
-   "latency_p95_s": 0.00259,
+   "latency_mean_s": 0.0014383333333333333,
+   "latency_p95_s": 0.00366,
    "api_errors": 0,
    "parse_errors": 0,
    "confusion": {
@@ -145,61 +181,61 @@
    }
   },
   "B": {
-   "accuracy": 0.5138888888888888,
-   "macro_precision": 0.6112544362544363,
-   "macro_recall": 0.48653864382071943,
-   "macro_f1": 0.5305412880686733,
+   "accuracy": 0.575,
+   "macro_precision": 0.5824242137770215,
+   "macro_recall": 0.5283361092317181,
+   "macro_f1": 0.5376761624919854,
    "per_class": {
     "suitable": {
-     "precision": 0.6060606060606061,
-     "recall": 0.6382978723404256,
-     "f1": 0.6217616580310881,
+     "precision": 0.5083333333333333,
+     "recall": 0.648936170212766,
+     "f1": 0.5700934579439252,
      "support": 94
     },
     "unsuitable": {
-     "precision": 0.7027027027027027,
-     "recall": 0.5683060109289617,
-     "f1": 0.6283987915407855,
+     "precision": 0.7267441860465116,
+     "recall": 0.6830601092896175,
+     "f1": 0.704225352112676,
      "support": 183
     },
     "insufficient": {
-     "precision": 0.525,
+     "precision": 0.5121951219512195,
      "recall": 0.25301204819277107,
-     "f1": 0.34146341463414637,
+     "f1": 0.33870967741935476,
      "support": 83
     }
    },
-   "precision_at_5": 0.7833333333333333,
-   "recall_at_5": 0.637962962962963,
-   "ndcg_at_5": 0.6400093541876887,
-   "violation_rate": 0.125,
-   "violations": 10,
-   "recommended_items": 80,
+   "precision_at_5": 0.7972222222222223,
+   "recall_at_5": 0.6935185185185185,
+   "ndcg_at_5": 0.6955649097432443,
+   "violation_rate": 0.2,
+   "violations": 19,
+   "recommended_items": 95,
    "explanation_error_rate": 0.0,
-   "correct_refusal": "9/18",
+   "correct_refusal": "6/18",
    "clarify_accuracy": 0.6111111111111112,
-   "latency_mean_s": 1.0584516129032258,
+   "latency_mean_s": 1.0391944444444445,
    "latency_p95_s": 1.318,
-   "api_errors": 5,
+   "api_errors": 0,
    "parse_errors": 0,
    "confusion": {
     "suitable": {
-     "suitable": 60,
+     "suitable": 61,
      "unsuitable": 24,
      "insufficient": 4,
-     "missing": 6
+     "missing": 5
     },
     "unsuitable": {
-     "suitable": 10,
-     "unsuitable": 104,
-     "insufficient": 15,
-     "missing": 54
+     "suitable": 20,
+     "unsuitable": 125,
+     "insufficient": 16,
+     "missing": 22
     },
     "insufficient": {
-     "suitable": 29,
-     "unsuitable": 20,
+     "suitable": 39,
+     "unsuitable": 23,
      "insufficient": 21,
-     "missing": 13
+     "missing": 0
     }
    },
    "per_category": {
@@ -234,69 +270,69 @@
      "n": 2
     },
     "limited_time": {
-     "p5": 0.0,
-     "ndcg5": 0.0,
-     "violations": 0,
+     "p5": 0.25,
+     "ndcg5": 1.0,
+     "violations": 3,
      "n": 1
     }
    }
   },
   "C": {
-   "accuracy": 0.46944444444444444,
-   "macro_precision": 0.559452693861296,
-   "macro_recall": 0.40143109351719164,
-   "macro_f1": 0.4028846338144252,
+   "accuracy": 0.5583333333333333,
+   "macro_precision": 0.6686495350596505,
+   "macro_recall": 0.4816645958324637,
+   "macro_f1": 0.48671977187180504,
    "per_class": {
     "suitable": {
-     "precision": 0.5698924731182796,
+     "precision": 0.5196078431372549,
      "recall": 0.5638297872340425,
-     "f1": 0.5668449197860964,
+     "f1": 0.5408163265306123,
      "support": 94
     },
     "unsuitable": {
-     "precision": 0.6084656084656085,
-     "recall": 0.6284153005464481,
-     "f1": 0.6182795698924732,
+     "precision": 0.6401869158878505,
+     "recall": 0.7486338797814208,
+     "f1": 0.6901763224181361,
      "support": 183
     },
     "insufficient": {
-     "precision": 0.5,
-     "recall": 0.012048192771084338,
-     "f1": 0.023529411764705882,
+     "precision": 0.8461538461538461,
+     "recall": 0.13253012048192772,
+     "f1": 0.22916666666666669,
      "support": 83
     }
    },
    "precision_at_5": 0.8037037037037037,
    "recall_at_5": 0.5861111111111111,
    "ndcg_at_5": 0.611265621091113,
-   "violation_rate": 0.14814814814814814,
-   "violations": 12,
-   "recommended_items": 81,
+   "violation_rate": 0.2222222222222222,
+   "violations": 20,
+   "recommended_items": 90,
    "explanation_error_rate": 0.0,
-   "correct_refusal": "7/18",
-   "clarify_accuracy": 0.5277777777777778,
-   "latency_mean_s": 0.9831290322580645,
+   "correct_refusal": "4/18",
+   "clarify_accuracy": 0.5555555555555556,
+   "latency_mean_s": 0.9645555555555556,
    "latency_p95_s": 1.227,
-   "api_errors": 5,
+   "api_errors": 0,
    "parse_errors": 0,
    "confusion": {
     "suitable": {
      "suitable": 53,
-     "unsuitable": 39,
+     "unsuitable": 40,
      "insufficient": 1,
-     "missing": 1
+     "missing": 0
     },
     "unsuitable": {
-     "suitable": 12,
-     "unsuitable": 115,
-     "insufficient": 0,
-     "missing": 56
+     "suitable": 20,
+     "unsuitable": 137,
+     "insufficient": 1,
+     "missing": 25
     },
     "insufficient": {
-     "suitable": 28,
-     "unsuitable": 35,
-     "insufficient": 1,
-     "missing": 19
+     "suitable": 29,
+     "unsuitable": 37,
+     "insufficient": 11,
+     "missing": 6
     }
    },
    "per_category": {
@@ -339,61 +375,61 @@
    }
   },
   "D": {
-   "accuracy": 0.5194444444444445,
-   "macro_precision": 0.534382422442124,
-   "macro_recall": 0.44738540255662806,
-   "macro_f1": 0.4576817225641483,
+   "accuracy": 0.6111111111111112,
+   "macro_precision": 0.5686481555644551,
+   "macro_recall": 0.5294403984966725,
+   "macro_f1": 0.5237341726421175,
    "per_class": {
     "suitable": {
-     "precision": 0.5824175824175825,
+     "precision": 0.53,
      "recall": 0.5638297872340425,
-     "f1": 0.572972972972973,
+     "f1": 0.5463917525773196,
      "support": 94
     },
     "unsuitable": {
-     "precision": 0.6318407960199005,
-     "recall": 0.6939890710382514,
-     "f1": 0.6614583333333334,
+     "precision": 0.6607929515418502,
+     "recall": 0.819672131147541,
+     "f1": 0.7317073170731708,
      "support": 183
     },
     "insufficient": {
-     "precision": 0.3888888888888889,
-     "recall": 0.08433734939759036,
-     "f1": 0.1386138613861386,
+     "precision": 0.5151515151515151,
+     "recall": 0.20481927710843373,
+     "f1": 0.2931034482758621,
      "support": 83
     }
    },
    "precision_at_5": 0.8148148148148148,
    "recall_at_5": 0.575,
    "ndcg_at_5": 0.6035635814423618,
-   "violation_rate": 0.14285714285714285,
-   "violations": 9,
-   "recommended_items": 63,
+   "violation_rate": 0.2361111111111111,
+   "violations": 17,
+   "recommended_items": 72,
    "explanation_error_rate": 0.0,
-   "correct_refusal": "11/18",
-   "clarify_accuracy": 0.6388888888888888,
-   "latency_mean_s": 0.9831290322580645,
+   "correct_refusal": "8/18",
+   "clarify_accuracy": 0.6666666666666666,
+   "latency_mean_s": 0.9645555555555556,
    "latency_p95_s": 1.227,
-   "api_errors": 5,
+   "api_errors": 0,
    "parse_errors": 0,
    "confusion": {
     "suitable": {
      "suitable": 53,
-     "unsuitable": 39,
+     "unsuitable": 40,
      "insufficient": 1,
-     "missing": 1
+     "missing": 0
     },
     "unsuitable": {
-     "suitable": 10,
-     "unsuitable": 127,
-     "insufficient": 10,
-     "missing": 36
+     "suitable": 18,
+     "unsuitable": 150,
+     "insufficient": 15,
+     "missing": 0
     },
     "insufficient": {
-     "suitable": 28,
-     "unsuitable": 35,
-     "insufficient": 7,
-     "missing": 13
+     "suitable": 29,
+     "unsuitable": 37,
+     "insufficient": 17,
+     "missing": 0
     }
    },
    "per_category": {
@@ -436,61 +472,61 @@
    }
   },
   "D2": {
-   "accuracy": 0.6138888888888889,
-   "macro_precision": 0.735789449499127,
-   "macro_recall": 0.5839315872955839,
-   "macro_f1": 0.6447695025812373,
+   "accuracy": 0.7055555555555556,
+   "macro_precision": 0.7076873957721294,
+   "macro_recall": 0.6659865832356282,
+   "macro_f1": 0.6817359855334539,
    "per_class": {
     "suitable": {
-     "precision": 0.7361111111111112,
+     "precision": 0.654320987654321,
      "recall": 0.5638297872340425,
-     "f1": 0.6385542168674699,
+     "f1": 0.6057142857142858,
      "support": 94
     },
     "unsuitable": {
-     "precision": 0.6827956989247311,
-     "recall": 0.6939890710382514,
-     "f1": 0.6883468834688347,
+     "precision": 0.7075471698113207,
+     "recall": 0.819672131147541,
+     "f1": 0.759493670886076,
      "support": 183
     },
     "insufficient": {
-     "precision": 0.7884615384615384,
-     "recall": 0.4939759036144578,
-     "f1": 0.6074074074074073,
+     "precision": 0.7611940298507462,
+     "recall": 0.6144578313253012,
+     "f1": 0.68,
      "support": 83
     }
    },
    "precision_at_5": 0.8148148148148148,
    "recall_at_5": 0.575,
    "ndcg_at_5": 0.6035635814423618,
-   "violation_rate": 0.14285714285714285,
-   "violations": 9,
-   "recommended_items": 63,
+   "violation_rate": 0.2361111111111111,
+   "violations": 17,
+   "recommended_items": 72,
    "explanation_error_rate": 0.0,
-   "correct_refusal": "11/18",
-   "clarify_accuracy": 0.6388888888888888,
-   "latency_mean_s": 0.9831290322580645,
+   "correct_refusal": "8/18",
+   "clarify_accuracy": 0.6666666666666666,
+   "latency_mean_s": 0.9645555555555556,
    "latency_p95_s": 1.227,
-   "api_errors": 5,
+   "api_errors": 0,
    "parse_errors": 0,
    "confusion": {
     "suitable": {
      "suitable": 53,
-     "unsuitable": 39,
+     "unsuitable": 40,
      "insufficient": 1,
-     "missing": 1
+     "missing": 0
     },
     "unsuitable": {
-     "suitable": 10,
-     "unsuitable": 127,
-     "insufficient": 10,
-     "missing": 36
+     "suitable": 18,
+     "unsuitable": 150,
+     "insufficient": 15,
+     "missing": 0
     },
     "insufficient": {
-     "suitable": 9,
-     "unsuitable": 20,
-     "insufficient": 41,
-     "missing": 13
+     "suitable": 10,
+     "unsuitable": 22,
+     "insufficient": 51,
+     "missing": 0
     }
    },
    "per_category": {
@@ -515,6 +551,103 @@
     "no_experience": {
      "p5": 0.6666666666666666,
      "ndcg5": 0.6156062402821016,
+     "violations": 1,
+     "n": 4
+    },
+    "active": {
+     "p5": 0.5,
+     "ndcg5": 0.4159362318644413,
+     "violations": 0,
+     "n": 2
+    },
+    "limited_time": {
+     "p5": 0.0,
+     "ndcg5": 0.0,
+     "violations": 0,
+     "n": 1
+    }
+   }
+  },
+  "D3": {
+   "accuracy": 0.7055555555555556,
+   "macro_precision": 0.7076873957721294,
+   "macro_recall": 0.6659865832356282,
+   "macro_f1": 0.6817359855334539,
+   "per_class": {
+    "suitable": {
+     "precision": 0.654320987654321,
+     "recall": 0.5638297872340425,
+     "f1": 0.6057142857142858,
+     "support": 94
+    },
+    "unsuitable": {
+     "precision": 0.7075471698113207,
+     "recall": 0.819672131147541,
+     "f1": 0.759493670886076,
+     "support": 183
+    },
+    "insufficient": {
+     "precision": 0.7611940298507462,
+     "recall": 0.6144578313253012,
+     "f1": 0.68,
+     "support": 83
+    }
+   },
+   "precision_at_5": 0.8148148148148148,
+   "recall_at_5": 0.5861111111111111,
+   "ndcg_at_5": 0.6171940390998322,
+   "violation_rate": 0.2328767123287671,
+   "violations": 17,
+   "recommended_items": 73,
+   "explanation_error_rate": 0.0,
+   "correct_refusal": "8/18",
+   "clarify_accuracy": 0.6666666666666666,
+   "latency_mean_s": 0.9645555555555556,
+   "latency_p95_s": 1.227,
+   "api_errors": 0,
+   "parse_errors": 0,
+   "confusion": {
+    "suitable": {
+     "suitable": 53,
+     "unsuitable": 40,
+     "insufficient": 1,
+     "missing": 0
+    },
+    "unsuitable": {
+     "suitable": 18,
+     "unsuitable": 150,
+     "insufficient": 15,
+     "missing": 0
+    },
+    "insufficient": {
+     "suitable": 10,
+     "unsuitable": 22,
+     "insufficient": 51,
+     "missing": 0
+    }
+   },
+   "per_category": {
+    "apartment": {
+     "p5": 1.0,
+     "ndcg5": 0.7765732350040718,
+     "violations": 0,
+     "n": 4
+    },
+    "house": {
+     "p5": 1.0,
+     "ndcg5": 0.7103688953523166,
+     "violations": 0,
+     "n": 4
+    },
+    "family_kids": {
+     "p5": 1.0,
+     "ndcg5": 0.645878381570832,
+     "violations": 0,
+     "n": 3
+    },
+    "no_experience": {
+     "p5": 0.6666666666666666,
+     "ndcg5": 0.5980541434825117,
      "violations": 1,
      "n": 4
     },

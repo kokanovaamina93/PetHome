@@ -78,7 +78,7 @@ function img(rel, widthPx, caption) {
   if (caption) out.push(P(caption, { align: AlignmentType.CENTER, italics: true, size: 18, after: 200 }));
   return out;
 }
-const V = { A: "A. Правила (baseline)", B: "B. Zero-shot", C: "C. Few-shot", D: "D. Few-shot + отказ v1", D2: "D2. Отказ v2 (повторная проверка)" };
+const V = { A: "A. Правила (baseline)", B: "B. Zero-shot", C: "C. Few-shot", D: "D. Few-shot + отказ v1", D2: "D2. Отказ v2 (повторная проверка)", D3: "D3. Отказ v3 + ранжирование правилами" };
 const VK = Object.keys(V).filter((k) => R[k]);
 const meta = D.meta;
 
@@ -94,7 +94,7 @@ const s0 = [
     ["Eval-набор, 36 сценариев", "evals/scenarios.jsonl; эталон — evals/gold.jsonl"],
     ["Две таблицы разметки, спорные случаи", "evals/labeling/1_labeling_Fariza.xlsx, 2_labeling_Amina.xlsx, 3_disputes.xlsx"],
     ["Промпты zero-shot и few-shot", `evals/raw/${D.run_id}/prompts/; версия ${meta.prompt_version}`],
-    ["Скрипты и сырые ответы", "evals/run_experiment.py, score.py, rescore_refusal.py; evals/raw/<прогон>/A–D2.jsonl, meta.json"],
+    ["Скрипты и сырые ответы", "evals/run_experiment.py, score.py, rescore_refusal.py; evals/raw/<прогон>/A–D3.jsonl, meta.json"],
     ["Таблицы, графики, матрицы ошибок, разбор ошибок", `evals/results/${D.run_id}/; evals/error_analysis.json`],
     ["Стоимость и точка безубыточности", "evals/results/cost-model.xlsx (рабочие формулы), cost_chart.png"],
   ], [3000, W - 3000], { boldFirstCol: true }),
@@ -159,7 +159,7 @@ const errRows = (an.cases || []).map((c) => [c.id, c.request, c.gold, c.answer, 
 const s3 = [
   new Paragraph({ children: [new PageBreak()] }),
   H1("Часть 3. Замер качества и разбор ошибок"),
-  P(`Прогон ${meta.started_utc.replace("T", " ").replace("+00:00", "")} UTC${meta.resumed_utc ? " (продолжен " + meta.resumed_utc.map((x) => x.replace("T", " ").replace("+00:00", "")).join(", ") + " UTC после суточного лимита)" : ""}. Провайдер — Groq (OpenAI-совместимый API, ${meta.provider_base_url}). Модель — ${meta.model}. Параметры: temperature 0, seed 42, max_tokens 2500, response_format json_object, reasoning_effort low. Версия промпта ${meta.prompt_version}, коммит ${meta.git_commit}, версия каталога животных ${meta.catalog_version}. Ошибок API: ${meta.api_errors.length} (все повторены успешно${meta.api_errors.some((e) => /TPD/.test(e.error)) ? ", одна — суточный лимит бесплатного тарифа" : ""}). Groq поддерживает seed только в режиме best effort: за прогон зафиксировано ${u.C.fingerprints} разных system_fingerprint, детерминированность не гарантируется.`),
+  P(`Прогон ${meta.started_utc.replace("T", " ").replace("+00:00", "")} UTC${meta.resumed_utc ? " (продолжен " + meta.resumed_utc.map((x) => x.replace("T", " ").replace("+00:00", "")).join(", ") + " UTC после суточного лимита; завершён " + (meta.finished_utc || "").replace("T", " ").replace("+00:00", "") + " UTC, выполнены все " + meta.n_scenarios + " сценариев)" : ""}. Провайдер — Groq (OpenAI-совместимый API, ${meta.provider_base_url}). Модель — ${meta.model}. Параметры: temperature 0, seed 42, max_tokens 2500, response_format json_object, reasoning_effort low. Версия промпта ${meta.prompt_version}, коммит ${meta.git_commit}, версия каталога животных ${meta.catalog_version}. Ошибок API: ${meta.api_errors.length} (все повторены успешно${meta.api_errors.some((e) => /TPD/.test(e.error)) ? ", " + meta.api_errors.filter((e) => /TPD/.test(e.error)).length + " — суточный лимит бесплатного тарифа" : ""}). Groq поддерживает seed только в режиме best effort: за прогон зафиксировано ${u.C.fingerprints} разных system_fingerprint, детерминированность не гарантируется.`),
   P(`Средние токены по счётчику провайдера: zero-shot — ${u.B.prompt_avg} входных и ${u.B.completion_avg} выходных; few-shot — ${u.C.prompt_avg} входных и ${u.C.completion_avg} выходных (из них в среднем ${u.C.reasoning_avg} токенов рассуждений). Оплата не производилась: использован бесплатный тариф Groq.`),
   table([["Вариант", "Accuracy", "Macro P", "Macro R", "Macro F1", "P@5", "R@5", "NDCG@5", "Нарушения", "Верный отказ", "Время"], ...VK.map(qrow)],
     [1900, 720, 720, 720, 760, 680, 680, 760, 900, 900, 898], { size: 16, boldFirstCol: true }),
@@ -169,7 +169,7 @@ const s3 = [
     ...["suitable", "unsuitable", "insufficient"].map((c) => [`${clsRu[c]} (${R.A.per_class[c].support})`, ...VK.map((k) => f3(R[k].per_class[c].f1))])],
     [2400, ...VK.map(() => Math.floor((W - 2400) / VK.length))], { size: 18, boldFirstCol: true }),
   P(""),
-  ...img(D.images.quality, 560, "Рис. 3. Качество четырёх вариантов и повторной проверки D2"),
+  ...img(D.images.quality, 560, "Рис. 3. Качество четырёх вариантов и повторных проверок D2, D3"),
   ...img(D.images.latency, 400, "Рис. 4. Среднее время ответа"),
   ...img(D.images.errors, 430, "Рис. 5. Нарушения ограничений, ошибки API и неразобранные ответы"),
   ...img(D.images.confusion_A, 280, "Рис. 6. Матрица ошибок baseline (A)"),
@@ -208,7 +208,7 @@ const s4 = [
     ["Укладывается в бесплатный тариф Groq", C.free_tier_ok[0], C.free_tier_ok[1], "лимиты: 1 000 запросов и 200 000 токенов в сутки, 8 000 токенов в минуту"],
   ], [2300, 2000, 2000, W - 6300], { boldFirstCol: true, size: 18 }),
   P(""),
-  P([B("Бесплатный тариф на практике. "), "Во время замера суточный лимит в 200 000 токенов был исчерпан на 31-м сценарии, а запросы сайта, сделанные параллельно с прогоном, получали ошибку 429 по лимиту 8 000 токенов в минуту. Один подбор тратит около 3 700 токенов, значит, бесплатный тариф выдерживает примерно 50 подборов в сутки и 2 в минуту. Для учебной демонстрации этого достаточно; для реальной нагрузки нужен платный тариф — по цене он копеечный (см. таблицу)."]),
+  P([B("Бесплатный тариф на практике. "), "Во время замера суточный лимит в 200 000 токенов был исчерпан на 31-м сценарии; оставшиеся 5 сценариев пришлось дозапускать с паузами до обновления лимита. Запросы запросы сайта, сделанные параллельно с прогоном, получали ошибку 429 по лимиту 8 000 токенов в минуту. Один подбор тратит около 3 700 токенов, значит, бесплатный тариф выдерживает примерно 50 подборов в сутки и 2 в минуту. Для учебной демонстрации этого достаточно; для реальной нагрузки нужен платный тариф — по цене он копеечный (см. таблицу)."]),
   H2("Сравнение вариантов размещения"),
   table([
     ["Вариант", "Стоимость в месяц", "Вывод"],

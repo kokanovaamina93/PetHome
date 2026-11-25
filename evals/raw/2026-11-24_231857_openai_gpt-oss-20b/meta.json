@@ -15,9 +15,12 @@
  "catalog_version": "f45debb02649",
  "n_scenarios": 36,
  "python": "3.11.4",
- "git_commit": "f1d5191",
- "finished_utc": "2026-11-24T20:23:00+00:00",
- "complete": false,
+ "git_commit": "a0af9d9",
+ "resumed_utc": [
+  "2026-11-24T21:00:49+00:00"
+ ],
+ "finished_utc": "2026-11-25T04:07:48+00:00",
+ "complete": true,
  "api_errors": [
   {
    "id": "sc-07",
@@ -32,15 +35,48 @@
    "attempt": 1,
    "error": "HTTP 429: {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-20b` in organization `org_01m86z9gnhektt1sseew0wyrn2` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 196935, Requested 3552. Please try again in 3m30.384s. Need more tokens? Upgrade to Dev Tier today at https://c",
    "utc": "2026-11-24T18:45:20+00:00"
+  },
+  {
+   "id": "sc-33",
+   "variant": "C",
+   "attempt": 1,
+   "error": "HTTP 429: {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-20b` in organization `org_***` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 199044, Requested 3327. Please try again in 17m4.271999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/s",
+   "utc": "2026-11-24T21:01:59+00:00"
+  },
+  {
+   "id": "sc-34",
+   "variant": "B",
+   "attempt": 1,
+   "error": "HTTP 429: {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-20b` in organization `org_***` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 199933, Requested 2082. Please try again in 14m30.48s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/setting",
+   "utc": "2026-11-24T21:19:38+00:00"
+  },
+  {
+   "id": "sc-34",
+   "variant": "C",
+   "attempt": 1,
+   "error": "HTTP 429: {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-20b` in organization `org_***` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 199481, Requested 3419. Please try again in 20m52.8s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings",
+   "utc": "2026-11-24T21:36:08+00:00"
+  },
+  {
+   "id": "sc-35",
+   "variant": "B",
+   "attempt": 1,
+   "error": "HTTP 429: {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-20b` in organization `org_***` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 199492, Requested 2655. Please try again in 15m27.504s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settin",
+   "utc": "2026-11-24T21:59:42+00:00"
+  },
+  {
+   "id": "sc-35",
+   "variant": "B",
+   "attempt": 2,
+   "error": "HTTP 429: {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-20b` in organization `org_***` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 197144, Requested 4169. Please try again in 9m27.216s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/setting",
+   "utc": "2026-11-24T22:16:37+00:00"
+  },
+  {
+   "id": "sc-35",
+   "variant": "C",
+   "attempt": 1,
+   "error": "HTTP 429: {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-20b` in organization `org_***` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 197780, Requested 3458. Please try again in 8m54.816s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/setting",
+   "utc": "2026-11-24T22:27:24+00:00"
   }
- ],
- "completed_scenarios": 31,
- "not_completed": [
-  "sc-32",
-  "sc-33",
-  "sc-34",
-  "sc-35",
-  "sc-36"
- ],
- "not_completed_reason": "не выполнено: исчерпан суточный лимит бесплатного тарифа Groq (200 000 токенов), прогон закрыт 25.11.2026"
+ ]
 }
