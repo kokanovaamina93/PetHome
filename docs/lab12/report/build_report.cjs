@@ -188,6 +188,27 @@ const s3 = [
   P(an.refusal || ""),
   H2("Итог замера"),
   P(an.conclusion || ""),
+  ...(D.gold_v2 && D.gold_v2.results ? (() => {
+    const g = D.gold_v2, R2 = g.results, A2 = g.agreement;
+    const keys = VK.filter((k) => R2[k]);
+    return [
+      H2("Проверка на эталоне v2: разметки Фаризы и Амины"),
+      P("После основного замера получены две разметки тех же 36 сценариев — разметка Фаризы и разметка Амины. Их сверили, спорные случаи участницы согласовали, из согласованных решений собран эталон v2 (evals/gold_v2.jsonl). Все варианты пересчитаны на тех же сохранённых ответах модели, без новых запросов к API."),
+      table([
+        ["Что сравнивали", "Совпало", "Разногласий", "Согласие", "Cohen's kappa"],
+        ["Метки пар (3 класса)", `${A2.pairs_matched} из ${A2.pairs}`, String(A2.pairs_disputed), pct(A2.pairs_agreement), f3(A2.pairs_kappa)],
+        ["Нужен уточняющий вопрос", `${A2.scenarios - A2.clarify_disputed} из ${A2.scenarios}`, String(A2.clarify_disputed), pct(A2.clarify_agreement), f3(A2.clarify_kappa)],
+        ["Можно выдавать рекомендации", `${A2.scenarios - A2.allowed_disputed} из ${A2.scenarios}`, String(A2.allowed_disputed), pct(A2.allowed_agreement), f3(A2.allowed_kappa)],
+      ], [3000, 1700, 1500, 1600, W - 7800], { size: 18, boldFirstCol: true }),
+      P(`Спорных строк — ${A2.pairs_disputed + A2.clarify_disputed + A2.allowed_disputed} (evals/labeling/10_disputes_v2.xlsx), все закрыты с указанием причины. Эталон v2: Подходит — ${g.counts.suitable}, Не подходит — ${g.counts.unsuitable}, Недостаточно данных — ${g.counts.insufficient}; уточняющий вопрос нужен в ${g.clarify.yes} сценариях, рекомендации можно выдавать в ${g.allowed.yes}.`),
+      table([["Вариант", "Accuracy", "Macro F1", "F1 Подходит", "F1 Не подходит", "F1 Нет данных", "NDCG@5", "Нарушения", "Верный отказ"],
+        ...keys.map((k) => [V[k], f3(R2[k].accuracy), f3(R2[k].macro_f1), f3(R2[k].per_class.suitable.f1), f3(R2[k].per_class.unsuitable.f1), f3(R2[k].per_class.insufficient.f1), f3(R2[k].ndcg_at_5), `${R2[k].violations}/${R2[k].recommended_items}`, R2[k].correct_refusal])],
+        [1900, 860, 860, 960, 1060, 1060, 860, 1000, W - 8560], { size: 16, boldFirstCol: true }),
+      P(""),
+      P([B("Вывод. "), `На эталоне v2 лучший вариант с моделью — D2: macro F1 ${f3(R2.D2.macro_f1)} против ${f3(R2.A.macro_f1)} у baseline, но выигрыш только за счёт класса «Недостаточно данных». По классам «Подходит» и «Не подходит» и по ранжированию (NDCG@5 ${f3(R2.D2.ndcg_at_5)} против ${f3(R2.A.ndcg_at_5)}) правила лучше; доля запрещённых рекомендаций у D2 выше (${pct(R2.D2.violation_rate)} против ${pct(R2.A.violation_rate)}). Критерий приёмки не выполнен и на этом эталоне.`]),
+      P([B("Ограничение. "), "Происхождение разметки v2 не подтверждено: она могла выполняться с помощью ИИ, а в самих файлах есть пометки о черновом статусе и искусственно изменённых метках. Поэтому эталон v2 — это согласованный результат двух предоставленных разметок, а не подтверждённая независимая человеческая разметка."]),
+    ];
+  })() : []),
 ];
 
 // ---------- 4. Стоимость

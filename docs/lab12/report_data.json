@@ -1,4 +1,663 @@
 {
+ "gold_v2": {
+  "results": {
+   "A": {
+    "accuracy": 0.44166666666666665,
+    "macro_precision": 0.5725481019598666,
+    "macro_recall": 0.44080637370439557,
+    "macro_f1": 0.38539472722546075,
+    "per_class": {
+     "suitable": {
+      "precision": 0.3949579831932773,
+      "recall": 0.7401574803149606,
+      "f1": 0.5150684931506849,
+      "support": 127
+     },
+     "unsuitable": {
+      "precision": 0.5045045045045045,
+      "recall": 0.509090909090909,
+      "f1": 0.5067873303167421,
+      "support": 110
+     },
+     "insufficient": {
+      "precision": 0.8181818181818182,
+      "recall": 0.07317073170731707,
+      "f1": 0.13432835820895522,
+      "support": 123
+     }
+    },
+    "precision_at_5": 0.26875,
+    "recall_at_5": 0.4041666666666667,
+    "ndcg_at_5": 0.37811507422844076,
+    "violation_rate": 0.2236842105263158,
+    "violations": 34,
+    "recommended_items": 152,
+    "explanation_error_rate": 0.0,
+    "correct_refusal": "0/19",
+    "clarify_accuracy": 0.3055555555555556,
+    "latency_mean_s": 0.0014383333333333333,
+    "latency_p95_s": 0.00366,
+    "api_errors": 0,
+    "parse_errors": 0,
+    "confusion": {
+     "suitable": {
+      "suitable": 94,
+      "unsuitable": 33,
+      "insufficient": 0,
+      "missing": 0
+     },
+     "unsuitable": {
+      "suitable": 52,
+      "unsuitable": 56,
+      "insufficient": 2,
+      "missing": 0
+     },
+     "insufficient": {
+      "suitable": 92,
+      "unsuitable": 22,
+      "insufficient": 9,
+      "missing": 0
+     }
+    },
+    "per_category": {
+     "apartment": {
+      "p5": 0.0,
+      "ndcg5": 0.0,
+      "violations": 0,
+      "n": 2
+     },
+     "house": {
+      "p5": 0.5,
+      "ndcg5": 0.49406054088301,
+      "violations": 2,
+      "n": 2
+     },
+     "family_kids": {
+      "p5": 0.4,
+      "ndcg5": 0.4952666135111134,
+      "violations": 0,
+      "n": 2
+     },
+     "no_experience": {
+      "p5": 0.2,
+      "ndcg5": 0.4238932778884183,
+      "violations": 1,
+      "n": 2
+     },
+     "active": {
+      "p5": 0.2,
+      "ndcg5": 0.38715034696533834,
+      "violations": 8,
+      "n": 4
+     },
+     "limited_time": {
+      "p5": 0.325,
+      "ndcg5": 0.41869973380715375,
+      "violations": 4,
+      "n": 4
+     }
+    }
+   },
+   "B": {
+    "accuracy": 0.33611111111111114,
+    "macro_precision": 0.3862639440347892,
+    "macro_recall": 0.34143140644004866,
+    "macro_f1": 0.332749028239701,
+    "per_class": {
+     "suitable": {
+      "precision": 0.4,
+      "recall": 0.3779527559055118,
+      "f1": 0.38866396761133604,
+      "support": 127
+     },
+     "unsuitable": {
+      "precision": 0.31976744186046513,
+      "recall": 0.5,
+      "f1": 0.3900709219858156,
+      "support": 110
+     },
+     "insufficient": {
+      "precision": 0.43902439024390244,
+      "recall": 0.14634146341463414,
+      "f1": 0.21951219512195122,
+      "support": 123
+     }
+    },
+    "precision_at_5": 0.17916666666666667,
+    "recall_at_5": 0.165625,
+    "ndcg_at_5": 0.1663326186766621,
+    "violation_rate": 0.2631578947368421,
+    "violations": 25,
+    "recommended_items": 95,
+    "explanation_error_rate": 0.0,
+    "correct_refusal": "1/19",
+    "clarify_accuracy": 0.2222222222222222,
+    "latency_mean_s": 1.0391944444444445,
+    "latency_p95_s": 1.318,
+    "api_errors": 0,
+    "parse_errors": 0,
+    "confusion": {
+     "suitable": {
+      "suitable": 48,
+      "unsuitable": 59,
+      "insufficient": 9,
+      "missing": 11
+     },
+     "unsuitable": {
+      "suitable": 29,
+      "unsuitable": 55,
+      "insufficient": 14,
+      "missing": 12
+     },
+     "insufficient": {
+      "suitable": 43,
+      "unsuitable": 58,
+      "insufficient": 18,
+      "missing": 4
+     }
+    },
+    "per_category": {
+     "apartment": {
+      "p5": 0.0,
+      "ndcg5": 0.0,
+      "violations": 1,
+      "n": 2
+     },
+     "house": {
+      "p5": 0.43333333333333335,
+      "ndcg5": 0.29283685693594164,
+      "violations": 2,
+      "n": 2
+     },
+     "family_kids": {
+      "p5": 0.5,
+      "ndcg5": 0.19519002499605084,
+      "violations": 0,
+      "n": 2
+     },
+     "no_experience": {
+      "p5": 0.1,
+      "ndcg5": 0.3065735963827292,
+      "violations": 1,
+      "n": 2
+     },
+     "active": {
+      "p5": 0.0,
+      "ndcg5": 0.0,
+      "violations": 2,
+      "n": 4
+     },
+     "limited_time": {
+      "p5": 0.2,
+      "ndcg5": 0.2680302355492876,
+      "violations": 2,
+      "n": 4
+     }
+    }
+   },
+   "C": {
+    "accuracy": 0.33611111111111114,
+    "macro_precision": 0.4512646659430607,
+    "macro_recall": 0.34747358354041663,
+    "macro_f1": 0.30672336862935373,
+    "per_class": {
+     "suitable": {
+      "precision": 0.4019607843137255,
+      "recall": 0.3228346456692913,
+      "f1": 0.35807860262008734,
+      "support": 127
+     },
+     "unsuitable": {
+      "precision": 0.3364485981308411,
+      "recall": 0.6545454545454545,
+      "f1": 0.44444444444444436,
+      "support": 110
+     },
+     "insufficient": {
+      "precision": 0.6153846153846154,
+      "recall": 0.06504065040650407,
+      "f1": 0.11764705882352942,
+      "support": 123
+     }
+    },
+    "precision_at_5": 0.23541666666666666,
+    "recall_at_5": 0.23333333333333334,
+    "ndcg_at_5": 0.21628510230775808,
+    "violation_rate": 0.2777777777777778,
+    "violations": 25,
+    "recommended_items": 90,
+    "explanation_error_rate": 0.0,
+    "correct_refusal": "2/19",
+    "clarify_accuracy": 0.2777777777777778,
+    "latency_mean_s": 0.9645555555555556,
+    "latency_p95_s": 1.227,
+    "api_errors": 0,
+    "parse_errors": 0,
+    "confusion": {
+     "suitable": {
+      "suitable": 41,
+      "unsuitable": 74,
+      "insufficient": 3,
+      "missing": 9
+     },
+     "unsuitable": {
+      "suitable": 27,
+      "unsuitable": 72,
+      "insufficient": 2,
+      "missing": 9
+     },
+     "insufficient": {
+      "suitable": 34,
+      "unsuitable": 68,
+      "insufficient": 8,
+      "missing": 13
+     }
+    },
+    "per_category": {
+     "apartment": {
+      "p5": 0.0,
+      "ndcg5": 0.0,
+      "violations": 1,
+      "n": 2
+     },
+     "house": {
+      "p5": 0.5333333333333333,
+      "ndcg5": 0.5419338719926936,
+      "violations": 1,
+      "n": 2
+     },
+     "family_kids": {
+      "p5": 0.45,
+      "ndcg5": 0.5197944628431599,
+      "violations": 0,
+      "n": 2
+     },
+     "no_experience": {
+      "p5": 0.1,
+      "ndcg5": 0.11859885638464811,
+      "violations": 1,
+      "n": 2
+     },
+     "active": {
+      "p5": 0.0,
+      "ndcg5": 0.0,
+      "violations": 5,
+      "n": 4
+     },
+     "limited_time": {
+      "p5": 0.4,
+      "ndcg5": 0.2749768136207815,
+      "violations": 3,
+      "n": 4
+     }
+    }
+   },
+   "D": {
+    "accuracy": 0.3861111111111111,
+    "macro_precision": 0.4618568949405954,
+    "macro_recall": 0.39785545099545483,
+    "macro_f1": 0.3624791810585089,
+    "per_class": {
+     "suitable": {
+      "precision": 0.41,
+      "recall": 0.3228346456692913,
+      "f1": 0.36123348017621143,
+      "support": 127
+     },
+     "unsuitable": {
+      "precision": 0.3392070484581498,
+      "recall": 0.7,
+      "f1": 0.456973293768546,
+      "support": 110
+     },
+     "insufficient": {
+      "precision": 0.6363636363636364,
+      "recall": 0.17073170731707318,
+      "f1": 0.2692307692307692,
+      "support": 123
+     }
+    },
+    "precision_at_5": 0.17291666666666666,
+    "recall_at_5": 0.11875,
+    "ndcg_at_5": 0.13822258192215556,
+    "violation_rate": 0.3194444444444444,
+    "violations": 23,
+    "recommended_items": 72,
+    "explanation_error_rate": 0.0,
+    "correct_refusal": "2/19",
+    "clarify_accuracy": 0.16666666666666666,
+    "latency_mean_s": 0.9645555555555556,
+    "latency_p95_s": 1.227,
+    "api_errors": 0,
+    "parse_errors": 0,
+    "confusion": {
+     "suitable": {
+      "suitable": 41,
+      "unsuitable": 81,
+      "insufficient": 5,
+      "missing": 0
+     },
+     "unsuitable": {
+      "suitable": 26,
+      "unsuitable": 77,
+      "insufficient": 7,
+      "missing": 0
+     },
+     "insufficient": {
+      "suitable": 33,
+      "unsuitable": 69,
+      "insufficient": 21,
+      "missing": 0
+     }
+    },
+    "per_category": {
+     "apartment": {
+      "p5": 0.0,
+      "ndcg5": 0.0,
+      "violations": 0,
+      "n": 2
+     },
+     "house": {
+      "p5": 0.3333333333333333,
+      "ndcg5": 0.2765732350040718,
+      "violations": 1,
+      "n": 2
+     },
+     "family_kids": {
+      "p5": 0.25,
+      "ndcg5": 0.2792537931316096,
+      "violations": 0,
+      "n": 2
+     },
+     "no_experience": {
+      "p5": 0.0,
+      "ndcg5": 0.0,
+      "violations": 0,
+      "n": 2
+     },
+     "active": {
+      "p5": 0.0,
+      "ndcg5": 0.0,
+      "violations": 5,
+      "n": 4
+     },
+     "limited_time": {
+      "p5": 0.4,
+      "ndcg5": 0.2749768136207815,
+      "violations": 3,
+      "n": 4
+     }
+    }
+   },
+   "D2": {
+    "accuracy": 0.41388888888888886,
+    "macro_precision": 0.4593900981929393,
+    "macro_recall": 0.4245070253136318,
+    "macro_f1": 0.4057394741033185,
+    "per_class": {
+     "suitable": {
+      "precision": 0.43209876543209874,
+      "recall": 0.2755905511811024,
+      "f1": 0.33653846153846156,
+      "support": 127
+     },
+     "unsuitable": {
+      "precision": 0.3490566037735849,
+      "recall": 0.6727272727272727,
+      "f1": 0.4596273291925466,
+      "support": 110
+     },
+     "insufficient": {
+      "precision": 0.5970149253731343,
+      "recall": 0.3252032520325203,
+      "f1": 0.42105263157894735,
+      "support": 123
+     }
+    },
+    "precision_at_5": 0.17291666666666666,
+    "recall_at_5": 0.11875,
+    "ndcg_at_5": 0.13822258192215556,
+    "violation_rate": 0.3194444444444444,
+    "violations": 23,
+    "recommended_items": 72,
+    "explanation_error_rate": 0.0,
+    "correct_refusal": "2/19",
+    "clarify_accuracy": 0.16666666666666666,
+    "latency_mean_s": 0.9645555555555556,
+    "latency_p95_s": 1.227,
+    "api_errors": 0,
+    "parse_errors": 0,
+    "confusion": {
+     "suitable": {
+      "suitable": 35,
+      "unsuitable": 77,
+      "insufficient": 15,
+      "missing": 0
+     },
+     "unsuitable": {
+      "suitable": 24,
+      "unsuitable": 74,
+      "insufficient": 12,
+      "missing": 0
+     },
+     "insufficient": {
+      "suitable": 22,
+      "unsuitable": 61,
+      "insufficient": 40,
+      "missing": 0
+     }
+    },
+    "per_category": {
+     "apartment": {
+      "p5": 0.0,
+      "ndcg5": 0.0,
+      "violations": 0,
+      "n": 2
+     },
+     "house": {
+      "p5": 0.3333333333333333,
+      "ndcg5": 0.2765732350040718,
+      "violations": 1,
+      "n": 2
+     },
+     "family_kids": {
+      "p5": 0.25,
+      "ndcg5": 0.2792537931316096,
+      "violations": 0,
+      "n": 2
+     },
+     "no_experience": {
+      "p5": 0.0,
+      "ndcg5": 0.0,
+      "violations": 0,
+      "n": 2
+     },
+     "active": {
+      "p5": 0.0,
+      "ndcg5": 0.0,
+      "violations": 5,
+      "n": 4
+     },
+     "limited_time": {
+      "p5": 0.4,
+      "ndcg5": 0.2749768136207815,
+      "violations": 3,
+      "n": 4
+     }
+    }
+   },
+   "D3": {
+    "accuracy": 0.41388888888888886,
+    "macro_precision": 0.4593900981929393,
+    "macro_recall": 0.4245070253136318,
+    "macro_f1": 0.4057394741033185,
+    "per_class": {
+     "suitable": {
+      "precision": 0.43209876543209874,
+      "recall": 0.2755905511811024,
+      "f1": 0.33653846153846156,
+      "support": 127
+     },
+     "unsuitable": {
+      "precision": 0.3490566037735849,
+      "recall": 0.6727272727272727,
+      "f1": 0.4596273291925466,
+      "support": 110
+     },
+     "insufficient": {
+      "precision": 0.5970149253731343,
+      "recall": 0.3252032520325203,
+      "f1": 0.42105263157894735,
+      "support": 123
+     }
+    },
+    "precision_at_5": 0.17291666666666666,
+    "recall_at_5": 0.11875,
+    "ndcg_at_5": 0.11542444894510187,
+    "violation_rate": 0.3013698630136986,
+    "violations": 22,
+    "recommended_items": 73,
+    "explanation_error_rate": 0.0,
+    "correct_refusal": "2/19",
+    "clarify_accuracy": 0.16666666666666666,
+    "latency_mean_s": 0.9645555555555556,
+    "latency_p95_s": 1.227,
+    "api_errors": 0,
+    "parse_errors": 0,
+    "confusion": {
+     "suitable": {
+      "suitable": 35,
+      "unsuitable": 77,
+      "insufficient": 15,
+      "missing": 0
+     },
+     "unsuitable": {
+      "suitable": 24,
+      "unsuitable": 74,
+      "insufficient": 12,
+      "missing": 0
+     },
+     "insufficient": {
+      "suitable": 22,
+      "unsuitable": 61,
+      "insufficient": 40,
+      "missing": 0
+     }
+    },
+    "per_category": {
+     "apartment": {
+      "p5": 0.0,
+      "ndcg5": 0.0,
+      "violations": 0,
+      "n": 2
+     },
+     "house": {
+      "p5": 0.3333333333333333,
+      "ndcg5": 0.19178318368566782,
+      "violations": 1,
+      "n": 2
+     },
+     "family_kids": {
+      "p5": 0.25,
+      "ndcg5": 0.18165878063358418,
+      "violations": 0,
+      "n": 2
+     },
+     "no_experience": {
+      "p5": 0.0,
+      "ndcg5": 0.0,
+      "violations": 0,
+      "n": 2
+     },
+     "active": {
+      "p5": 0.0,
+      "ndcg5": 0.0,
+      "violations": 5,
+      "n": 4
+     },
+     "limited_time": {
+      "p5": 0.4,
+      "ndcg5": 0.2749768136207815,
+      "violations": 3,
+      "n": 4
+     }
+    }
+   }
+  },
+  "agreement": {
+   "set": "v2",
+   "files": {
+    "Fariza": "8_labeling_Fariza_v2.xlsx",
+    "Amina": "9_labeling_Amina_v2.xlsx"
+   },
+   "scenarios": 36,
+   "pairs_matched": 169,
+   "pairs_disputed": 191,
+   "clarify_disputed": 8,
+   "allowed_disputed": 4,
+   "best_filled": {
+    "Fariza": 0,
+    "Amina": 0
+   },
+   "per_class": {
+    "Подходит": {
+     "Fariza": 139,
+     "Amina": 136,
+     "both": 68,
+     "agreement_jaccard": 0.329
+    },
+    "Не подходит": {
+     "Fariza": 87,
+     "Amina": 81,
+     "both": 37,
+     "agreement_jaccard": 0.282
+    },
+    "Недостаточно данных": {
+     "Fariza": 134,
+     "Amina": 143,
+     "both": 64,
+     "agreement_jaccard": 0.3
+    }
+   },
+   "cross_table_rows_Fariza_cols_Amina": {
+    "Подходит": {
+     "Подходит": 68,
+     "Не подходит": 21,
+     "Недостаточно данных": 50
+    },
+    "Не подходит": {
+     "Подходит": 21,
+     "Не подходит": 37,
+     "Недостаточно данных": 29
+    },
+    "Недостаточно данных": {
+     "Подходит": 47,
+     "Не подходит": 23,
+     "Недостаточно данных": 64
+    }
+   },
+   "pairs": 360,
+   "pairs_agreement": 0.469,
+   "pairs_kappa": 0.186,
+   "clarify_agreement": 0.778,
+   "clarify_kappa": 0.546,
+   "allowed_agreement": 0.889,
+   "allowed_kappa": 0.778
+  },
+  "counts": {
+   "suitable": 127,
+   "insufficient": 123,
+   "unsuitable": 110
+  },
+  "clarify": {
+   "yes": 25,
+   "no": 11
+  },
+  "allowed": {
+   "no": 19,
+   "yes": 17
+  }
+ },
  "run_id": "2026-11-24_231857_openai_gpt-oss-20b",
  "meta": {
   "run_id": "2026-11-24_231857_openai_gpt-oss-20b",
@@ -3127,7 +3786,7 @@
    }
   ],
   "refusal": "Правило отказа сравнивалось в трёх состояниях на одних и тех же ответах модели (36 сценариев). C (без правила): macro F1 0,487, F1 «Недостаточно данных» 0,229, нарушений 20 из 90 выданных рекомендаций (22,2 %). D (v1: проверка жёстких ограничений по карточке, пропуск = «нет данных», уточнение при ≥ 2 пустых полях анкеты): macro F1 0,524, нарушений 17 из 72, верных отказов 8 из 18 (у C — 4). D2 (v2: плюс «нет данных» для всех кандидатов при неполной анкете): macro F1 0,682, F1 «Недостаточно данных» 0,680, accuracy 0,706 (у C — 0,558). Выданных рекомендаций становится меньше (90 → 72), но доля нарушений почти не меняется (22,2 % → 23,6 %): правило снимает в основном верные рекомендации, а запрещённые остаются в сценариях, где анкета полная (sc-14, sc-34, sc-35). Вариант D3 (v3: плюс ранжирование подходящих по баллам правил R15–R18) даёт те же метки и почти тот же NDCG@5 (0,617 против 0,604). Правило отказа не использует «уверенность», которую называет модель: только полноту анкеты и подтверждённые поля карточки.",
-  "conclusion": "На всех 36 сценариях итоговый вариант D2 даёт macro F1 0,682 против 0,504 у baseline и лучше baseline по F1 каждого класса: «Подходит» 0,606 против 0,566, «Не подходит» 0,759 против 0,755, «Недостаточно данных» 0,680 против 0,191. Но правило отказа v2 придумано после просмотра ошибок на этом же наборе, поэтому это повторная проверка на наборе разработки. По ранжированию ИИ уступает правилам: NDCG@5 0,604 против 0,853, Recall@5 0,575 против 0,967; в категории «ограниченное время» D2 не выдал ни одной верной рекомендации. Доля нарушений 23,6 % (17 из 72) при пороге 2 % (у baseline — 25,7 %). Критерий приёмки не выполнен: функцию нельзя включать для реальных пользователей без промпта v3 и независимого замера на реальных обращениях с ручной разметкой."
+  "conclusion": "На всех 36 сценариях итоговый вариант D2 даёт macro F1 0,682 против 0,504 у baseline и лучше baseline по F1 каждого класса: «Подходит» 0,606 против 0,566, «Не подходит» 0,759 против 0,755, «Недостаточно данных» 0,680 против 0,191. Но правило отказа v2 придумано после просмотра ошибок на этом же наборе, поэтому это повторная проверка на наборе разработки. По ранжированию ИИ уступает правилам: NDCG@5 0,604 против 0,853, Recall@5 0,575 против 0,967; в категории «ограниченное время» D2 не выдал ни одной верной рекомендации. Доля нарушений 23,6 % (17 из 72) при пороге 2 % (у baseline — 25,7 %). Критерий приёмки не выполнен: функцию нельзя включать для реальных пользователей без промпта v3 и независимого замера на реальных обращениях с ручной разметкой. На эталоне v2 (согласованные разметки Фаризы и Амины) картина хуже: D2 — macro F1 0,406 против 0,385 у baseline, лучше только по классу «Недостаточно данных», NDCG@5 0,138 против 0,378, нарушений 31,9 % против 22,4 %. Вывод о том, что функцию нельзя включать, от выбора эталона не зависит."
  },
  "usage": {
   "B": {

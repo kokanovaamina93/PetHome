@@ -76,7 +76,20 @@ if cm.exists():
     if cost["per_request_usd"] is None:
         sys.exit("cost-model.xlsx не пересчитан: запустите recalc (LibreOffice) после evals/cost_model.py")
 
+gold_v2 = {}
+v2dir = ROOT / "evals/results" / f"{run}__gold_v2"
+if (v2dir / "metrics.json").exists():
+    g2 = [json.loads(x) for x in open(ROOT / "evals/gold_v2.jsonl", encoding="utf-8")]
+    gold_v2 = {
+        "results": json.loads((v2dir / "metrics.json").read_text(encoding="utf-8"))["results"],
+        "agreement": json.loads((ROOT / "evals/results/agreement_v2.json").read_text(encoding="utf-8")),
+        "counts": dict(Counter(v for g in g2 for v in g["pairs"].values())),
+        "clarify": dict(Counter(g["clarify"] for g in g2)),
+        "allowed": dict(Counter(g["allowed"] for g in g2)),
+    }
+
 data = {
+    "gold_v2": gold_v2,
     "run_id": run,
     "meta": metrics["meta"],
     "results": metrics["results"],
